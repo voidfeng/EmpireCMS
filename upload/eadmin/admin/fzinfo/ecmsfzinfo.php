@@ -1,0 +1,105 @@
+<?php
+define('EmpireCMSAdmin','1');
+require("../../../e/class/connect.php");
+require("../../../e/class/functions.php");
+require("../../../e/data/dbcache/class.php");
+$link=db_connect();
+$empire=new mysqlquery();
+$editor=1;
+$enews=$_POST['enews'];
+if(empty($enews))
+{
+	$enews=$_GET['enews'];
+}
+//验证用户
+$lur=is_login();
+$logininid=(int)$lur['userid'];
+$loginin=$lur['username'];
+$loginrnd=$lur['rnd'];
+$loginlevel=(int)$lur['groupid'];
+$loginadminstyleid=(int)$lur['adminstyleid'];
+hCheckEcmsRHash();
+include("../../../e/class/fzpubfun.php");
+include("../../../e/class/FzinfoFun.php");
+
+if($enews=='AddFzinfo')//增加父信息
+{
+	AddFzinfo($_POST,$logininid,$loginin);
+}
+elseif($enews=='EditFzinfo')//修改父信息
+{
+	EditFzinfo($_POST,$logininid,$loginin);
+}
+elseif($enews=='DelFzinfo')//取消父信息
+{
+	DelFzinfo($_GET,$logininid,$loginin);
+}
+elseif($enews=='AddFzDataClass')//增加子信息分类
+{
+	AddFzDataClass($_POST,$logininid,$loginin);
+}
+elseif($enews=='EditFzDataClass')//修改子信息分类
+{
+	EditFzDataClass($_POST,$logininid,$loginin);
+}
+elseif($enews=='DelFzDataClass')//删除子信息分类
+{
+	DelFzDataClass($_GET,$logininid,$loginin);
+}
+elseif($enews=='EditFzDataClassOrder')//修改子信息分类顺序
+{
+	EditFzDataClassOrder($_POST,$logininid,$loginin);
+}
+elseif($enews=='PushInfoToEfz')//推送信息
+{
+	PushInfoToEfz($_POST,$logininid,$loginin);
+}
+elseif($enews=='DoDelFzData')//移除子信息
+{
+	DoDelFzData($_POST,$logininid,$loginin);
+}
+elseif($enews=='DoMoveFzData')//转移子信息
+{
+	DoMoveFzData($_POST,$logininid,$loginin);
+}
+elseif($enews=='DoGoodFzData')//推荐子信息
+{
+	DoGoodFzData($_POST,$logininid,$loginin);
+}
+elseif($enews=='DoFirsttitleFzData')//头条子信息
+{
+	DoFirsttitleFzData($_POST,$logininid,$loginin);
+}
+elseif($enews=='DoEditFzDataTime')//修改子信息发布时间
+{
+	DoEditFzDataTime($_POST,$logininid,$loginin);
+}
+elseif($enews=='LoadInFzData')//导入子信息
+{
+	LoadInFzData($_GET,$logininid,$loginin);
+}
+elseif($enews=='AddFzDataTable')//增加子信息分表
+{
+	AddFzDataTable($_POST,$logininid,$loginin);
+}
+elseif($enews=='DefFzDataTable')//默认子信息分表
+{
+	DefFzDataTable($_GET,$logininid,$loginin);
+}
+elseif($enews=='DelFzDataTable')//删除子信息分表
+{
+	DelFzDataTable($_GET,$logininid,$loginin);
+}
+elseif($enews=='ClearFzinfo')//整理父子信息数据
+{
+	ClearFzinfo($_GET,$logininid,$loginin);
+}
+elseif($enews=='OneClearFzinfo')//整理父子信息数据(单父信息)
+{
+	DoOneClearFzinfo($_GET,$logininid,$loginin);
+}
+else
+{printerror("ErrorUrl","history.go(-1)");}
+db_close();
+$empire=null;
+?>

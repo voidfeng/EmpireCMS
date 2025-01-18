@@ -1,0 +1,18 @@
+<?php
+if(!defined('InEmpireCMS'))
+{
+	exit();
+}
+?>
+<!--empire.listtemp.top-->
+<?php
+while($r=$empire->fetch($sql))
+{
+	$r['retext']=nl2br(stripSlashes($r['retext']));
+	$r['lytext']=nl2br(stripSlashes($r['lytext']));
+?>
+<!--empire.listtemp.center-->
+<?php
+}
+?>
+<!--empire.listtemp.footer-->

@@ -1,0 +1,61 @@
+<?php
+require("../../class/connect.php");
+eCheckCloseMods('pl');//关闭模块
+$id=(int)$_GET['id'];
+$classid=(int)$_GET['classid'];
+$num=(int)$_GET['num'];
+if($num<1||$num>80)
+{
+	$num=10;
+}
+$doaction=$_GET['doaction']=='dozt'?'dozt':'';
+require("../../class/q_functions.php");
+$link=db_connect();
+$empire=new mysqlquery();
+//专题
+if($doaction=='dozt')
+{
+	if(empty($classid))
+	{
+		exit();
+	}
+	//信息
+	$infor=$empire->fetch1("select ztid,restb from {$dbtbpre}enewszt where ztid='$classid'".do_dblimit_one());
+	if(!$infor['ztid'])
+	{
+		exit();
+	}
+	$pubid='-'.$classid;
+}
+else
+{
+	if(empty($id)||empty($classid))
+	{
+		exit();
+	}
+	include("../../data/dbcache/class.php");
+	if(empty($class_r[$classid]['tbname'])||InfoIsInTable($class_r[$classid]['tbname']))
+	{
+		exit();
+	}
+	//信息
+	$infor=$empire->fetch1("select classid,restb from {$dbtbpre}ecms_".$class_r[$classid]['tbname']." where id='$id'".do_dblimit_one());
+	if(!$infor['classid']||$infor['classid']!=$classid)
+	{
+		exit();
+	}
+	$pubid=ReturnInfoPubid($classid,$id);
+}
+//排序
+$addorder='plid desc';
+$myorder=(int)$_GET['myorder'];
+if($myorder==1)
+{
+	$addorder='plid';
+}
+$sql=$empire->query("select * from {$dbtbpre}enewspl_".$infor['restb']." where pubid='$pubid' and checked=0 order by ".$addorder."".do_dblimit($num));
+//引用文件
+@include(ECMS_PATH.'c/ecachetemp/epltemp/esp_pljs.php');
+db_close();
+$empire=null;
+?>

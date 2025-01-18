@@ -1,0 +1,236 @@
+<?php
+//--------------- 修改信息函数 ---------------
+
+//修改安全信息
+function EditSafeInfo($add){
+	global $empire,$dbtbpre,$public_r;
+	$user_r=islogin();//是否登陆
+	$userid=$user_r['userid'];
+	$username=$user_r['username'];
+	$rnd=$user_r['rnd'];
+	//必填
+	$email=trim($add['email']);
+	$email=addslashes(RepPostStr($email));
+	$email=RepPostVar($email);
+	$phno=RepPostVar($add['phno']);
+	if($public_r['regmustef']!=3)
+	{
+		if($public_r['regmustef']==1)//邮箱必填
+		{
+			if(!$email)
+			{
+				printerror('EmptyMemberEmail','history.go(-1)',1);
+			}
+		}
+		elseif($public_r['regmustef']==2)//手机必填
+		{
+			if(!$phno)
+			{
+				printerror('EmptyMemberPhno','history.go(-1)',1);
+			}
+		}
+		else//邮箱和手机必填
+		{
+			if(!$email||!$phno)
+			{
+				printerror('EmptyMemberMF','history.go(-1)',1);
+			}
+		}
+	}
+	//邮箱
+	if($email&&!chemail($email))
+	{
+		printerror("EmailFail","history.go(-1)",1);
+	}
+	//手机
+	if($phno&&!echphno($phno))
+	{
+		printerror('PhnoFail','',1);
+	}
+	//验证原密码
+	$oldpassword=RepPostVar($add['oldpassword']);
+	if(!$oldpassword)
+	{
+		printerror('FailOldPassword','',1);
+	}
+	$pr=$empire->fetch1("select regemailonly,min_passlen,max_passlen,regphonly from {$dbtbpre}enewspublic".do_dblimit_one());
+	$add['password']=RepPostVar($add['password']);
+	//密码字数
+	$passlen=strlen($add['password']);
+	if($passlen<$pr['min_passlen']||$passlen>$pr['max_passlen'])
+	{
+		printerror('FailPasslen','',1);
+	}
+	$num=0;
+	$ur=$empire->fetch1("select ".eReturnSelectMemberF('userid,password,salt,email,phno')." from ".eReturnMemberTable()." where ".egetmf('userid')."='$userid'");
+	if(empty($ur['userid']))
+	{
+		printerror('FailOldPassword','',1);
+	}
+	if(!eDoCkMemberPw($oldpassword,$ur['password'],$ur['salt']))
+	{
+		printerror('FailOldPassword','',1);
+	}
+	//邮箱
+	if($pr['regemailonly'])
+	{
+		if($ur['email']<>$email)
+		{
+			$num=$empire->gettotal("select count(*) as total from ".eReturnMemberTable()." where ".egetmf('email')."='$email' and ".egetmf('userid')."<>'$userid'".do_dblimit_cone());
+			if($num>=$pr['regemailonly'])
+			{
+				printerror("ReEmailFail","history.go(-1)",1);
+			}
+		}
+	}
+	//手机
+	if($pr['regphonly'])
+	{
+		if($ur['phno']<>$phno)
+		{
+			$num=$empire->gettotal("select count(*) as total from ".eReturnMemberTable()." where ".egetmf('phno')."='$phno' and ".egetmf('userid')."<>'$userid'".do_dblimit_cone());
+			if($num>=$pr['regphonly'])
+			{
+				printerror("RePhnoFail","history.go(-1)",1);
+			}
+		}
+	}
+	//密码
+	$a='';
+	$salt='';
+	$truepassword='';
+	if($add['password'])
+	{
+		if($add['password']!==$add['repassword'])
+		{
+			printerror('NotRepassword','history.go(-1)',1);
+		}
+		$salt=eReturnMemberSalt();
+		$password=eDoMemberPw($add['password'],$salt);
+		$a=",".egetmf('password')."='$password',".egetmf('salt')."='$salt'";
+		$truepassword=$add['password'];
+	}
+	$sql=$empire->query("update ".eReturnMemberTable()." set ".egetmf('email')."='$email',".egetmf('phno')."='$phno'".$a." where ".egetmf('userid')."='$userid'");
+	if($sql)
+    {
+		//易通行系统
+		DoEpassport('editpassword',$userid,$username,$truepassword,$salt,$email,$user_r['groupid'],'');
+		printerror("EditInfoSuccess","../member/EditInfo/EditSafeInfo.php",1);
+	}
+    else
+    {
+		printerror("DbError","history.go(-1)",1);
+	}
+}
+
+//信息修改
+function EditInfo($post){
+	global $empire,$dbtbpre,$public_r;
+	$user_r=islogin();//是否登陆
+	$userid=$user_r['userid'];
+	$username=$user_r['username'];
+	$dousername=$username;
+	$rnd=$user_r['rnd'];
+	$groupid=$user_r['groupid'];
+	if(!$userid||!$username)
+	{
+		printerror("NotEmpty","history.go(-1)",1);
+	}
+	//验证附加表必填项
+	$addr=$empire->fetch1("select * from {$dbtbpre}enewsmemberadd where userid='$userid'");
+	$user_getr=$empire->fetch1("select ".eReturnSelectMemberF('groupid')." from ".eReturnMemberTable()." where ".egetmf('userid')."='$userid'");
+	$fid=GetMemberFormId($user_getr['groupid']);
+	if(empty($addr['userid']))
+	{
+		$mr['add_filepass']=$userid;
+		$member_r=ReturnDoMemberF($fid,$post,$mr,0,$dousername);
+	}
+	else
+	{
+		$addr['add_filepass']=$userid;
+		$member_r=ReturnDoMemberF($fid,$post,$addr,1,$dousername);
+	}
+	//附加表
+	if(empty($addr['userid']))
+	{
+		//IP
+		$regip=egetip();
+		$regipport=egetipport();
+		$lasttime=time();
+		$sql=$empire->query("insert into {$dbtbpre}enewsmemberadd(userid,regip,lasttime,lastip,loginnum,regipport,lastipport".$member_r[0].") values('$userid','$regip','$lasttime','$regip',1,'$regipport','$regipport'".$member_r[1].");");
+    }
+	else
+	{
+		$sql=$empire->query("update {$dbtbpre}enewsmemberadd set userid='$userid'".$member_r[0]." where userid='$userid'");
+    }
+	//更新附件
+	UpdateTheFileEditOther(6,$userid,'member');
+    if($sql)
+    {
+		printerror("EditInfoSuccess","../member/EditInfo/",1);
+	}
+    else
+    {
+		printerror("DbError","history.go(-1)",1);
+	}
+}
+
+//上传会员头像
+function EditUpic($add,$file,$file_name,$file_type,$file_size){
+	global $empire,$dbtbpre,$ecms_config,$public_r;
+	$user_r=islogin();//是否登陆
+	$userid=(int)$user_r['userid'];
+	$username=$user_r['username'];
+	$rnd=$user_r['rnd'];
+	//文件
+	if(!$file_name)
+	{
+		printerror("EmptyQTranFile","",1);
+	}
+	$filetype=GetFiletype($file_name);//取得文件类型
+	if(CheckSaveTranFiletype($filetype))
+	{
+		printerror("NotQTranFiletype","",1);
+	}
+	/*
+	if('dg'.$public_r['upictype']<>'dg'.$filetype)
+	{
+		printerror("NotQTranFiletype","",1);
+	}
+	*/
+	if(!strstr($public_r['upictype'],"|".$filetype."|"))
+	{
+		printerror("NotQTranFiletype","",1);
+	}
+	if(!strstr($ecms_config['sets']['tranpicturetype'],','.$filetype.','))
+	{
+		printerror("NotQTranFiletype","",1);
+	}
+	if($file_size>$public_r['upicsize']*1024)
+	{
+		printerror("TooBigQTranFile","",1);
+	}
+	$upic=eMember_UpicReturnGupic($filetype);
+	$upic=(int)$upic;
+	//上传
+	$mupic_r=eMember_UpicReturnPathfile($userid,$upic);
+	$mynewspath=$mupic_r['rpath'];
+	$myfn=$mupic_r['rinsertfile'];
+	$tfr=ecp_DoTranFile($file,$file_name,$file_type,$file_size,$mynewspath,3,1,1,'','',$myfn,0);
+	//更新
+	$sql=$empire->query("update ".eReturnMemberTable()." set ".egetmf('upic')."='$upic' where ".egetmf('userid')."='$userid'");
+	//dely
+	if($user_r['upic']&&$user_r['upic']!=$upic)
+	{
+		eMember_UpicDelFile($userid,$user_r['upic']);
+	}
+	if($sql)
+    {
+		printerror("EditUpicSuccess","../member/EditInfo/EditUpic.php",1);
+	}
+    else
+    {
+		printerror("DbError","history.go(-1)",1);
+	}
+}
+?>

@@ -1,0 +1,19 @@
+<?php
+if(!defined('EMPIRECMSVP'))
+{
+	exit();
+}
+if(!defined('EMPIRECMSVPPATH'))
+{
+	exit();
+}
+if(!function_exists('EcmsViewPass'))
+{
+	require_once(EMPIRECMSVPPATH.'e/class/connect.php');
+}
+if(!defined('InEmpireCMS'))
+{
+	exit();
+}
+EcmsViewPass($ecms_tofunr['viewpassecms'],$ecms_tofunr['viewpassckvar'],$ecms_tofunr['viewpassckpass'],$ecms_tofunr['viewpasstitle']);
+?>

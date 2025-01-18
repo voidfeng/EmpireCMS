@@ -1,0 +1,20 @@
+<?php
+if(!defined('InEmpireCMS'))
+{
+	exit();
+}
+?>
+<?php
+if($mhavelogin==1)
+{
+?>
+<!--loginin-->
+<?php
+}
+else
+{
+?>
+<!--login-->
+<?php
+}
+?>

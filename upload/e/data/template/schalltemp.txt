@@ -1,0 +1,38 @@
+<?php
+if(!defined('InEmpireCMS'))
+{
+	exit();
+}
+?>
+<!--empire.listtemp.top-->
+<?php
+$no=$offset;
+$subnum=<!--empire.listtemp.subnum-->;
+$formatdate="<!--empire.listtemp.formatdate-->";
+while($r=$empire->fetch($sql))
+{
+	$tbname=$class_r[$r['classid']]['tbname'];
+	if(empty($tbname))
+	{
+		continue;
+	}
+	$titlefield=$schalltb_r[$tbname]['titlefield'];
+	$smalltextfield=$schalltb_r[$tbname]['smalltextfield'];
+	$infor=$empire->fetch1("select id,classid,titlepic,newstime,isurl,titleurl,".$titlefield.",".$smalltextfield." from {$dbtbpre}ecms_".$tbname." where id='".$r['id']."'".do_dblimit_one());
+	if(empty($infor['id']))
+	{
+		continue;
+	}
+	$no++;
+	$titleurl=sys_ReturnBqTitleLink($infor);
+	$titlepic=$infor['titlepic']?$infor['titlepic']:$public_r['newsurl']."e/data/images/notimg.gif";
+	$smalltext=SubSchallSmalltext($infor[$smalltextfield],$subnum);
+	$title=DoReplaceFontRed($infor[$titlefield],$keyboard);
+	$smalltext=DoReplaceFontRed($smalltext,$keyboard);
+	$newstime=date($formatdate,$infor['newstime']);
+?>
+<!--empire.listtemp.center-->
+<?php
+}
+?>
+<!--empire.listtemp.footer-->

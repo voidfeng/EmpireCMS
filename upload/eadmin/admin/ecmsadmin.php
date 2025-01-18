@@ -1,0 +1,56 @@
+<?php
+error_reporting(0);
+define('EmpireCMSAdmin','1');
+$enews=$_POST['enews'];
+if(empty($enews))
+{$enews=$_GET['enews'];}
+if($enews=='login')
+{
+	define('EmpireCMSAPage','login');
+}
+require("../../e/class/connect.php");
+require("../../e/class/functions.php");
+$link=db_connect();
+$empire=new mysqlquery();
+if($enews=="login")
+{
+	$logininid=0;
+	$loginin='';
+	$loginrnd='';
+	$loginlevel=0;
+	$loginadminstyleid=0;
+}
+else
+{
+	//验证用户
+	$lur=is_login();
+	$logininid=(int)$lur['userid'];
+	$loginin=$lur['username'];
+	$loginrnd=$lur['rnd'];
+	$loginlevel=(int)$lur['groupid'];
+	$loginadminstyleid=(int)$lur['adminstyleid'];
+	hCheckEcmsRHash();
+}
+include("../../e/class/adminfun.php");
+if($enews=="login")//登陆
+{
+	//urlcs
+	eAdminCheckLoginUrlCs();
+	$username=$_POST['username'];
+	$password=$_POST['password'];
+	$key=$_POST['key'];
+	$file=$_FILES['file']['tmp_name'];
+    $file_name=$_FILES['file']['name'];
+    $file_type=$_FILES['file']['type'];
+    $file_size=$_FILES['file']['size'];
+	$logininid=0;
+	$loginin=RepPostVar($username);
+	login($username,$password,$key,$_POST,$file,$file_name,$file_type,$file_size);
+}
+else
+{
+	printerror("ErrorUrl","history.go(-1)");
+}
+db_close();
+$empire=null;
+?>

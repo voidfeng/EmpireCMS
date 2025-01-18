@@ -1,0 +1,252 @@
+<?php
+if(!defined('empirecms'))
+{
+	exit();
+}
+
+if(!defined('EPAGECHECKPATH'))
+{
+	exit();
+}
+
+if(!defined('EPAGECHECKTBNAME'))
+{
+	exit();
+}
+
+//目录
+$check_pathck=str_replace('.','',$check_path);
+$check_pathck=str_replace('/','',$check_pathck);
+if($check_pathck<>'')
+{
+	exit();
+}
+
+if(EPAGECHECKPATH!=$check_path)
+{
+	exit();
+}
+$check_path=EPAGECHECKPATH;
+$check_tbname=EPAGECHECKTBNAME;
+
+//是否登陆
+function ViewCheckLogin($infor){
+	global $empire,$public_r,$ecms_config,$toreturnurl,$gotourl;
+	$userid=(int)getcvar('mluserid');
+	$username=RepPostVar(getcvar('mlusername'));
+	$rnd=RepPostVar(getcvar('mlrnd'));
+	if(!$userid)
+	{
+		if(!getcvar('returnurl'))
+		{
+			esetcookie("returnurl",$toreturnurl,0);
+		}
+		eCheckLevelInfo_ViewInfoMsg($ckuser,$infor,'NotLogin');
+	}
+	//ck
+	$qcklgr=qCheckLoginAuthstr();
+	if(!$qcklgr['islogin'])
+	{
+		EmptyEcmsCookie();
+		if(!getcvar('returnurl'))
+		{
+			esetcookie("returnurl",$toreturnurl,0);
+		}
+		eCheckLevelInfo_ViewInfoMsg($ckuser,$infor,'NotLogin');
+	}
+	//db
+	$cr=$empire->fetch1("select ".eReturnSelectMemberF('checked,userid,username,groupid,userfen,userdate,zgroupid,ingid,agid,isern,isot')." from ".eReturnMemberTable()." where ".egetmf('userid')."='$userid' and ".egetmf('username')."='$username' and ".egetmf('rnd')."='$rnd'".do_dblimit_one());
+	if(!$cr['userid']||!$cr['isot'])
+	{
+		EmptyEcmsCookie();
+		if(!getcvar('returnurl'))
+		{
+			esetcookie("returnurl",$toreturnurl,0);
+		}
+		eCheckLevelInfo_ViewInfoMsg($cr,$infor,'SingleLogin');
+	}
+	if($cr['checked']==0)
+	{
+		EmptyEcmsCookie();
+		if(!getcvar('returnurl'))
+		{
+			esetcookie("returnurl",$toreturnurl,0);
+		}
+		eCheckLevelInfo_ViewInfoMsg($cr,$infor,'NotCheckUser');
+	}
+	//默认会员组
+	if(empty($cr['groupid']))
+	{
+		$user_groupid=eReturnMemberDefGroupid();
+		$user_groupid=(int)$user_groupid;
+		$usql=$empire->query("update ".eReturnMemberTable()." set ".egetmf('groupid')."='$user_groupid' where ".egetmf('userid')."='".$cr['userid']."'");
+		$cr['groupid']=$user_groupid;
+	}
+	//是否过期
+	if($cr['userdate'])
+	{
+		if($cr['userdate']-time()<=0)
+		{
+			OutTimeZGroup($cr['userid'],$cr['zgroupid']);
+			$cr['userdate']=0;
+			if($cr['zgroupid'])
+			{
+				$cr['groupid']=$cr['zgroupid'];
+				$cr['zgroupid']=0;
+			}
+		}
+	}
+	$re['userid']=$cr['userid'];
+	$re['username']=$cr['username'];
+	$re['userfen']=$cr['userfen'];
+	$re['groupid']=$cr['groupid'];
+	$re['userdate']=$cr['userdate'];
+	$re['zgroupid']=$cr['zgroupid'];
+	$re['ingid']=$cr['ingid'];
+	$re['agid']=$cr['agid'];
+	$re['isern']=$cr['isern'];
+	$re['checked']=$cr['checked'];
+	return $re;
+}
+
+//查看权限函数
+function CheckShowNewsLevel($infor){
+	global $check_path,$level_r,$empire,$gotourl,$toreturnurl,$public_r,$dbtbpre,$class_r;
+	$infor['classid']=(int)$infor['classid'];
+	$groupid=(int)$infor['groupid'];
+	$userfen=(int)$infor['userfen'];
+	$id=(int)$infor['id'];
+	$classid=(int)$infor['classid'];
+	//是否登陆
+	$user_r=ViewCheckLogin($infor);
+	$user_r['userid']=(int)$user_r['userid'];
+	$user_r['groupid']=(int)$user_r['groupid'];
+	//验证权限
+	if($class_r[$infor['classid']]['cgtoinfo'])//栏目设置
+	{
+		$checkcr=$empire->fetch1("select cgroupid from {$dbtbpre}enewsclass where classid='".$infor['classid']."'");
+		if($checkcr['cgroupid'])
+		{
+			$mvgresult=eMember_ReturnCheckMVGroup($user_r,$checkcr['cgroupid']);
+			if($mvgresult<>'empire.cms')
+			{
+				$infor['eclass_cgroupid']=$checkcr['cgroupid'];
+				if(!getcvar('returnurl'))
+				{
+					esetcookie("returnurl",$toreturnurl,0);
+				}
+				eCheckLevelInfo_ViewInfoMsg($user_r,$infor,'NotLevelClass');
+			}
+		}
+	}
+	if($groupid)//信息设置
+	{
+		if($groupid>0)//会员组
+		{
+			if($level_r[$groupid]['level']>$level_r[$user_r['groupid']]['level'])
+			{
+				if(!getcvar('returnurl'))
+				{
+					esetcookie("returnurl",$toreturnurl,0);
+				}
+				eCheckLevelInfo_ViewInfoMsg($user_r,$infor,'NotLevelGroup');
+			}
+		}
+		else//访问组
+		{
+			$vgroupid=0-$groupid;
+			$ckvgresult=eMember_ReturnCheckViewGroup($user_r,$vgroupid);
+			if($ckvgresult<>'empire.cms')
+			{
+				if(!getcvar('returnurl'))
+				{
+					esetcookie("returnurl",$toreturnurl,0);
+				}
+				eCheckLevelInfo_ViewInfoMsg($user_r,$infor,'NotLevelViewGroup');
+			}
+		}
+	}
+	//扣点
+	if(!empty($userfen))
+	{
+		//是否有历史记录
+		$bakr=$empire->fetch1("select id,truetime from {$dbtbpre}enewsdownrecord where id='$id' and classid='$classid' and userid='".$user_r['userid']."' and online=2 order by truetime desc".do_dblimit_one());
+		if($bakr['id']&&(time()-$bakr['truetime']<=$public_r['redoview']*3600))
+		{}
+		else
+		{
+			if($user_r['userdate']-time()>0)//包月
+			{}
+			else
+			{
+				if($user_r['userfen']<$userfen)
+				{
+					if(!getcvar('returnurl'))
+					{
+						esetcookie("returnurl",$toreturnurl,0);
+					}
+					eCheckLevelInfo_ViewInfoMsg($user_r,$infor,'NotUserfen');
+				}
+				//扣点
+				$usql=$empire->query("update ".eReturnMemberTable()." set ".egetmf('userfen')."=".egetmf('userfen')."-".$userfen." where ".egetmf('userid')."='".$user_r['userid']."'");
+			}
+			//备份下载记录
+			$utfusername=$user_r['username'];
+			BakDown($classid,$id,0,$user_r['userid'],$utfusername,$infor['title'],$userfen,2);
+		}
+	}
+}
+$check_infoid=(int)$check_infoid;
+$check_classid=(int)$check_classid;
+eCheckStrType(4,$check_tbname,1);
+if(!defined('PageCheckLevel'))
+{
+	require_once(EPAGECHECKPATH.'e/class/connect.php');
+	if(!defined('InEmpireCMS'))
+	{
+		exit();
+	}
+	require_once(ECMS_PATH.'e/data/dbcache/class.php');
+	require_once(ECMS_PATH.'e/data/dbcache/MemberLevel.php');
+	$link=db_connect();
+	$empire=new mysqlquery();
+	$check_tbname=RepPostVar($check_tbname);
+	$checkinfor=$empire->fetch1("select * from {$dbtbpre}ecms_".$check_tbname." where id='$check_infoid'".do_dblimit_one());
+	if(!$checkinfor['id']||$checkinfor['classid']!=$check_classid)
+	{
+		echo"<script>alert('此信息不存在');history.go(-1);</script>";
+		exit();
+	}
+	//副表
+	$check_mid=$class_r[$checkinfor['classid']]['modid'];
+	$checkfinfor=$empire->fetch1("select ".ReturnSqlFtextF($check_mid)." from {$dbtbpre}ecms_".$check_tbname."_data_".$checkinfor['stb']." where id='".$checkinfor['id']."'".do_dblimit_one());
+	$checkinfor=array_merge($checkinfor,$checkfinfor);
+}
+else
+{
+	$check_tbname=RepPostVar($check_tbname);
+}
+
+//内部表
+if(empty($check_tbname)||InfoIsInTable($check_tbname))
+{
+	echo"<script>alert('此信息不存在');history.go(-1);</script>";
+	exit();
+}
+
+require_once(ECMS_PATH.'e/member/class/user.php');
+//验证IP
+eCheckAccessDoIp('showinfo');
+if($checkinfor['groupid']||$class_r[$checkinfor['classid']]['cgtoinfo'])
+{
+	require_once(ECMS_PATH.'e/template/public/checklevel/info1.php');
+	$toreturnurl=eReturnSelfPage(1);	//返回页面地址
+	$gotourl=$ecms_config['member']['loginurl']?$ecms_config['member']['loginurl']:$public_r['newsurl']."e/member/login/";	//登陆地址
+	CheckShowNewsLevel($checkinfor);
+}
+if(!defined('PageCheckLevel'))
+{
+	db_close();
+	$empire=null;
+}
+?>

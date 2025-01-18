@@ -1,0 +1,174 @@
+<?php
+require('../class/connect.php');
+require('../class/functions.php');
+require('../class/eafun.php');
+
+//是否开启
+eapage_IsOpenEapage();
+
+//参数
+$egn=(int)$_GET['egn'];
+$ecmsck=RepPostVar($_GET['ecmsck']);
+$classid=(int)$_GET['classid'];
+$id=(int)$_GET['id'];
+$dornd=RepPostVar($_GET['dornd']);
+$dotime=(int)$_GET['dotime'];
+$dopass=RepPostVar($_GET['dopass']);
+$ecmsck=str_replace(',','',$ecmsck);
+//参数
+
+$ecmscklist=',eaShowInfo,eaShowInfoUrl,eaGoUrlFlink,eaGoUrlUserlist,eaGoUrlUserpage,eaGoUrlClass,eaGoUrlZt,eaGoUrlInfotype,eaGoUrlTags,eaGoUrlCjpage,eaGoUrlSearchUrl,';
+$gotourl='';
+$urlcs='';
+
+if(!$classid||!$dornd||!$dotime||!$dopass||!$ecmsck)
+{
+	printerror('EapageErrorPass',$public_r['newsurl'],1);
+}
+if(!strstr($ecmscklist,','.$ecmsck.','))
+{
+	printerror('EapageErrorPass',$public_r['newsurl'],1);
+}
+$urlcs=eapage_CkPassShowInfo($classid,$id,$dornd,$dotime,$dopass,$ecmsck);
+
+//db
+$link=db_connect();
+$empire=new mysqlquery();
+
+include('../data/dbcache/class.php');
+
+if($ecmsck=='eaShowInfo')//信息
+{
+	if($egn)
+	{
+		$gotourl='eaShowInfo.php?'.$urlcs;
+	}
+	else
+	{
+		$gotourl='eaGotoPage.php?egn=1'.$urlcs;
+	}
+}
+elseif($ecmsck=='eaShowInfoUrl')//信息地址
+{
+	if($egn)
+	{
+		$gotourl=eaGotoGeturlInfo($classid,$id,0);
+	}
+	else
+	{
+		$gotourl='eaGotoPage.php?egn=1'.$urlcs;
+	}
+}
+elseif($ecmsck=='eaGoUrlFlink')//友情链接
+{
+	if($egn)
+	{
+		$gotourl=eaGotoGeturlFlink($classid);
+	}
+	else
+	{
+		$gotourl='eaGotoPage.php?egn=1'.$urlcs;
+	}
+}
+elseif($ecmsck=='eaGoUrlUserlist')//自定义列表
+{
+	if($egn)
+	{
+		$gotourl=eaGotoGeturlUserlist($classid);
+	}
+	else
+	{
+		$gotourl='eaGotoPage.php?egn=1'.$urlcs;
+	}
+}
+elseif($ecmsck=='eaGoUrlUserpage')//自定义页面
+{
+	if($egn)
+	{
+		$gotourl=eaGotoGeturlUserpage($classid);
+	}
+	else
+	{
+		$gotourl='eaGotoPage.php?egn=1'.$urlcs;
+	}
+}
+elseif($ecmsck=='eaGoUrlClass')//栏目
+{
+	if($egn)
+	{
+		$gotourl=eaGotoGeturlClass($classid);
+	}
+	else
+	{
+		$gotourl='eaGotoPage.php?egn=1'.$urlcs;
+	}
+}
+elseif($ecmsck=='eaGoUrlZt')//专题
+{
+	if($egn)
+	{
+		$gotourl=eaGotoGeturlZt($classid);
+	}
+	else
+	{
+		$gotourl='eaGotoPage.php?egn=1'.$urlcs;
+	}
+}
+elseif($ecmsck=='eaGoUrlInfotype')//标题分类
+{
+	if($egn)
+	{
+		$gotourl=eaGotoGeturlInfotype($classid);
+	}
+	else
+	{
+		$gotourl='eaGotoPage.php?egn=1'.$urlcs;
+	}
+}
+elseif($ecmsck=='eaGoUrlTags')//TAGS
+{
+	if($egn)
+	{
+		$gotourl=eaGotoGeturlTags($classid);
+	}
+	else
+	{
+		$gotourl='eaGotoPage.php?egn=1'.$urlcs;
+	}
+}
+elseif($ecmsck=='eaGoUrlCjpage')//采集
+{
+	if($egn)
+	{
+		$gotourl=eaGotoGeturlCjpage($classid);
+	}
+	else
+	{
+		$gotourl='eaGotoPage.php?egn=1'.$urlcs;
+	}
+}
+elseif($ecmsck=='eaGoUrlSearchUrl')//搜索转发地址
+{
+	if($egn)
+	{
+		$gotourl=eaGotoGeturlSearchUrl($classid);
+	}
+	else
+	{
+		$gotourl='eaGotoPage.php?egn=1'.$urlcs;
+	}
+}
+else
+{
+	printerror('EapageErrorPass',$public_r['newsurl'],1);
+}
+
+db_close();
+$empire=null;
+
+if($gotourl)
+{
+	echo'<meta http-equiv="refresh" content="0;url='.$gotourl.'">';
+}
+
+?>

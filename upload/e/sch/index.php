@@ -1,0 +1,105 @@
+<?php
+require("../class/connect.php");
+if(!defined('InEmpireCMS'))
+{
+	exit();
+}
+include("../data/dbcache/class.php");
+include LoadLang("pub/fun.php");
+include("../class/schallfun.php");
+$link=db_connect();
+$empire=new mysqlquery();
+eCheckCloseMods('sch');//关闭模块
+$searchtime=time();
+$totalnum=(int)$_GET['totalnum'];
+$sear=(int)$_GET['sear'];
+if(!$public_r['usetotalnum'])
+{
+	$totalnum=0;
+}
+$firstsearch=0;
+if($sear<1)
+{
+	$firstsearch=1;
+	//搜索间隔
+	$lastsearchtime=(int)getcvar('lastschalltime');
+	if($lastsearchtime)
+	{
+		if($searchtime-$lastsearchtime<$public_r['schalltime'])
+		{
+			printerror('SchallOutTime','',1);
+		}
+	}
+	//设置最后搜索时间
+	esetcookie('lastschalltime',$searchtime,$searchtime+3600*24);
+}
+//searchurl
+if($_GET['keyboard'])
+{
+	ePostGoSearchUrl($_GET['keyboard'],0);
+}
+
+$page=(int)$_GET['page'];
+$page=RepPIntvar($page);
+$start=0;
+$page_line=(int)$public_r['schallpagenum'];//每页显示链接数
+$line=(int)$public_r['schallnum'];//每页显示记录数
+$offset=$start+$page*$line;//总偏移量
+//upnum
+if($public_r['schallupnum'])
+{
+	if($offset>$public_r['schallupnum'])
+	{
+		printerror('SchallNotRecord','',1);
+	}
+}
+//编码
+$iconv='';
+$char='';
+$targetchar='';
+if($ecms_config['sets']['pagechar']!='gb2312')
+{
+	$char=$ecms_config['sets']['pagechar']=='big5'?'BIG5':'UTF8';
+	$targetchar='GB2312';
+}
+$schallr=ReturnSearchAllSql($_GET);
+include("../data/dbcache/SearchAllTb.php");
+$keyboard=$schallr['keyboard'];
+$query="select id,classid from {$dbtbpre}enewssearchall where ".$schallr['where'];
+if($totalnum<1)
+{
+	$totalquery="select count(*) as total from {$dbtbpre}enewssearchall where ".$schallr['where'];
+	$num=$empire->gettotal($totalquery);
+	if(empty($num))
+	{
+		printerror('SchallNotRecord','',1);
+	}
+}
+else
+{
+	$num=$totalnum;
+}
+//upnum
+if($public_r['schallupnum'])
+{
+	if($num>$public_r['schallupnum'])
+	{
+		$num=$public_r['schallupnum'];
+	}
+}
+$search=$schallr['search'].'&sear=1';
+if($public_r['usetotalnum'])
+{
+	$search.='&totalnum='.$num;
+}
+//checkpageno
+eCheckListPageNo($page,$line,$num);
+$query.=" order by infotime desc".do_dblimit($line,$offset);
+$sql=$empire->query($query);
+$listpage=page1($num,$line,$page_line,$start,$page,$search);
+$url="<a href='".ReturnSiteIndexUrl()."'>".$fun_r['index']."</a>&nbsp;>&nbsp;".$fun_r['SearchAllNav'];
+//引用文件
+@include(ECMS_PATH.'c/ecachetemp/epubtemp/esp_sch.php');
+db_close();
+$empire=null;
+?>
