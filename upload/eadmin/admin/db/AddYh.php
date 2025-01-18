@@ -1,7 +1,7 @@
 <?php
 define('EmpireCMSAdmin','1');
-require("../../class/connect.php");
-require("../../class/functions.php");
+require("../../../e/class/connect.php");
+require("../../../e/class/functions.php");
 $link=db_connect();
 $empire=new mysqlquery();
 $editor=1;

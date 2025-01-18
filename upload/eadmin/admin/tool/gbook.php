@@ -270,7 +270,7 @@ if($r['userid'])
       <td>分页:
         <?=$returnpage?>
         &nbsp;&nbsp;
-        <input type="submit" name="Submit" value="审核留言" onClick="document.thisform.enews.value='CheckGbook_all';document.thisform.<?=$efhr1['vname']?>.value='<?=$efhr1['vname']?>';">
+        <input type="submit" name="Submit" value="审核留言" onClick="document.thisform.enews.value='CheckGbook_all';document.thisform.<?=$efhr1['vname']?>.value='<?=$efhr1['vval']?>';">
         &nbsp;&nbsp; <input type="submit" name="Submit2" value="删除留言" onClick="document.thisform.enews.value='DelGbook_all';document.thisform.<?=$efhr['vname']?>.value='<?=$efhr['vval']?>';">
         <input name="enews" type="hidden" id="enews" value="DelGbook_all">
         <input name="bid" type="hidden" id="bid" value="<?=$bid?>">

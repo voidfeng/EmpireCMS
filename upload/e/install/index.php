@@ -5,6 +5,9 @@ error_reporting(0);
 
 define('InEmpireCMS',TRUE);
 define('InEmpireCMSIns',TRUE);
+define('ECMS_PATH',substr(dirname(__FILE__),0,-9));
+define('MAGIC_QUOTES_GPC',function_exists('ini_get')&&ini_get('magic_quotes_gpc'));
+define('STR_IREPLACE',function_exists('str_ireplace'));
 
 @header('Content-Type: text/html; charset=utf-8');
 
