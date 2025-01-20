@@ -85,6 +85,7 @@ if(empty($enews))
 if($enews)
 {
 	hCheckEcmsRHash();
+	include("../../../e/class/tempfun.php");
 }
 //修改模板ID
 if($enews=="EditTempid")

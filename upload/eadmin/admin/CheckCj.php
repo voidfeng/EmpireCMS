@@ -111,7 +111,7 @@ function CheckAll(form)
   <tr> 
     <td width="90%" height="32">位置：采集 &gt; <a href="<?=$listclasslink?><?=$ecms_hashur['whehref']?>">管理节点</a> &gt; <a href="CheckCj.php?classid=<?=$classid?>&from=<?=ehtmlspecialchars($_GET['from'])?><?=$ecms_hashur['ehref']?>">审核采集</a> 
       &gt; 节点名称： 
-      <?=$cr[classname]?>
+      <?=$cr['classname']?>
       &nbsp;(共<b><font color=red> 
       <?=$num?>
       </font></b>条未入库记录) </td>

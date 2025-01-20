@@ -6330,15 +6330,16 @@ function EcmsViewPass($ecms,$ckvar,$ckpass,$title=''){
 		return '';
 	}
 	$ckecms=$ecms==1?1:0;
+	$evpostvname=$ecms==1?'hecmsckviewdof':'qecmsckviewdof';
 	$reurl=eReturnSelfPage(1);
-	if($_POST['ecmsckviewdof'])
+	if($_POST[$evpostvname])
 	{
-		if('dg'.$ckpass!='dg'.$_POST['ecmsckviewdof'])
+		if('dg'.$ckpass!='dg'.$_POST['eckvpassword'])
 		{
 			echo'<SCRIPT language=javascript>history.go(-1);</SCRIPT>';
 			exit();
 		}
-		$setenpass=EcmsViewPassEn($ecms,$_POST['ecmsckviewdof']);
+		$setenpass=EcmsViewPassEn($ecms,$_POST['eckvpassword']);
 		esetcookie($ckvar,$setenpass,0,0,$ckecms);
 		echo'<meta http-equiv="refresh" content="0;url='.$reurl.'">';
 		exit();

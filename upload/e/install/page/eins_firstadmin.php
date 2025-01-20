@@ -29,6 +29,10 @@ if(!defined('InEmpireCMSIns'))
                         <tr>
                           <td height="25"> <li>密码不能包含：$、&amp;、*、#、&lt;、&gt;、'、&quot;、/、\、%、;、空格</li></td>
                         </tr>
+						
+                        <tr> 
+                          <td height="25"> <li>如果提交按钮是灰色的，您可以刷新当前页面解决。</li></td>
+                        </tr>
                       </table></td>
                   </tr>
                 </table>

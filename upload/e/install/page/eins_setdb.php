@@ -158,7 +158,7 @@ if(!defined('InEmpireCMSIns'))
                   <tr bgcolor="#FFFFFF"> 
                     <td height="25">数据库名(*):</td>
                     <td> <input name="mydbname" type="text" id="mydbname" value="empirecms" size="30">                    </td>
-                    <td><font color="#666666">数据库名称</font></td>
+                    <td><font color="#666666">数据库名称，使用PHP8以上或PostgreSQL需填写已建好的库名</font></td>
                   </tr>
                   <tr bgcolor="#FFFFFF"> 
                     <td height="25"><font color="#009900">表名前缀(*):</font></td>

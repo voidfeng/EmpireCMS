@@ -20,7 +20,7 @@ CheckLevel($logininid,$loginin,$classid,"dtuserpage");
 //增加分类
 function AddDtUserpageClass($add,$userid,$username){
 	global $empire,$dbtbpre;
-	$edb_ir['cname']=hRepPostStr($add['classname'],1);
+	$edb_ir['cname']=hRepPostStr($add['cname'],1);
 	$edb_ir['myorder']=(int)$add['myorder'];
 	if(!$edb_ir['cname'])
 	{
@@ -44,7 +44,7 @@ function AddDtUserpageClass($add,$userid,$username){
 function EditDtUserpageClass($add,$userid,$username){
 	global $empire,$dbtbpre;
 	$edb_ir['cid']=(int)$add['cid'];
-	$edb_ir['cname']=hRepPostStr($add['classname'],1);
+	$edb_ir['cname']=hRepPostStr($add['cname'],1);
 	$edb_ir['myorder']=(int)$add['myorder'];
 	if(!$edb_ir['cname']||!$edb_ir['cid'])
 	{

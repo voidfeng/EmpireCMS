@@ -8,6 +8,7 @@ if(!$title)
 {
 	$title='系统开启'.($ecms==1?'后台':'').'访问验证';
 }
+$evpostvname=$ecms==1?'hecmsckviewdof':'qecmsckviewdof';
 ?>
 <html>
 <head>
@@ -16,7 +17,7 @@ if(!$title)
 <style>table{ font: 9pt Tahoma, Verdana; }</style>
 </head>
 <body>
-<form name="form1" method="post" action="?ecmsckview=1" autocomplete="off">
+<form name="form1" method="post" action="" autocomplete="off">
 <br><br><br><br><br><br>
 <table width="500" border="0" align="center" cellpadding="3" cellspacing="1" bgcolor="#4FB4DE">
 <tr>
@@ -26,8 +27,8 @@ if(!$title)
 </tr>
 <tr>
 	<td height="36" bgcolor="#FFFFFF">
-		<div align="center">请输入访问密码：<input name="password" type="password" id="password">
-		<input type="submit" name="Submit" value="进入"><input name="ecmsckviewdof" type="hidden" id="ecmsckviewdof" value="1"></div>
+		<div align="center">请输入访问密码：<input name="eckvpassword" type="password" id="eckvpassword">
+		<input type="submit" name="Submit" value="进入"><input name="<?php echo $evpostvname; ?>" type="hidden" id="<?php echo $evpostvname; ?>" value="1"></div>
 	</td>
 </tr>
 </table>

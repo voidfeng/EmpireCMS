@@ -22,9 +22,13 @@ if(!$count)
 {
 	printerror("NotChangeCjid","history.go(-1)");
 }
+
+//formhash
+$efh=heformhash_get('CjUrl',1);
+
 $add['from']=ehtmlspecialchars($add['from']);
 esetcookie("recjnum",$count,0,1);
-$url="ecmscj.php?enews=CjUrl".$ecms_hashur['href'];
+$url="ecmscj.php?enews=CjUrl".$ecms_hashur['href'].$efh;
 echo"<center><b>采集节点的总个数为:<font color=red>$count</font>个。</b>&nbsp;&nbsp; (<a href='ReHtml/ChangeData.php".$ecms_hashur['whehref']."#ReIfInfoHtml' target=_blank>数据更新中心</a>)</center><br>";
 for($i=0;$i<$count;$i++)
 {

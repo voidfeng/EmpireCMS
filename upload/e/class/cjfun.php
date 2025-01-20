@@ -1851,7 +1851,7 @@ function GetNewsInfo($classid,$checkrnd,$start,$userid,$username){
 		if($next)
 		{continue;}
 		//入临时库
-		$isql=$empire->query("insert into {$dbtbpre}ecms_infotmp_".$r[tbname]."(classid,oldurl,checked,keyboard,newstime,truetime,tmptime,userid,username".$ifield.") values('$classid','".$nr['newsurl']."',0,'".addslashes($keyboard)."','$newstime','$truetime','$tmptime','$userid','".addslashes($username)."'".$ivalue.");");
+		$isql=$empire->query("insert into {$dbtbpre}ecms_infotmp_".$r['tbname']."(classid,oldurl,checked,keyboard,newstime,truetime,tmptime,userid,username".$ifield.") values('$classid','".$nr['newsurl']."',0,'".addslashes($keyboard)."','$newstime','$truetime','$tmptime','$userid','".addslashes($username)."'".$ivalue.");");
     }
 	//采集结束
 	if(empty($b))
