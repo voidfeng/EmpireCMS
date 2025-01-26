@@ -27,7 +27,7 @@ function AddWapStyle($add,$userid,$username){
 		printerror("EmptyWapStyle","history.go(-1)");
 	}
 	//目录是否存在
-	if(!file_exists("../../wap/template/".$path))
+	if(!file_exists("../../../e/wap/template/".$path))
 	{
 		printerror("EmptyWapStylePath","history.go(-1)");
 	}
@@ -57,7 +57,7 @@ function EditWapStyle($add,$userid,$username){
 		printerror("EmptyWapStyle","history.go(-1)");
 	}
 	//目录是否存在
-	if(!file_exists("../../wap/template/".$path))
+	if(!file_exists("../../../e/wap/template/".$path))
 	{
 		printerror("EmptyWapStylePath","history.go(-1)");
 	}

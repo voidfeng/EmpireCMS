@@ -33,6 +33,7 @@ if($ttr['ecmsvpf'])
 	$ecms_tofunr['viewpassckvar']='ecmsvpt'.$ttr['typeid'];
 	$ecms_tofunr['viewpassckpass']=$ttr['ecmsvpf'];
 	$ecms_tofunr['viewpasstitle']=stripSlashes($ttr['tname']);
+	$ecms_tofunr['viewpassaddvn']=3;
 	@include("../../class/checkviewpass.php");
 }
 //moreport

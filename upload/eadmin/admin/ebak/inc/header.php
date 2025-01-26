@@ -1,5 +1,9 @@
 <?php
 error_reporting(0);
+if(!defined('INEMPIREBAKDT'))
+{
+	exit();
+}
 define('EmpireCMSAdmin','1');
 define('InEmpireBak',TRUE);
 define('InEmpireBakRe',TRUE);

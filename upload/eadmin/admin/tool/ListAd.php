@@ -132,7 +132,7 @@ function DelAd($adid,$userid,$username){
 }
 
 //批量生成广告
-function ReAdJs_all($start=0,$from,$userid,$username){
+function ReAdJs_all($start,$from,$userid,$username){
 	global $empire,$public_r,$fun_r,$dbtbpre;
 	$moreportpid=(int)$_GET['moreportpid'];
 	$mphref='';
@@ -482,9 +482,9 @@ function eCopyAdStr(adid,isjs){
   <tr> 
     <td width="20%" height="32">位置：<a href="ListAd.php<?=$ecms_hashur['whehref']?>">管理广告</a></td>
     <td width="80%"><div align="right" class="emenubutton">
-        <input type="button" name="Submit5" value="增加广告" onclick="self.location.href='AddAd.php?enews=AddAd<?=$ecms_hashur['ehref']?>';">&nbsp;&nbsp;
-        <input type="button" name="Submit52" value="管理过期广告" onclick="self.location.href='ListAd.php?time=1<?=$ecms_hashur['ehref']?>';">&nbsp;&nbsp;
-        <input type="button" name="Submit522" value="管理广告分类" onclick="self.location.href='AdClass.php<?=$ecms_hashur['whehref']?>';">
+        <input type="button" name="Submit5" value="增加广告" onClick="self.location.href='AddAd.php?enews=AddAd<?=$ecms_hashur['ehref']?>';">&nbsp;&nbsp;
+        <input type="button" name="Submit52" value="管理过期广告" onClick="self.location.href='ListAd.php?time=1<?=$ecms_hashur['ehref']?>';">&nbsp;&nbsp;
+        <input type="button" name="Submit522" value="管理广告分类" onClick="self.location.href='AdClass.php<?=$ecms_hashur['whehref']?>';">
       </div></td>
   </tr>
 </table>
@@ -533,7 +533,7 @@ function eCopyAdStr(adid,isjs){
   while($r=$empire->fetch($sql))
   {
   ?>
-  <tr bgcolor="#FFFFFF" onmouseout="this.style.backgroundColor='#ffffff'" onmouseover="this.style.backgroundColor='#C3EFFF'"> 
+  <tr bgcolor="#FFFFFF" onMouseOut="this.style.backgroundColor='#ffffff'" onMouseOver="this.style.backgroundColor='#C3EFFF'"> 
     <td height="25"> <div align="center"> 
         <?=$r['adid']?>
       </div></td>
@@ -550,15 +550,15 @@ function eCopyAdStr(adid,isjs){
     <td> <div align="center"> 
         <input name="textfield" type="text" value="<?=$public_r['newsurl']?>d/js/acmsd/<?=$public_r['adfile']?><?=$r['adid']?>.js" size="26">
         <br>
-        <a href="#ecms" onclick="eCopyAdStr(<?=$r['adid']?>,1);" title="点击复制JS调用代码">JS调用</a> | <a href="#ecms" onclick="eCopyAdStr(<?=$r['adid']?>,0);" title="点击复制标签调用代码">标签调用</a><br>
+        <a href="#ecms" onClick="eCopyAdStr(<?=$r['adid']?>,1);" title="点击复制JS调用代码">JS调用</a> | <a href="#ecms" onClick="eCopyAdStr(<?=$r['adid']?>,0);" title="点击复制标签调用代码">标签调用</a><br>
       </div></td>
     <td> <div align="center"> 
         <?=$r['onclick']?>
       </div></td>
     <td> <div align="center"> 
-        <textarea name="textarea" cols="20" rows="3"><?=$r['adsay']?></textarea>
+        <textarea name="textarea" cols="20" rows="3"><?=ehtmlspecialchars($r['adsay'])?></textarea>
       </div></td>
-    <td> <div align="center"><a href="../view/js.php?js=<?=$public_r['adfile']?><?=$r['adid']?>&p=acmsd<?=$ecms_hashur['ehref']?>" target="_blank">预览</a> | <a href="AddAd.php?enews=EditAd&adid=<?=$r['adid']?>&time=<?=$time?><?=$ecms_hashur['ehref']?>">修改</a> | <a href="ListAd.php?enews=DelAd&adid=<?=$r['adid']?>&time=<?=$time?><?=$ecms_hashur['href'].$efh?>" onclick="return confirm('确认要删除？');">删除</a></div></td>
+    <td> <div align="center"><a href="../view/js.php?js=<?=$public_r['adfile']?><?=$r['adid']?>&p=acmsd<?=$ecms_hashur['ehref']?>" target="_blank">预览</a> | <a href="AddAd.php?enews=EditAd&adid=<?=$r['adid']?>&time=<?=$time?><?=$ecms_hashur['ehref']?>">修改</a> | <a href="ListAd.php?enews=DelAd&adid=<?=$r['adid']?>&time=<?=$time?><?=$ecms_hashur['href'].$efh?>" onClick="return confirm('确认要删除？');">删除</a></div></td>
   </tr>
   <?php
   }

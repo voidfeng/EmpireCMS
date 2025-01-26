@@ -45,6 +45,7 @@ if($r['ecmsvpf'])
 	$ecms_tofunr['viewpassckvar']='ecmsvp'.$r['classid'].'v'.$r['id'];
 	$ecms_tofunr['viewpassckpass']=$r['ecmsvpf'];
 	$ecms_tofunr['viewpasstitle']=stripSlashes($r['title']);
+	$ecms_tofunr['viewpassaddvn']=1;
 	@include("../class/checkviewpass.php");
 }
 //外部链接

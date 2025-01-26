@@ -120,7 +120,7 @@ function DelVote($voteid,$userid,$username){
 }
 
 //批量生成投票
-function ReVoteJs_all($start=0,$from,$userid,$username){
+function ReVoteJs_all($start,$from,$userid,$username){
 	global $empire,$public_r,$fun_r,$dbtbpre;
 	$moreportpid=(int)$_GET['moreportpid'];
 	$mphref='';

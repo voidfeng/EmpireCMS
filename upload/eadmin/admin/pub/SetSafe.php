@@ -165,7 +165,7 @@ if($ecms_config['esafe']['loginauth'])
     </tr>
     <tr>
       <td height="25" bgcolor="#FFFFFF">后台访问的UserAgent包含</td>
-      <td height="25" bgcolor="#FFFFFF"><input name="ckhuseragent" type="text" id="ckhuseragent" value="<?=$ecms_config['esafe']['ckhuseragent']?>" size="35" autocomplete="off">
+      <td height="25" bgcolor="#FFFFFF"><input name="ckhuagjgecms" type="text" id="ckhuagjgecms" value="<?=$ecms_config['esafe']['ckhuseragent']?>" size="35" autocomplete="off">
         <font color="#666666">(区分大小写，多个用“||”半角双竖线隔开，设置后UserAgent信息必须包含这些字符才能访问后台)</font></td>
     </tr>
     <tr>

@@ -35,6 +35,7 @@ if($cr['ecmsvpf'])
 	$ecms_tofunr['viewpassckvar']='ecmsvpc'.$cr['classid'];
 	$ecms_tofunr['viewpassckpass']=$cr['ecmsvpf'];
 	$ecms_tofunr['viewpasstitle']=stripSlashes($class_r[$cr['classid']]['classname']);
+	$ecms_tofunr['viewpassaddvn']=2;
 	@include("../../class/checkviewpass.php");
 }
 if($class_r[$classid]['islast']&&$cr['bdinfoid'])

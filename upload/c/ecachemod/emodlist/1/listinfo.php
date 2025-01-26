@@ -211,7 +211,7 @@ function eonsubmitform()
   </form>
 </table>
 <br>
-<form name="listform" id="listform" method="post" action="ecmsinfo.php" onSubmit="return confirm('确认要执行此操作？');">
+<form name="listform" id="listform" method="post" action="ecmsinfo.php" onSubmit="return eonsubmitform();">
 <?=$ecms_hashur['form']?>
 <?=$efhr['vform']?>
 <input type=hidden name=classid value=<?=$classid?>>

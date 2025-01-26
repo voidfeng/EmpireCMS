@@ -30,7 +30,7 @@ if(!$fzclassid||!$fzid||!$tbname||!$fzpubid)
 {
 	printerror('ErrorUrl','');
 }
-$fzinfor=$empire->fetch1("select id,classid,mid,fzstb,cid from {$dbtbpre}enewsfz_info where pubid='$fzpubid'".do_dblimit_one());
+$fzinfor=$empire->fetch1("select id,classid,mid,fzstb,cid,sclassid from {$dbtbpre}enewsfz_info where pubid='$fzpubid'".do_dblimit_one());
 if(!$fzinfor['id']||!$fzinfor['fzstb'])
 {
 	printerror('ErrorUrl','');
@@ -135,11 +135,20 @@ if($mid)
 	$search.='&mid='.$mid;
 }
 //栏目
+$showcclassid=0;
 $classid=(int)$_GET['classid'];
 if($classid)
 {
+	$showcclassid=$classid;
 	$add.=' and '.($class_r[$classid]['islast']?"classid='$classid'":"(".ReturnClass($class_r[$classid]['sonclass']).")");
 	$search.='&classid='.$classid;
+}
+else
+{
+	if($fzinfor['sclassid'])
+	{
+		$showcclassid=$fzinfor['sclassid'];
+	}
 }
 //推荐
 $isgood=(int)$_GET['isgood'];
@@ -592,7 +601,7 @@ function ChangeInfoDoAction(tbname,infoids){
   </form>
 </table>
 <br>
-<IFRAME frameBorder="0" id="showclassnav" name="showclassnav" scrolling="no" src="../ShowClassNav.php?ecms=8&classid=<?=$classid?><?=$ecms_hashur['ehref']?>" style="HEIGHT:0;VISIBILITY:inherit;WIDTH:0;Z-INDEX:1"></IFRAME>
+<IFRAME frameBorder="0" id="showclassnav" name="showclassnav" scrolling="no" src="../ShowClassNav.php?ecms=8&classid=<?=$showcclassid?><?=$ecms_hashur['ehref']?>" style="HEIGHT:0;VISIBILITY:inherit;WIDTH:0;Z-INDEX:1"></IFRAME>
 </body>
 </html>
 <?php

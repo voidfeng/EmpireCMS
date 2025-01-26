@@ -1069,7 +1069,7 @@ function FieldChangeColor(obj){
 			  	<table width="100%" border="0" cellpadding="3" cellspacing="1" bgcolor="#DBEAF5">
                 <tr>
                   <td width="50%" height="27">所属父信息</td>
-                  <td width="50%"><div align="right"><a href="#empirecms" onClick="window.open('fzinfo/ChangeFzinfo.php?sinfo=1&infoclassid=<?=$classid?>&infoid=<?=$id?><?=$ecms_hashur['ehref']?>','PushToFz','width=500,height=500,scrollbars=yes,left=300,top=150,resizable=yes');">点击选择所属父信息</a></div></td>
+                  <td width="50%"><div align="right"><a href="#empirecms" onClick="window.open('fzinfo/ChangeFzinfo.php?sinfo=1&infoclassid=<?=$classid?>&infoid=<?=$id?><?=$ecms_hashur['ehref']?>','PushToFz','width=650,height=500,scrollbars=yes,left=300,top=150,resizable=yes');">点击选择所属父信息</a></div></td>
                 </tr>
               	</table>
 		      	<table width="100%" border="0" cellpadding="3" cellspacing="1" bgcolor="#DBEAF5">

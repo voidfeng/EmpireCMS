@@ -1,4 +1,8 @@
 <?php
+if(!defined('INEMPIREBAKDT'))
+{
+	exit();
+}
 if(!defined('InEmpireCMS'))
 {
 	exit();

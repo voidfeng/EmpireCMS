@@ -559,6 +559,12 @@ function GoToUrl(url,totarget){
       </table></td>
     <td valign="top" bgcolor="#FFFFFF" onMouseOut="this.style.backgroundColor='#ffffff'" onMouseOver="this.style.backgroundColor='#EBF3FC'"><table width="100%" border="0" cellspacing="1" cellpadding="3">
         <tr> 
+          <td><strong>API接口</strong></td>
+        </tr>
+        <tr> 
+          <td>&nbsp;&nbsp;<a href="#ecms" onClick="GoToUrl('eapi/ListDtUserpage.php<?=$ecms_hashur['whehref']?>','');">管理自定义动态页面</a></td>
+        </tr>
+        <tr> 
           <td><strong>广告系统</strong></td>
         </tr>
         <tr> 

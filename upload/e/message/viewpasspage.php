@@ -9,6 +9,10 @@ if(!$title)
 	$title='系统开启'.($ecms==1?'后台':'').'访问验证';
 }
 $evpostvname=$ecms==1?'hecmsckviewdof':'qecmsckviewdof';
+if($ecmsaddvn)
+{
+	$evpostvname=$evpostvname.intval($ecmsaddvn);
+}
 ?>
 <html>
 <head>

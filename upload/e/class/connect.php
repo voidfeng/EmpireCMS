@@ -88,6 +88,11 @@ $efh='';
 $eeid='';
 $eeid_r=array();
 $emptyarray=array();
+$ecms_elu=0;
+$elu_setr=array();
+$elu_sysr=array();
+$elu_r=array();
+$elu_addr=array();
 $ecms_config['sets']['selfmoreportid']=0;
 $ecms_config['sets']['mainportpath']='';
 $ecms_config['sets']['pagemustdt']=0;
@@ -186,8 +191,8 @@ else
 }
 
 //访问密码
-EcmsViewPass(0,$ecms_config['esafe']['viewpassvar'],$ecms_config['esafe']['viewpass'],'');
-EcmsViewPass(1,$ecms_config['esafe']['hviewpassvar'],$ecms_config['esafe']['hviewpass'],'');
+EcmsViewPass(0,$ecms_config['esafe']['viewpassvar'],$ecms_config['esafe']['viewpass'],'',0);
+EcmsViewPass(1,$ecms_config['esafe']['hviewpassvar'],$ecms_config['esafe']['hviewpass'],'',0);
 
 if($ecms_config['sets']['selfmoreportid']>1)
 {
@@ -6324,13 +6329,17 @@ function eCheckTimeCloseDo($ecms){
 }
 
 //访问密码
-function EcmsViewPass($ecms,$ckvar,$ckpass,$title=''){
+function EcmsViewPass($ecms,$ckvar,$ckpass,$title='',$ecmsaddvn=0){
 	if(!$ckpass)
 	{
 		return '';
 	}
 	$ckecms=$ecms==1?1:0;
 	$evpostvname=$ecms==1?'hecmsckviewdof':'qecmsckviewdof';
+	if($ecmsaddvn)
+	{
+		$evpostvname=$evpostvname.intval($ecmsaddvn);
+	}
 	$reurl=eReturnSelfPage(1);
 	if($_POST[$evpostvname])
 	{
@@ -6347,12 +6356,12 @@ function EcmsViewPass($ecms,$ckvar,$ckpass,$title=''){
 	$getpass=getcvar($ckvar);
 	if(!$getpass)
 	{
-		EcmsViewPassForm($title,$ecms);
+		EcmsViewPassForm($title,$ecms,$ecmsaddvn);
 	}
 	$ckenpass=EcmsViewPassEn($ecms,$ckpass);
 	if('dg'.$ckenpass!='dg'.$getpass)
 	{
-		EcmsViewPassForm($title,$ecms);
+		EcmsViewPassForm($title,$ecms,$ecmsaddvn);
 	}
 }
 
@@ -6370,7 +6379,7 @@ function EcmsViewPassEn($ecms,$pass){
 }
 
 //访问密码(录入)
-function EcmsViewPassForm($title='',$ecms=0){
+function EcmsViewPassForm($title='',$ecms=0,$ecmsaddvn=0){
 	@include(ECMS_PATH.'e/message/viewpasspage.php');
 	exit();
 }

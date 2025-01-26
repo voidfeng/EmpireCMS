@@ -255,6 +255,7 @@ else
 {
 	$thisuid=$uid;
 }
+$thisuid=(int)$thisuid;
 $user_r=$empire->fetch1("select adminclass,groupid from {$dbtbpre}enewsuser where userid='$thisuid'");
 if(!$user_r['groupid'])
 {

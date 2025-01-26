@@ -308,6 +308,7 @@ function Ebak_BakExe($t,$s,$p,$mypath,$alltotal,$thenof,$fnum,$stime=0,$userid=0
 		$stime=time();
 	}
 	$header="<?php
+define('INEMPIREBAKDT',TRUE);
 @require(\"../../inc/header.php\");
 ";
 	$footer="
@@ -482,6 +483,7 @@ function Ebak_BakExeT($t,$s,$p,$mypath,$alltotal,$thenof,$fnum,$auf='',$aufval=0
 		$stime=time();
 	}
 	$header="<?php
+define('INEMPIREBAKDT',TRUE);
 @require(\"../../inc/header.php\");
 ";
 	$footer="

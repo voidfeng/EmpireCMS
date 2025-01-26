@@ -15,5 +15,5 @@ if(!defined('InEmpireCMS'))
 {
 	exit();
 }
-EcmsViewPass($ecms_tofunr['viewpassecms'],$ecms_tofunr['viewpassckvar'],$ecms_tofunr['viewpassckpass'],$ecms_tofunr['viewpasstitle']);
+EcmsViewPass($ecms_tofunr['viewpassecms'],$ecms_tofunr['viewpassckvar'],$ecms_tofunr['viewpassckpass'],$ecms_tofunr['viewpasstitle'],$ecms_tofunr['viewpassaddvn']);
 ?>

@@ -141,7 +141,7 @@ function foreColor()
               <td height="25">广告分类：</td>
               <td height="25"> <select name="add[classid]" id="add[classid]">
                   <?=$options?>
-                </select> <input type="button" name="Submit3" value="管理分类" onclick="window.open('AdClass.php<?=$ecms_hashur['whehref']?>');"></td>
+                </select> <input type="button" name="Submit3" value="管理分类" onClick="window.open('AdClass.php<?=$ecms_hashur['whehref']?>');"></td>
             </tr>
             <tr bgcolor="#FFFFFF"> 
               <td width="27%" height="25">广告名称：</td>
@@ -221,7 +221,7 @@ function foreColor()
             </tr>
             <tr bgcolor="#FFFFFF"> 
               <td height="25">简单注释：</td>
-              <td height="25"> <textarea name="add[adsay]" cols="65" rows="5" id="add[adsay]"><?=$r['adsay']?></textarea></td>
+              <td height="25"> <textarea name="add[adsay]" cols="65" rows="5" id="add[adsay]"><?=ehtmlspecialchars($r['adsay'])?></textarea></td>
             </tr>
             <tr bgcolor="#FFFFFF"> 
               <td height="25">&nbsp;</td>
@@ -261,7 +261,7 @@ function foreColor()
               <td height="25">广告分类：</td>
               <td height="25"> <select name="add[classid]" id="add[classid]">
                   <?=$options?>
-                </select> <input type="button" name="Submit32" value="管理分类" onclick="window.open('AdClass.php<?=$ecms_hashur['whehref']?>');"></td>
+                </select> <input type="button" name="Submit32" value="管理分类" onClick="window.open('AdClass.php<?=$ecms_hashur['whehref']?>');"></td>
             </tr>
             <tr bgcolor="#FFFFFF"> 
               <td width="27%" height="25">广告名称：</td>
@@ -305,7 +305,7 @@ function foreColor()
             </tr>
             <tr bgcolor="#FFFFFF"> 
               <td height="25">简单注释：</td>
-              <td height="25"> <textarea name="add[adsay]" cols="65" rows="5" id="add[adsay]"><?=$r['adsay']?></textarea></td>
+              <td height="25"> <textarea name="add[adsay]" cols="65" rows="5" id="add[adsay]"><?=ehtmlspecialchars($r['adsay'])?></textarea></td>
             </tr>
             <tr bgcolor="#FFFFFF"> 
               <td height="25">&nbsp;</td>
@@ -345,7 +345,7 @@ function foreColor()
               <td height="25">广告分类：</td>
               <td height="25"> <select name="add[classid]" id="add[classid]">
                   <?=$options?>
-                </select> <input type="button" name="Submit33" value="管理分类" onclick="window.open('AdClass.php<?=$ecms_hashur['whehref']?>');"></td>
+                </select> <input type="button" name="Submit33" value="管理分类" onClick="window.open('AdClass.php<?=$ecms_hashur['whehref']?>');"></td>
             </tr>
             <tr bgcolor="#FFFFFF"> 
               <td width="27%" height="25">广告名称：</td>
@@ -391,7 +391,7 @@ function foreColor()
             </tr>
             <tr bgcolor="#FFFFFF"> 
               <td height="25">简单注释：</td>
-              <td height="25"> <textarea name="add[adsay]" cols="65" rows="5" id="add[adsay]"><?=$r['adsay']?></textarea></td>
+              <td height="25"> <textarea name="add[adsay]" cols="65" rows="5" id="add[adsay]"><?=ehtmlspecialchars($r['adsay'])?></textarea></td>
             </tr>
             <tr bgcolor="#FFFFFF"> 
               <td height="25">&nbsp;</td>
@@ -431,7 +431,7 @@ function foreColor()
               <td height="25">广告分类：</td>
               <td height="25"> <select name="add[classid]" id="add[classid]">
                   <?=$options?>
-                </select> <input type="button" name="Submit34" value="管理分类" onclick="window.open('AdClass.php<?=$ecms_hashur['whehref']?>');"></td>
+                </select> <input type="button" name="Submit34" value="管理分类" onClick="window.open('AdClass.php<?=$ecms_hashur['whehref']?>');"></td>
             </tr>
             <tr bgcolor="#FFFFFF"> 
               <td width="27%" height="25">广告名称：</td>
@@ -453,8 +453,8 @@ function foreColor()
             <tr bgcolor="#FFFFFF"> 
               <td height="25">图片/FLASH地址：</td>
               <td height="25"> <input name="picurl" type="text" id="picurl" value="<?=$r['picurl']?>" size="42"> 
-                <a onclick="window.open('../ecmseditor/FileMain.php?<?=$ecms_hashur['ehref']?>&modtype=3&type=1&classid=&doing=2&field=picurl&filepass=<?=$filepass?>&sinfo=1','','width=700,height=550,scrollbars=yes');" title="选择已上传的图片"><img src="../../../e/data/images/changeimg.gif" alt="选择/上传图片" width="22" height="22" border="0" align="absbottom"></a> 
-                <a onclick="window.open('../ecmseditor/FileMain.php?<?=$ecms_hashur['ehref']?>&modtype=3&type=2&classid=&doing=2&field=picurl&filepass=<?=$filepass?>&sinfo=1','','width=700,height=550,scrollbars=yes');" title="选择已上传的图片"><img src="../../../e/data/images/changeflash.gif" alt="选择/上传FLASH" width="22" height="22" border="0" align="absbottom"></a> 
+                <a onClick="window.open('../ecmseditor/FileMain.php?<?=$ecms_hashur['ehref']?>&modtype=3&type=1&classid=&doing=2&field=picurl&filepass=<?=$filepass?>&sinfo=1','','width=700,height=550,scrollbars=yes');" title="选择已上传的图片"><img src="../../../e/data/images/changeimg.gif" alt="选择/上传图片" width="22" height="22" border="0" align="absbottom"></a> 
+                <a onClick="window.open('../ecmseditor/FileMain.php?<?=$ecms_hashur['ehref']?>&modtype=3&type=2&classid=&doing=2&field=picurl&filepass=<?=$filepass?>&sinfo=1','','width=700,height=550,scrollbars=yes');" title="选择已上传的图片"><img src="../../../e/data/images/changeflash.gif" alt="选择/上传FLASH" width="22" height="22" border="0" align="absbottom"></a> 
               </td>
             </tr>
             <tr bgcolor="#FFFFFF"> 
@@ -502,7 +502,7 @@ function foreColor()
             </tr>
             <tr bgcolor="#FFFFFF"> 
               <td height="25">简单注释：</td>
-              <td height="25"> <textarea name="add[adsay]" cols="65" rows="5" id="add[adsay]"><?=$r['adsay']?></textarea></td>
+              <td height="25"> <textarea name="add[adsay]" cols="65" rows="5" id="add[adsay]"><?=ehtmlspecialchars($r['adsay'])?></textarea></td>
             </tr>
             <tr bgcolor="#FFFFFF"> 
               <td height="25">&nbsp;</td>

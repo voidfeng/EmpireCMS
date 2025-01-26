@@ -2300,7 +2300,7 @@ function ChangeClassIslast($reclassid,$userid,$username){
 		$empire->query("delete from {$dbtbpre}enewsclassnavcache where navtype='listclass' or navtype='listenews' or navtype='jsclass' or navtype='userenews' or (navtype='modclass' and modid='".$r['modid']."')");
 		DelFiletext("../d/js/js/addinfo".$r['modid'].".js");
 		$cache_enews='doclass,doinfo,douserinfo,domod,dostemp';
-		$cache_ecmstourl=urlencode(EcmsGetReturnUrl());
+		$cache_ecmstourl=urlencode($_POST['from']);
 		$cache_mess=$mess;
 		$cache_mid=$r['modid'];
 		$cache_url="CreacjCache.php?enews=$cache_enews&mid=$cache_mid&ecmstourl=$cache_ecmstourl&mess=$cache_mess".hReturnEcmsHashStrHref2(0);
@@ -2493,7 +2493,7 @@ function EditClassOrder($classid,$myorder,$userid,$username){
 	//删除导航缓存
 	$empire->query("delete from {$dbtbpre}enewsclassnavcache where navtype='listclass' or navtype='listenews' or navtype='jsclass' or navtype='userenews'");
 	$cache_enews='doclass,doinfo,douserinfo';
-	$cache_ecmstourl=urlencode(EcmsGetReturnUrl());
+	$cache_ecmstourl=urlencode($_POST['from']);
 	$cache_mess='EditClassOrderSuccess';
 	$cache_url="CreacjCache.php?enews=$cache_enews&ecmstourl=$cache_ecmstourl&mess=$cache_mess".hReturnEcmsHashStrHref2(0);
 	//操作日志

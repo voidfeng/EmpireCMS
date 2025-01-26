@@ -169,6 +169,22 @@ function SetSafe($add,$userid,$username){
 	{
 		$r['do_loginauth']=$ecms_config['esafe']['loginauth'];
 	}
+	if($add['viewpass'])
+	{
+		$r['do_viewpass']=$add['viewpass']=='null'?'':$add['viewpass'];
+	}
+	else
+	{
+		$r['do_viewpass']=$ecms_config['esafe']['viewpass'];
+	}
+	if($add['hviewpass'])
+	{
+		$r['do_hviewpass']=$add['hviewpass']=='null'?'':$add['hviewpass'];
+	}
+	else
+	{
+		$r['do_hviewpass']=$ecms_config['esafe']['hviewpass'];
+	}
 	//$r['do_loginauth']=$add['loginauth'];
 	$r['do_enloginauth']=(int)$add['enloginauth'];
 	$r['do_eloginurlcsvar']=$add['eloginurlcsvar'];
@@ -186,13 +202,13 @@ function SetSafe($add,$userid,$username){
 	$r['do_ckhashename']=$add['ckhashename'];
 	$r['do_ckhashrname']=$add['ckhashrname'];
 	$r['do_ckformhash']=(int)$add['ckformhash'];
-	$r['do_ckhuseragent']=$add['ckhuseragent'];
+	$r['do_ckhuseragent']=$add['ckhuagjgecms'];
 	$r['do_hendatakey']=$add['hendatakey'];
 	$r['do_endatakey']=$add['endatakey'];
 	$r['do_viewpassvar']=$add['viewpassvar'];
-	$r['do_viewpass']=$add['viewpass'];
+	//$r['do_viewpass']=$add['viewpass'];
 	$r['do_hviewpassvar']=$add['hviewpassvar'];
-	$r['do_hviewpass']=$add['hviewpass'];
+	//$r['do_hviewpass']=$add['hviewpass'];
 
 	$r['phome_cookiedomain']=$add['cookiedomain'];
 	$r['phome_cookiepath']=$add['cookiepath'];

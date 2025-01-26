@@ -319,6 +319,7 @@ function SetEnews($add,$userid,$username){
 	//fpn
 	eCheckStrType(5,$add['bakdbpath'],1);
 	eCheckStrType(5,$add['bakdbzip'],1);
+	eCheckStrType(5,$add['adfile'],1);
 	//提交IP
 	$doiptypes='';
 	$doiptype=$add['doiptype'];
