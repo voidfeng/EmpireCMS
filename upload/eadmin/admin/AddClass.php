@@ -160,6 +160,11 @@ if($enews=="EditClass"||$copyclass)
 		$openpl0="";
 		$openpl1=" checked";
 	}
+	else
+	{
+		$openpl0=" checked";
+		$openpl1="";
+	}
 	if($r['checkpl'])
 	{
 		$checkpl=" checked";

@@ -198,7 +198,6 @@ function CheckShowNewsLevel($infor){
 }
 $check_infoid=(int)$check_infoid;
 $check_classid=(int)$check_classid;
-eCheckStrType(4,$check_tbname,1);
 if(!defined('PageCheckLevel'))
 {
 	require_once(EPAGECHECKPATH.'e/class/connect.php');
@@ -210,6 +209,7 @@ if(!defined('PageCheckLevel'))
 	require_once(ECMS_PATH.'e/data/dbcache/MemberLevel.php');
 	$link=db_connect();
 	$empire=new mysqlquery();
+	eCheckStrType(4,$check_tbname,1);
 	$check_tbname=RepPostVar($check_tbname);
 	$checkinfor=$empire->fetch1("select * from {$dbtbpre}ecms_".$check_tbname." where id='$check_infoid'".do_dblimit_one());
 	if(!$checkinfor['id']||$checkinfor['classid']!=$check_classid)
@@ -224,6 +224,7 @@ if(!defined('PageCheckLevel'))
 }
 else
 {
+	eCheckStrType(4,$check_tbname,1);
 	$check_tbname=RepPostVar($check_tbname);
 }
 

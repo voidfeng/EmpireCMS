@@ -20,7 +20,7 @@ CheckLevel($logininid,$loginin,$classid,"memberconnect");
 //设置接口
 function EditMemberConnect($add,$userid,$username){
 	global $empire,$dbtbpre;
-	$add[id]=(int)$add[id];
+	$add['id']=(int)$add['id'];
 	if(empty($add['appname'])||!$add['id'])
 	{
 		printerror("EmptyMemberConnect","history.go(-1)");

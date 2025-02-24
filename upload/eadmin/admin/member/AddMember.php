@@ -18,6 +18,7 @@ $ecms_hashur=hReturnEcmsHashStrAll();
 //验证权限
 CheckLevel($logininid,$loginin,$classid,"member");
 $r=array();
+$phr=array();
 $userdate=0;
 $enews=ehtmlspecialchars($_GET['enews']);
 $changegroupid=(int)$_GET['changegroupid'];
@@ -42,6 +43,8 @@ if($enews=="EditMember")
 	$r=ReturnUserInfo($userid);
 	$r['groupid']=$r['groupid']?$r['groupid']:eReturnMemberDefGroupid();
 	$addr=$empire->fetch1("select * from {$dbtbpre}enewsmemberadd where userid='$userid'".do_dblimit_one());
+	//绑定手机号
+	$phr=$empire->fetch1("select phno from {$dbtbpre}enewsmemberphno where uid='".$userid."'");
 	$url="<a href=ListMember.php".$ecms_hashur['whehref'].">管理会员</a>&nbsp;>&nbsp;修改会员资料：<b>".$r['username']."</b>";
 	//时间
 	if($r['userdate'])
@@ -186,8 +189,8 @@ $formfile='../../../c/ecachemod/emodpub/memberform'.$formid.'.php';
         <input type="radio" name="add[isern]" value="1"<?=$r['isern']==1?' checked':''?>>已实名</td>
     </tr>
     <tr bgcolor="#FFFFFF"> 
-      <td height="25" valign="top">所属会员组<br> <br> <input type="button" name="Submit3" value="管理会员组" onclick="window.open('ListMemberGroup.php<?=$ecms_hashur['whehref']?>');">      </td>
-      <td height="25"><select name="add[groupid]" size="6" id="add[groupid]" onchange="self.location.href='AddMember.php?<?=$ecms_hashur['ehref']?>&enews=EditMember&userid=<?=$userid?>&changegroupid='+this.options[this.selectedIndex].value;">
+      <td height="25" valign="top">所属会员组<br> <br> <input type="button" name="Submit3" value="管理会员组" onClick="window.open('ListMemberGroup.php<?=$ecms_hashur['whehref']?>');">      </td>
+      <td height="25"><select name="add[groupid]" size="6" id="add[groupid]" onChange="self.location.href='AddMember.php?<?=$ecms_hashur['ehref']?>&enews=EditMember&userid=<?=$userid?>&changegroupid='+this.options[this.selectedIndex].value;">
           <?=$group?>
         </select></td>
     </tr>
@@ -205,6 +208,10 @@ $formfile='../../../c/ecachemod/emodpub/memberform'.$formid.'.php';
     <tr bgcolor="#FFFFFF">
       <td height="25">手机号码</td>
       <td height="25"><input name='add[phno]' type='text' id='add[phno]' value='<?=$r['phno']?>' size="35"></td>
+    </tr>
+	<tr bgcolor="#FFFFFF">
+      <td height="25">绑定手机号</td>
+      <td height="25"><b><?=$phr['phno']?$phr['phno']:'没有绑定'?></b></td>
     </tr>
     <tr bgcolor="#FFFFFF"> 
       <td height="25">剩余天数</td>
@@ -272,7 +279,7 @@ $formfile='../../../c/ecachemod/emodpub/memberform'.$formid.'.php';
       <td height="25">空间使用模板</td>
       <td height="25"><select name="add[spacestyleid]" id="add[spacestyleid]">
           <?=$spacestyle?>
-        </select> <input type="button" name="Submit32" value="管理空间模板" onclick="window.open('ListSpaceStyle.php<?=$ecms_hashur['whehref']?>');"></td>
+        </select> <input type="button" name="Submit32" value="管理空间模板" onClick="window.open('ListSpaceStyle.php<?=$ecms_hashur['whehref']?>');"></td>
     </tr>
     <tr bgcolor="#FFFFFF">
       <td height="25">空间名称</td>

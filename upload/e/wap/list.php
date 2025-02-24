@@ -106,7 +106,7 @@ $search.="&classid=$classid&style=$wapstyle&bclassid=$bclassid";
 
 $page=intval($_GET['page']);
 $page=RepPIntvar($page);
-$line=$pr['waplistnum'];//每页显示记录数
+$line=(int)$pr['waplistnum'];//每页显示记录数
 $offset=$page*$line;
 $query="select ".ReturnSqlListF($modid)." from {$dbtbpre}ecms_".$class_r[$classid]['tbname']." where ".$yhadd.$add;
 $totalnum=intval($_GET['totalnum']);

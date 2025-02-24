@@ -7793,6 +7793,7 @@ function GetPubCache(){
 'tgidlist'=>'".addslashes($tgidlist)."',
 'phmopen'=>".$paddr['phmopen'].",
 'phmouttime'=>".$paddr['phmouttime'].",
+'phmretime'=>".$paddr['phmretime'].",
 'phmern'=>".$paddr['phmern'].",
 'phmmust'=>".$paddr['phmmust'].",
 'phmreg'=>".$paddr['phmreg'].",

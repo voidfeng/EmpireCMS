@@ -16,6 +16,7 @@ if(!$p)
 {
 	printerror('ErrorUrl','',1);
 }
+eCheckStrType(4,$p,1);
 $groupid=(int)$groupid;
 $pagename='';
 $pagetext='';
@@ -24,6 +25,7 @@ if($groupid)
 	$record="<!--record-->";
 	$field="<!--field--->";
 	$memberformid=GetMemberFormId($groupid);
+	$memberformid=(int)$memberformid;
 	$memberformr=$empire->fetch1("select viewenter from {$dbtbpre}enewsmemberform where fid='$memberformid'");
 	$flike=$field.$p.$record;
 	if(strstr($memberformr['viewenter'],$flike))

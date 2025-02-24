@@ -225,6 +225,10 @@ function AddPl($username,$password,$nomember,$key,$saytext,$id,$classid,$repid,$
 	{
 		$checked=0;
 	}
+	$restb=(int)$restb;
+	$checked=(int)$checked;
+	$muserid=(int)$muserid;
+	
 	$ret_r=ReturnPlAddF($add,$plsetr,0);
 	//主表
 	$sql=$empire->updatesql("insert into {$dbtbpre}enewspl_".$restb."(pubid,username,sayip,saytime,id,classid,checked,zcnum,fdnum,userid,isgood,saytext,eipport".$ret_r['fields'].") values('$pubid','".$username."','$sayip','$saytime','$id','$classid','$checked',0,0,'$muserid',0,'".addslashes($saytext)."','$eipport'".$ret_r['values'].");","ins");

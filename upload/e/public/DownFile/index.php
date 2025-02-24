@@ -8,6 +8,7 @@ eCheckCloseMods('downfile');//关闭模块
 //下载附件
 function DoDownFile($fileid){
 	global $empire,$public_r,$class_r,$dbtbpre;
+	$fileid=(int)$fileid;
 	if(empty($fileid))
 	{
 		printerror("ErrorUrl","history.go(-1)",1);

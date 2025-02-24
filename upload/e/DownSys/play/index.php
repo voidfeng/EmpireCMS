@@ -190,6 +190,7 @@ $op=GetOnlinePass();
 $url="../doaction.php?enews=GetSofturl&classid=$classid&id=$id&pathid=$pathid&pass=".$pass."&p=".$user['userid'].":::".$user['rnd'].":::".$nockpass."&onlinetime=".$op[0]."&onlinepass=".$op[1];
 $trueurl=ReturnDSofturl($showdown_r[1],$showdown_r[4],'../../',0);//实际地址
 $playerpass="wm_chief";
+$r['playerid']=(int)$r['playerid'];
 //自动识别播放器
 $jwplayertype=',.flv,.mp4,';
 $htmlvideotype=',.ogg,.mp4,.webm,';

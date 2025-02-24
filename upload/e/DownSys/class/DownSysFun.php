@@ -196,7 +196,7 @@ function QDownLoadFile($file){
 	{
 		$file=str_replace($efileurl,'/d/file/',$file);
 	}
-	if(stristr($file,$exp."e".$exp)||strstr($file,"..")||strstr($file,"?")||strstr($file,"#")||strstr($file,":")||stristr($file,'/'.$ecms_config['esafe']['hfadminpath'])||stristr($file,'ecachefiles')||stristr($file,'/bbs')||stristr($file,'/elinkuser')||stristr($file,'/c/')||stristr($file,'esavedatas')||stristr($file,'/e/'))
+	if(stristr($file,$exp."e".$exp)||strstr($file,"..")||strstr($file,"?")||strstr($file,"#")||strstr($file,":")||stristr($file,'/'.$ecms_config['esafe']['hfadminpath'])||stristr($file,'ecachefiles')||stristr($file,'/bbs')||stristr($file,'/elinkuser')||stristr($file,'/c/')||stristr($file,'esavedatas')||stristr($file,'/e/')||stristr($file,'.php')||stristr($file,'/elu'))
 	{
 		Header("Location:$firstfile");
 		exit();

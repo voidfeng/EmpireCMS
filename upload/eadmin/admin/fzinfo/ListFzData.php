@@ -204,8 +204,8 @@ while($cr=$empire->fetch($csql))
 	
 	if(empty($cr['bcid']))//一级
 	{
-		$fzdatacs.="<option value='b".$cr['cid']."'".$selected.">".$cr['cname']."</option>".$bcr[$cr['cid']];
-		$movefzdatacs.="<option value='b".$cr['cid']."'>".$cr['cname']."</option>".$movebcr[$cr['cid']];
+		$fzdatacs.="<option value='b".$cr['cid']."' style='background:#99C4E3'".$selected.">".$cr['cname']."</option>".$bcr[$cr['cid']];
+		$movefzdatacs.="<option value='b".$cr['cid']."' style='background:#99C4E3'>".$cr['cname']."</option>".$movebcr[$cr['cid']];
 	}
 	else//二级
 	{

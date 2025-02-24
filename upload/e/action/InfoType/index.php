@@ -68,7 +68,7 @@ else
 	$addorder=$ttr['reorder'];
 }
 //列表模板
-$tempid=$ttr['listtempid'];
+$tempid=(int)$ttr['listtempid'];
 if(empty($tempid))
 {
 	printerror('ErrorUrl','',1);
@@ -81,7 +81,7 @@ if(empty($tempr['tempid']))
 $page=(int)$_GET['page'];
 $page=RepPIntvar($page);
 $start=0;
-$line=$ttr['tnum'];//每页显示记录数
+$line=(int)$ttr['tnum'];//每页显示记录数
 $page_line=10;//每页显示链接数
 $offset=$page*$line;//总偏移量
 //缓存

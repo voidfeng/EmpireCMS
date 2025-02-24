@@ -198,7 +198,7 @@ function EditFile_all($add,$userid,$username){
 		{
 			continue;
 		}
-		$sql=$empire->query("update ".eReturnFileTable($modtype,$fstb)." set no='".$dofileno[$i]."' where fileid='".$fileid[$i]."'");
+		$sql=$empire->query("update ".eReturnFileTable($modtype,$fstb)." set no='".$dofileno[$i]."' where fileid='".$dofileid[$i]."'");
     }
 	if($sql)
 	{
@@ -316,7 +316,7 @@ function EditFileOne($add,$userid,$username){
 	$upstr='';
 	if($no)
 	{
-		$upstr="no='".$no."'";
+		$upstr=",no='".$no."'";
 	}
 	$sql=$empire->query("update ".eReturnFileTable($modtype,$fstb)." set cid='$cid',cid2='$cid2'".$upstr." where fileid='".$fileid."'");
 	if($sql)

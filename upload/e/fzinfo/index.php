@@ -47,8 +47,21 @@ if(!$infor['id'])
 {
 	printerror('ErrorUrl','');
 }
+//父信息列表
+$efzinfoisall=0;
+if($get_evr['cid']==-1)
+{
+	$efzinfoisall=1;
+}
 //分类
-$fzdatacr=$empire->fetch1("select * from {$dbtbpre}enewsfz_class where cid='".$get_evr['cid']."' and pubid='".$fzinfor['pubid']."'".do_dblimit_one());
+if($efzinfoisall==1)
+{
+	$fzdatacr=$empire->fetch1("select * from {$dbtbpre}enewsfz_class where pubid='".$fzinfor['pubid']."' and islist=1 order by cid".do_dblimit_one());
+}
+else
+{
+	$fzdatacr=$empire->fetch1("select * from {$dbtbpre}enewsfz_class where cid='".$get_evr['cid']."' and pubid='".$fzinfor['pubid']."'".do_dblimit_one());
+}
 if(!$fzdatacr['cid'])
 {
 	printerror('ErrorUrl','',1);
@@ -73,19 +86,32 @@ $ecms_tofunr['cachepath']='empirecms';
 $defadd='';
 $add='';
 $search='';
-$GLOBALS['navclassid']=$fzdatacr['cid'];
+if($efzinfoisall==1)
+{
+	$GLOBALS['navclassid']=0-$fzdatacr['cid'];
+}
+else
+{
+	$GLOBALS['navclassid']=(int)$fzdatacr['cid'];
+}
+$GLOBALS['navinfor']=$fzinfor;
 
-$pagetitle=ehtmlspecialchars($fzdatacr['cname']);
+$infotitlelink=sys_ReturnBqTitleLink($infor);
+$pagetitle=ehtmlspecialchars($efzinfoisall==1?$infor['title']:$fzdatacr['cname']);
 $pagekey=$pagetitle;
 $pagedes=$pagetitle;
 $classimg=$public_r['newsurl'].'e/data/images/notimg.gif';
-$url=ReturnClassLink($infor['classid']).'&nbsp;'.$public_r['navfh'].'&nbsp;'.$infor['title'].'&nbsp;'.$public_r['navfh'].'&nbsp;'.$fzdatacr['cname'];
+$url=ReturnClassLink($infor['classid']).'&nbsp;'.$public_r['navfh'].'&nbsp;<a href="'.$infotitlelink.'">'.$infor['title'].'</a>';
+if($efzinfoisall!=1)
+{
+	$url=$url.'&nbsp;'.$public_r['navfh'].'&nbsp;'.$fzdatacr['cname'];
+}
 $pageecms=1;
 $pageclassid=0;
 $have_class=1;
 $search.='&fztid='.$get_evr['fztid'].'&fzid='.$get_evr['fzid'].'&cid='.$get_evr['cid'];
 //页面模式
-if($fzdatacr['islist']!=1)
+if($fzdatacr['islist']!=1&&$efzinfoisall!=1)
 {
 	//绑定信息
 	if($fzdatacr['islist']==2)
@@ -150,15 +176,23 @@ if(!$fzdatacr['listtempid'])
 	printerror('ErrorUrl','',1);
 }
 //分类
-if($fzdatacr['bcid'])
+if($efzinfoisall==1)
 {
-	$isbcid=0;
-	$defadd.="cid='$cid'";
+	$isbcid=-1;
+	$defadd.="bpubid='".$fzinfor['pubid']."'";
 }
 else
 {
-	$isbcid=1;
-	$defadd.="bcid='$bcid'";
+	if($fzdatacr['bcid'])
+	{
+		$isbcid=0;
+		$defadd.="cid='".$fzdatacr['cid']."'";
+	}
+	else
+	{
+		$isbcid=1;
+		$defadd.="bcid='".$fzdatacr['cid']."'";
+	}
 }
 //模型ID
 $mid=(int)$_GET['mid'];
@@ -291,8 +325,16 @@ $page_line=10;//每页显示链接数
 $offset=$page*$line;//总偏移量
 //缓存
 $ecms_tofunr['cachetype']='fzpage';
-$ecms_tofunr['cacheids']=$fzdatacr['cid'].','.$page.','.$tempid;
-$ecms_tofunr['cachedatepath']='cfzinfo/'.$fzdatacr['cid'];
+if($efzinfoisall==1)
+{
+	$ecms_tofunr['cacheids']='-'.$fzdatacr['cid'].','.$page.','.$tempid;
+	$ecms_tofunr['cachedatepath']='cfzinfo/f'.$fzdatacr['cid'];
+}
+else
+{
+	$ecms_tofunr['cacheids']=$fzdatacr['cid'].','.$page.','.$tempid;
+	$ecms_tofunr['cachedatepath']='cfzinfo/'.$fzdatacr['cid'];
+}
 $ecms_tofunr['cachetime']=$public_r['ctimefz'];
 $ecms_tofunr['cachelasttime']=$public_r['ctimelast'];
 $ecms_tofunr['cachelastedit']=$fzinfor['fclast'];
@@ -390,13 +432,13 @@ while($r=$empire->fetch($sql))
 	{
 		continue;
 	}
-	$infor=$empire->fetch1("select * from {$dbtbpre}ecms_".$class_r[$r['classid']]['tbname']." where id='".$r['id']."'".do_dblimit_one());
-	if(empty($infor['id']))
+	$infoaddr=$empire->fetch1("select * from {$dbtbpre}ecms_".$class_r[$r['classid']]['tbname']." where id='".$r['id']."'".do_dblimit_one());
+	if(empty($infoaddr['id']))
 	{
 		continue;
 	}
 	//替换列表变量
-	$repvar=ReplaceListVars($no,$listvar,$subnews,$subtitle,$formatdate,$url,$have_class,$infor,$ret_r,$docode);
+	$repvar=ReplaceListVars($no,$listvar,$subnews,$subtitle,$formatdate,$url,$have_class,$infoaddr,$ret_r,$docode);
 	$listtext=str_replace("<!--list.var".$changerow."-->",$repvar,$listtext);
 	$changerow+=1;
 	//超过行数

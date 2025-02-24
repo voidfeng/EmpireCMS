@@ -67,7 +67,10 @@ eCheckHaveTruename('msp',$ur['userid'],$ur['username'],$ur['isern'],$ur['checked
 $userid=$userid?$userid:$ur['userid'];
 $utfusername=$utfusername?$utfusername:$ur['username'];
 $username=$username?$username:$ur['username'];
-$groupid=$ur['groupid'];
+$groupid=(int)$ur['groupid'];
+$userid=(int)$userid;
+$utfusername=RepPostVar($utfusername);
+$username=RepPostVar($username);
 UpdateSpaceViewStats($userid);//统计访问
 $addur=$empire->fetch1("select * from {$dbtbpre}enewsmemberadd where userid='".$userid."'".do_dblimit_one());
 //头像

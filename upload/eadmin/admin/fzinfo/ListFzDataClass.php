@@ -146,7 +146,7 @@ $efhr=heformhash_getr('EditFzDataClassOrder');
           <?=$r['isopen']==1?'是':'否'?>
 		  </div></td>
       <td><div align="center"><?=$islistmod?></div></td>
-      <td height="25"><div align="center"><a href="AddFzDataClass.php?enews=EditFzDataClass&fzclassid=<?=$fzclassid?>&fzid=<?=$fzid?>&cid=<?=$r['cid']?><?=$ecms_hashur['ehref']?>">修改</a> <a href="AddFzDataClass.php?enews=EditFzDataClass&fzclassid=<?=$fzclassid?>&fzid=<?=$fzid?>&cid=<?=$r['cid']?>&docopy=1<?=$ecms_hashur['ehref']?>">复制</a> <a href="ecmsfzinfo.php?enews=DelFzDataClass&fzclassid=<?=$fzclassid?>&fzid=<?=$fzid?>&cid=<?=$r['cid']?><?=$ecms_hashur['href'].$efh?>" onClick="return confirm('确认要删除？');">删除</a></div></td>
+      <td height="25"><div align="center"><a href="AddFzDataClass.php?enews=EditFzDataClass&fzclassid=<?=$fzclassid?>&fzid=<?=$fzid?>&cid=<?=$r['cid']?><?=$ecms_hashur['ehref']?>">修改</a> <a href="AddFzDataClass.php?enews=AddFzDataClass&fzclassid=<?=$fzclassid?>&fzid=<?=$fzid?>&cid=<?=$r['cid']?>&docopy=1<?=$ecms_hashur['ehref']?>">复制</a> <a href="ecmsfzinfo.php?enews=DelFzDataClass&fzclassid=<?=$fzclassid?>&fzid=<?=$fzid?>&cid=<?=$r['cid']?><?=$ecms_hashur['href'].$efh?>" onClick="return confirm('确认要删除？');">删除</a></div></td>
     </tr>
 	<?php
 	$smallsql=$empire->query("select cid,pubid,bcid,cname,islast,myorder,islist,isopen from {$dbtbpre}enewsfz_class where bcid='".$r['cid']."' order by cid");
@@ -180,7 +180,7 @@ $efhr=heformhash_getr('EditFzDataClassOrder');
           <?=$sr['isopen']==1?'是':'否'?>
 		  </div></td>
       <td><div align="center"><?=$sislistmod?></div></td>
-      <td height="25"><div align="center"><a href="AddFzDataClass.php?enews=EditFzDataClass&fzclassid=<?=$fzclassid?>&fzid=<?=$fzid?>&cid=<?=$sr['cid']?><?=$ecms_hashur['ehref']?>">修改</a> <a href="AddFzDataClass.php?enews=EditFzDataClass&fzclassid=<?=$fzclassid?>&fzid=<?=$fzid?>&cid=<?=$sr['cid']?>&docopy=1<?=$ecms_hashur['ehref']?>">复制</a> <a href="ecmsfzinfo.php?enews=DelFzDataClass&fzclassid=<?=$fzclassid?>&fzid=<?=$fzid?>&cid=<?=$sr['cid']?><?=$ecms_hashur['href'].$efh?>" onClick="return confirm('确认要删除？');">删除</a></div></td>
+      <td height="25"><div align="center"><a href="AddFzDataClass.php?enews=EditFzDataClass&fzclassid=<?=$fzclassid?>&fzid=<?=$fzid?>&cid=<?=$sr['cid']?><?=$ecms_hashur['ehref']?>">修改</a> <a href="AddFzDataClass.php?enews=AddFzDataClass&fzclassid=<?=$fzclassid?>&fzid=<?=$fzid?>&cid=<?=$sr['cid']?>&docopy=1<?=$ecms_hashur['ehref']?>">复制</a> <a href="ecmsfzinfo.php?enews=DelFzDataClass&fzclassid=<?=$fzclassid?>&fzid=<?=$fzid?>&cid=<?=$sr['cid']?><?=$ecms_hashur['href'].$efh?>" onClick="return confirm('确认要删除？');">删除</a></div></td>
     </tr>
 	<?php
 	}

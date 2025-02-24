@@ -649,7 +649,7 @@ function DoEcmsMemberReg($r,$setr){
 	//变量
 	$yusername=$r['username'];
 	$username=RepPostVar($r['username']);
-	if($yusername!=$r['username'])
+	if($yusername!=$username)
 	{
 		exit();
 	}

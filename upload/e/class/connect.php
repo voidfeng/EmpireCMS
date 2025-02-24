@@ -93,6 +93,11 @@ $elu_setr=array();
 $elu_sysr=array();
 $elu_r=array();
 $elu_addr=array();
+$ecms_eext=0;
+$eext_setr=array();
+$eext_sysr=array();
+$eext_r=array();
+$eext_addr=array();
 $ecms_config['sets']['selfmoreportid']=0;
 $ecms_config['sets']['mainportpath']='';
 $ecms_config['sets']['pagemustdt']=0;
@@ -494,6 +499,7 @@ function ajax_printerror($result='',$ajaxarea='ajaxarea',$error='',$ecms=0,$nova
 		$ajaxarea='ajaxarea';
 	}
 	$ajaxarea=ehtmlspecialchars($ajaxarea,ENT_QUOTES);
+	eCheckStrType(4,$ajaxarea,1);
 	$string=$result.'|'.$ajaxarea.'|'.$error;
 	echo $string;
 	db_close();
@@ -3077,6 +3083,10 @@ function ReadUrltext($url,$ecms=0){
 	}
 	$string='';
 	$htmlfp=@fopen($url,"rb");
+	if(!$htmlfp)
+	{
+		return '';
+	}
 	while($data=@fread($htmlfp,500000))
 	{
 		$string.=$data;
@@ -3124,6 +3134,10 @@ function ReadFiletext($filepath){
 		return '';
 	}
 	$htmlfp=@fopen($filepath,"rb");
+	if(!$htmlfp)
+	{
+		return '';
+	}
 	$string=@fread($htmlfp,@filesize($filepath));
 	@fclose($htmlfp);
 	return $string;
@@ -3142,6 +3156,10 @@ function ReadFiletextAll($filepath){
 		$ishttp=1;
 	}
 	$htmlfp=@fopen($filepath,"rb");
+	if(!$htmlfp)
+	{
+		return '';
+	}
 	//远程
 	if($ishttp==1)
 	{
@@ -3164,6 +3182,10 @@ function WriteFiletext($filepath,$string){
 	global $public_r;
 	$string=stripSlashes($string);
 	$fp=@fopen($filepath,"wb");
+	if(!$fp)
+	{
+		return '';
+	}
 	@fputs($fp,$string);
 	@fclose($fp);
 	if(empty($public_r['filechmod']))
@@ -3176,6 +3198,10 @@ function WriteFiletext($filepath,$string){
 function WriteFiletext_n($filepath,$string){
 	global $public_r;
 	$fp=@fopen($filepath,"wb");
+	if(!$fp)
+	{
+		return '';
+	}
 	@fputs($fp,$string);
 	@fclose($fp);
 	if(empty($public_r['filechmod']))
@@ -3841,8 +3867,8 @@ function ReturnClassInfoNum($cr,$ecms=0){
 	{
 		$f=$ecms==0?'infos':'allinfos';
 		$num=$empire->gettotal("select sum(".$f.") as total from {$dbtbpre}enewsclass where ".ReturnClass($class_r[$cr['classid']]['sonclass']));
-		$num=(int)$num;
 	}
+	$num=(int)$num;
 	return $num;
 }
 
@@ -7375,6 +7401,10 @@ function Ecms_eMoreMkdir($basepath,$path){
 function Ecms_ReadFiletext($filepath,$dolock=0){
 	$filepath=trim($filepath);
 	$htmlfp=@fopen($filepath,"rb");
+	if(!$htmlfp)
+	{
+		return '';
+	}
 	if($dolock==1)
 	{
 		flock($htmlfp,LOCK_SH);
@@ -7396,6 +7426,10 @@ function Ecms_WriteFiletext($filepath,$string,$dolock=0,$strip=0){
 		$string=stripSlashes($string);
 	}
 	$fp=@fopen($filepath,"wb");
+	if(!$fp)
+	{
+		return '';
+	}
 	if($dolock==1)
 	{
 		flock($fp,LOCK_EX);
