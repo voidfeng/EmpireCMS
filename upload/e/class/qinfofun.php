@@ -1191,7 +1191,7 @@ function DodoInfo($add,$ecms=0){
 		}
 		if($sql)
 		{
-			$reurl=DoingReturnUrl("AddInfo.php?classid=$classid&mid=$mid".$addurlcsfz.$addecmscheck,$add['ecmsfrom']);
+			$reurl=DoingReturnUrl("AddInfo.php?classid=$classid&mid=$mid&id=$id".$addurlcsfz.$addecmscheck,$add['ecmsfrom']);
 			if($add['gotoinfourl']&&$checked)//返回内容页
 			{
 				if($cr['showdt']==1)
