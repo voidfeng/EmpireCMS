@@ -8,10 +8,10 @@ eCheckCloseMods('dtup');//关闭模块
 //函数
 
 //导入页面
-function eapi_DtUserpageLoad($eapi_r){
+function eapi_DtUserpageLoad($eapi_funr){
 	global $empire,$dbtbpre,$public_r,$emod_r,$class_r,$class_zr,$fun_r,$navclassid,$navinfor,$class_tr,$level_r,$etable_r,$etable_t,$page,$eapi_r,$start,$line,$page_line,$offset;
-	$eapi_r['aid']=(int)$eapi_r['aid'];
-	$dtupfile=ECMS_PATH.'c/ecacheapi/edtuserpage/dt'.$eapi_r['aid'].'.php';
+	$eapi_funr['aid']=(int)$eapi_funr['aid'];
+	$dtupfile=ECMS_PATH.'c/ecacheapi/edtuserpage/dt'.$eapi_funr['aid'].'.php';
 	//读取文件内容
 	if(!file_exists($dtupfile))
 	{

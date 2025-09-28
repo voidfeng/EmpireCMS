@@ -629,7 +629,7 @@ function EditNews($add,$userid,$username){
 	//索引表
 	$indexsql=$empire->query("update {$dbtbpre}ecms_".$class_r[$add['classid']]['tbname']."_index set newstime='$newstime',lastdotime='$lastdotime'".$aqf." where id='".$add['id']."'".do_dblimit_upone());
 	//efz
-	$newefzstb=PubAEInfoToFzData($class_r[$add['classid']]['tbname'],$add['classid'],$add['id'],$newstime,$newchecked,$checkr['efz'],$add['efzid'],$add['delefzid'],1,0);
+	$newefzstb=PubAEInfoToFzData($class_r[$add['classid']]['tbname'],$add['classid'],$add['id'],$newstime,$index_checkr['checked'],$checkr['efz'],$add['efzid'],$add['delefzid'],1,0);
 	$addefz_v='';
 	if($newefzstb&&$newefzstb!='null')
 	{
@@ -668,9 +668,10 @@ function EditNews($add,$userid,$username){
 	//是否改变审核状态
 	if($index_checkr['checked']!=$newchecked)
 	{
-		MoveCheckInfoData($class_r[$add['classid']]['tbname'],$index_checkr['checked'],$checkr['stb'],"id='".$add['id']."'");
 		//efz
 		MoveCheckInfoForFzData($class_r[$add['classid']]['tbname'],$add['classid'],$add['id'],$index_checkr['checked'],$checkr['stb'],$checkr['efz'],'');
+		//efz
+		MoveCheckInfoData($class_r[$add['classid']]['tbname'],$index_checkr['checked'],$checkr['stb'],"id='".$add['id']."'");
 		//更新栏目信息数
 		if($newchecked)
 		{
@@ -894,9 +895,10 @@ function EditInfoSimple($add,$userid,$username){
 	//是否改变审核状态
 	if($index_checkr['checked']!=$newchecked)
 	{
-		MoveCheckInfoData($class_r[$add['classid']]['tbname'],$index_checkr['checked'],$checkr['stb'],"id='".$add['id']."'");
 		//efz
 		MoveCheckInfoForFzData($class_r[$add['classid']]['tbname'],$add['classid'],$add['id'],$index_checkr['checked'],$checkr['stb'],$checkr['efz'],'');
+		//efz
+		MoveCheckInfoData($class_r[$add['classid']]['tbname'],$index_checkr['checked'],$checkr['stb'],"id='".$add['id']."'");
 		//更新栏目信息数
 		if($newchecked)
 		{
@@ -1665,9 +1667,10 @@ function EditInfoToCopyInfo($classid,$id,$userid,$username,$usergroupr){
 		//是否改变审核状态
 		if($index_infor['checked']!=$index_r['checked'])
 		{
-			MoveCheckInfoData($tbname,$index_infor['checked'],$infor['stb'],"id='$infoid'");
 			//efz
 			MoveCheckInfoForFzData($tbname,$index_infor['classid'],$infoid,$index_infor['checked'],$infor['stb'],$infor['efz'],'');
+			//efz
+			MoveCheckInfoData($tbname,$index_infor['checked'],$infor['stb'],"id='$infoid'");
 			//更新栏目信息数
 			if($index_r['checked'])
 			{
@@ -1959,9 +1962,10 @@ function CheckNews_all($classid,$id,$userid,$username){
 			$empire->query("update {$dbtbpre}ecms_".$class_r[$classid]['tbname']."_check_data set haveaddfen=1 where id='$infoid'");
 		}
 		//未审核表转换
-		MoveCheckInfoData($class_r[$classid]['tbname'],0,$infor['stb'],"id='$infoid'");
 		//efz
 		MoveCheckInfoForFzData($class_r[$infor['classid']]['tbname'],$infor['classid'],$infoid,0,$infor['stb'],$infor['efz'],'');
+		//efz
+		MoveCheckInfoData($class_r[$classid]['tbname'],0,$infor['stb'],"id='$infoid'");
 		//审核人
 		if(!$infor['eckuid']&&($infor['ismember']||$infor['userid']!=$userid))
 		{
@@ -2056,9 +2060,10 @@ function NoCheckNews_all($classid,$id,$userid,$username){
 		}
 		$sql=$empire->query("update {$dbtbpre}ecms_".$class_r[$classid]['tbname']."_index set checked=0 where id='$infoid'");
 		//未审核互转
-		MoveCheckInfoData($class_r[$classid]['tbname'],1,$r['stb'],"id='$infoid'");
 		//efz
 		MoveCheckInfoForFzData($class_r[$r['classid']]['tbname'],$r['classid'],$infoid,1,$r['stb'],$r['efz'],'');
+		//efz
+		MoveCheckInfoData($class_r[$classid]['tbname'],1,$r['stb'],"id='$infoid'");
 		//更新栏目信息数
 		AddClassInfos($r['classid'],'','-1');
 		//分页字段
@@ -2573,9 +2578,10 @@ function SetAllCheckInfo($bclassid,$classid,$userid,$username){
 		}
 		$empire->query("update {$dbtbpre}ecms_".$class_r[$classid]['tbname']."_index set checked=1 where id='".$r['id']."'");
 		//审核表转换
-		MoveCheckInfoData($class_r[$classid]['tbname'],0,$r['stb'],"id='".$r['id']."'");
 		//efz
 		MoveCheckInfoForFzData($class_r[$r['classid']]['tbname'],$r['classid'],$r['id'],0,$r['stb'],$r['efz'],'');
+		//efz
+		MoveCheckInfoData($class_r[$classid]['tbname'],0,$r['stb'],"id='".$r['id']."'");
 		$n++;
 	}
 	//更新动态缓存
@@ -2631,9 +2637,10 @@ function DoWfInfo($add,$userid,$username){
 				$empire->query("update {$dbtbpre}ecms_".$class_r[$classid]['tbname']."_index set checked=1 where id='$id'");
 				$ar=$empire->fetch1("select * from {$dbtbpre}ecms_".$class_r[$classid]['tbname']."_check where id='$id'");
 				//未审核表转换
-				MoveCheckInfoData($class_r[$classid]['tbname'],0,$ar['stb'],"id='$id'");
 				//efz
 				MoveCheckInfoForFzData($class_r[$ar['classid']]['tbname'],$ar['classid'],$id,0,$ar['stb'],$ar['efz'],'');
+				//efz
+				MoveCheckInfoData($class_r[$classid]['tbname'],0,$ar['stb'],"id='$id'");
 				//更新栏目信息数
 				AddClassInfos($classid,'','+1');
 				$empire->query("update {$dbtbpre}enewswfinfo set tstatus='',checktno='100' where id='$id' and classid='$classid'".do_dblimit_upone());
@@ -2669,9 +2676,10 @@ function DoWfInfo($add,$userid,$username){
 					$empire->query("update {$dbtbpre}ecms_".$class_r[$classid]['tbname']."_index set checked=1 where id='$id'");
 					$ar=$empire->fetch1("select * from {$dbtbpre}ecms_".$class_r[$classid]['tbname']."_check where id='$id'");
 					//未审核表转换
-					MoveCheckInfoData($class_r[$classid]['tbname'],0,$ar['stb'],"id='$id'");
 					//efz
 					MoveCheckInfoForFzData($class_r[$ar['classid']]['tbname'],$ar['classid'],$id,0,$ar['stb'],$ar['efz'],'');
+					//efz
+					MoveCheckInfoData($class_r[$classid]['tbname'],0,$ar['stb'],"id='$id'");
 					//更新栏目信息数
 					AddClassInfos($classid,'','+1');
 					$empire->query("update {$dbtbpre}enewswfinfo set tstatus='',checktno='100' where id='$id' and classid='$classid'".do_dblimit_upone());
@@ -3254,7 +3262,7 @@ function DoDocInfo($tb,$r,$ecms=0){
 		return '';
 	}
 	//副表
-	$fr=$empire->fetch1("select ".ReturnSqlFtextF($mid)." from ".$table2." where id='".$r['id']."'".do_dblimit_one());
+	$fr=$empire->fetch1("select ".ReturnSqlFtextF($mid,1)." from ".$table2." where id='".$r['id']."'".do_dblimit_one());
 	$r=array_merge($r,$fr);
 	$ret_r=ReturnAddF($r,$mid,$userid,$username,10,0,0);//返回自定义字段
 	//索引表

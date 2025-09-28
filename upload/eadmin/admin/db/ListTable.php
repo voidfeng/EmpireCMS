@@ -16,6 +16,13 @@ $loginadminstyleid=(int)$lur['adminstyleid'];
 $ecms_hashur=hReturnEcmsHashStrAll();
 //验证权限
 //CheckLevel($logininid,$loginin,$classid,"table");
+$hagr=ReturnLeftLevel($loginlevel);
+if($hagr['dof']||$hagr['dom']||$hagr['dotable'])
+{}
+else
+{
+	printerror("NotLevel","history.go(-1)");
+}
 $url="<a href='ListTable.php".$ecms_hashur['whehref']."'>管理数据表</a>";
 $sql=$empire->query("select tid,tname,tbname,isdefault from {$dbtbpre}enewstable order by tid");
 ?>

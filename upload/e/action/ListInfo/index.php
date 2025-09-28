@@ -16,7 +16,7 @@ if(empty($classid))
 }
 $search='&classid='.$classid;
 $tbname=$class_r[$classid]['tbname'];
-$mid=$class_r[$classid]['modid'];
+$mid=(int)$class_r[$classid]['modid'];
 if(empty($tbname)||empty($mid)||InfoIsInTable($tbname))
 {
 	printerror("ErrorUrl","history.go(-1)",1);
@@ -193,7 +193,7 @@ if($public_r['chlisttemp']&&$chtempid)
 	{
 		printerror("ErrorUrl","history.go(-1)",1);
 	}
-	$tempr=$empire->fetch1("select tempid,temptext,subnews,listvar,rownum,showdate,modid,subtitle,docode from ".GetTemptb("enewslisttemp")." where tempid='$chtempid'");
+	$tempr=$empire->fetch1("select tempid,temptext,subnews,listvar,".do_dbkeyfield_spe('rownum').",showdate,modid,subtitle,docode from ".GetTemptb("enewslisttemp")." where tempid='$chtempid'");
 	if(!$tempr['tempid'])
 	{
 		printerror("ErrorUrl","history.go(-1)",1);
@@ -254,7 +254,7 @@ if(!$tempr['tempid'])
 	{
 		printerror('ErrorUrl','',1);
 	}
-	$tempr=$empire->fetch1("select tempid,temptext,subnews,listvar,rownum,showdate,modid,subtitle,docode from ".GetTemptb("enewslisttemp")." where tempid='$tempid'");
+	$tempr=$empire->fetch1("select tempid,temptext,subnews,listvar,".do_dbkeyfield_spe('rownum').",showdate,modid,subtitle,docode from ".GetTemptb("enewslisttemp")." where tempid='$tempid'");
 	if(empty($tempr['tempid']))
 	{
 		printerror('ErrorUrl','',1);
@@ -263,7 +263,7 @@ if(!$tempr['tempid'])
 $page=(int)$_GET['page'];
 $page=RepPIntvar($page);
 $start=0;
-$line=$class_r[$classid]['lencord'];//每页显示记录数
+$line=(int)$class_r[$classid]['lencord'];//每页显示记录数
 $page_line=10;//每页显示链接数
 $offset=$page*$line;//总偏移量
 //列表：缓存
@@ -283,7 +283,7 @@ if($ecms_tofunr['cacheopen']==1)
 $ret_r=ReturnReplaceListF($mid);
 //优化
 $yhadd='';
-$yhid=$class_r[$classid]['yhid'];
+$yhid=(int)$class_r[$classid]['yhid'];
 $yhvar='qlist';
 if($yhid)
 {

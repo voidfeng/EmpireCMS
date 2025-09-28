@@ -87,7 +87,7 @@ function turnit(ss,img)
       <td height="25" bgcolor="#FFFFFF" onMouseOver="this.style.backgroundColor='#EFEFEF'" onMouseOut="this.style.backgroundColor='#FFFFFF'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="SpecialPathfile.php?ztid=<?=$ztid?><?=$ecms_hashur['ehref']?>" target="apmain">管理专题附件</a></td>
     </tr>
     <tr>
-      <td height="25" bgcolor="#FFFFFF" onMouseOver="this.style.backgroundColor='#EFEFEF'" onMouseOut="this.style.backgroundColor='#FFFFFF'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ecmschtml.php?enews=ReZtHtml&ztid=<?=$ztid?>&ecms=1<?=$ecms_hashur['href']?>" target="apmain">刷新专题页面</a></td>
+      <td height="25" bgcolor="#FFFFFF" onMouseOver="this.style.backgroundColor='#EFEFEF'" onMouseOut="this.style.backgroundColor='#FFFFFF'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ecmschtml.php?enews=ReZtHtml&ztid=<?=$ztid?>&ecms=1<?=$ecms_hashur['href'].heformhash_get('ReZtHtml',1)?>" target="apmain">刷新专题页面</a></td>
     </tr>
     <tr>
       <td height="25" bgcolor="#FFFFFF" onMouseOver="this.style.backgroundColor='#EFEFEF'" onMouseOut="this.style.backgroundColor='#FFFFFF'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="<?=$zturl?>" target="_blank">预览专题</a></td>

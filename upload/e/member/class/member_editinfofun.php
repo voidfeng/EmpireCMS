@@ -5,7 +5,7 @@
 function EditSafeInfo($add){
 	global $empire,$dbtbpre,$public_r;
 	$user_r=islogin();//是否登陆
-	$userid=$user_r['userid'];
+	$userid=(int)$user_r['userid'];
 	$username=$user_r['username'];
 	$rnd=$user_r['rnd'];
 	//必填
@@ -107,7 +107,7 @@ function EditSafeInfo($add){
 		}
 		$salt=eReturnMemberSalt();
 		$password=eDoMemberPw($add['password'],$salt);
-		$a=",".egetmf('password')."='$password',".egetmf('salt')."='$salt'";
+		$a=",".egetmf('password')."='".addslashes($password)."',".egetmf('salt')."='".addslashes($salt)."'";
 		$truepassword=$add['password'];
 	}
 	$sql=$empire->query("update ".eReturnMemberTable()." set ".egetmf('email')."='$email',".egetmf('phno')."='$phno'".$a." where ".egetmf('userid')."='$userid'");
@@ -127,7 +127,7 @@ function EditSafeInfo($add){
 function EditInfo($post){
 	global $empire,$dbtbpre,$public_r;
 	$user_r=islogin();//是否登陆
-	$userid=$user_r['userid'];
+	$userid=(int)$user_r['userid'];
 	$username=$user_r['username'];
 	$dousername=$username;
 	$rnd=$user_r['rnd'];

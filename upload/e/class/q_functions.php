@@ -258,6 +258,7 @@ function AddFeedback($add){
 			{
 				$repfval="";
 			}
+			$repfval=addslashes(dgdbe_rpstr($repfval,1));
 			$addval=str_replace("[!#@-".$tf."-@!]",$repfval,$addval);
 		}
 	}

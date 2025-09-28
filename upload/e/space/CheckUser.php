@@ -91,4 +91,5 @@ if(empty($spacestyleid))
 $spacestyleid=(int)$spacestyleid;
 $spacestyler=$empire->fetch1("select stylepath from {$dbtbpre}enewsspacestyle where styleid='$spacestyleid'");
 $spacestyle=$spacestyler['stylepath']?$spacestyler['stylepath']:'default';
+eCheckStrType(5,$spacestyle,1);
 ?>

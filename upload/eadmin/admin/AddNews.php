@@ -397,6 +397,8 @@ if($usersavelastisopen)
 	}
 }
 
+$ecmsfismember=$r['ismember'];
+
 //------ 编辑器内容显示 ------
 
 $seteshoweditorhtml=3;
@@ -717,6 +719,7 @@ function FieldChangeColor(obj){
             <input name="oldztids" type="hidden" id="oldztids">
             <input name="oldzcids" type="hidden" id="oldzcids">
 			<input type="hidden" name="havetmpic" value="0">
+			<input type=hidden name=ecmsfismember value="<?=$ecmsfismember?>">
 			      </div>			      </td>
 			</tr>
 		</table>
@@ -1189,6 +1192,12 @@ function FieldChangeColor(obj){
       <td width="17%"><input type="reset" name="Submit2" value="重置"></td>
       <td width="79%"><input type="submit" name="addnews" value=" 提 交 "> &nbsp;&nbsp;&nbsp;</td>
       <td width="4%"><div align="right"></div></td>
+    </tr>
+  </table>
+  <table width="100%" border="0" align="center" cellpadding="3" cellspacing="1">
+    <tr>
+      <td height="36">
+	    <font color="#666666">增加或修改信息后，可点击“刷新当前栏目、父栏目与首页”的“提交”按钮，将信息显示到前台。 </font></td>
     </tr>
   </table>
 </form>

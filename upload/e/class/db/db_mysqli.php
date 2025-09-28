@@ -190,6 +190,40 @@ function do_dbkeyfield($field){
 	return '`'.$field.'`';
 }
 
+//返回关键字字段
+function do_dbkeyfield_spe($field){
+	return '`'.$field.'`';
+}
+
+//设置表自增字段状态
+function do_dbTableSetAutoField($tbname,$idf,$ecms=''){
+	global $empire,$dbtbpre;
+	return 1;
+}
+
+//设置表自增字段状态
+function do_dbPubTableSetAutoField($tbname,$idf,$ecms=''){
+	global $empire,$dbtbpre;
+	return 1;
+}
+
+//复制表处理字段
+function do_dbCopyTbChAutoField($tb,$idf){
+	global $empire,$dbtbpre;
+}
+
+//判断序列是否存在
+function do_dbTbCkAutoFieldSeq($tb,$idf){
+	global $empire,$dbtbpre;
+	return 0;
+}
+
+//取得序列
+function do_dbTbGetAutoFieldSeq($tb,$idf){
+	global $empire,$dbtbpre;
+	return '';
+}
+
 //返回是否支持showcreatetable
 function do_dbCanUseSctb(){
 	$sct=1;
@@ -197,7 +231,7 @@ function do_dbCanUseSctb(){
 }
 
 //复制表
-function do_dbCopyTb($otb,$tb){
+function do_dbCopyTb($otb,$tb,$tbidf=''){
 	global $empire;
 	$create=do_dbTableStruSql($otb);
 	$create=str_replace($otb,$tb,$create);
@@ -315,7 +349,7 @@ function do_dbTableAddF($tbname,$f,$ftype,$flen,$defval='',$ecms=0){
 //修改表字段
 function do_dbTableEditF($tbname,$f,$oldf,$ftype,$flen,$defval='',$ecms=0){
 	global $empire,$dbtbpre;
-	$field=do_dbTableRetFtype($f,$ftype,$flen,$defval,$ecms);
+	$field=do_dbTableRetFtype($f,$ftype,$flen,$defval,$ecms,0,1);
 	$usql=$empire->updatesql("alter table ".$tbname." change ".$oldf." ".$field,'etf');
 	return $usql;
 }
@@ -352,7 +386,7 @@ function do_dbRetIndexname($tbname,$iname,$ecms=0){
 }
 
 //返回字段类型
-function do_dbTableRetFtype($f,$ftype,$flen,$defval='',$ecms=0,$nof=0){
+function do_dbTableRetFtype($f,$ftype,$flen,$defval='',$ecms=0,$nof=0,$iseditf=0){
 	//retype
 	if($ftype=='TEXT')
 	{
@@ -446,6 +480,36 @@ function do_dbTableRetFtype($f,$ftype,$flen,$defval='',$ecms=0,$nof=0){
 function do_dbTableRetFtypeChar(){
 	//return 'CHAR';
 	return 'VARCHAR';
+}
+
+//限制查询数量
+function do_dblimit_str($limit,$offset=0,$ecms=0){
+	$offset=(int)$offset;
+	$str='';
+	if($limit)
+	{
+		if(!$offset)
+		{
+			if(strstr($limit,','))
+			{
+				$lir=explode(',',$limit);
+				$offset=(int)$lir[0];
+				$limit=(int)$lir[1];
+				$str=' limit '.$offset.','.$limit;
+			}
+			else
+			{
+				$limit=(int)$limit;
+				$str=' limit '.$limit;
+			}
+		}
+		else
+		{
+			$limit=(int)$limit;
+			$str=' limit '.$offset.','.$limit;
+		}
+	}
+	return $str;
 }
 
 //限制查询数量
@@ -564,6 +628,12 @@ class mysqlquery
 		$this->sql=mysqli_query(return_dblink_w(),$query) or die($ecms_config['db']['showerror']==1?str_replace($GLOBALS['dbtbpre'],'***_',mysqli_error(return_dblink_w()).'<br>'.$query):'DbError');
 		return $this->sql;
 	}
+	//执行mysql_query()语句2(操作数据库)
+	function updatesql2($query,$ecms=''){
+		global $ecms_config;
+		$this->sql=mysqli_query(return_dblink_w(),$query);
+		return $this->sql;
+	}
 	//执行pg_prepare()语句
 	function query_bd($qname,$query,$vr,$ecms=''){
 		return 0;
@@ -585,6 +655,32 @@ class mysqlquery
 	{
 		$this->sql=$this->query($query);
 		$this->r=mysqli_fetch_array($this->sql);
+		return $this->r;
+	}
+	//执行mysql_fetch_assoc()
+	function fetch_zm($sql)//此方法的参数是$sql就是sql语句执行结果
+	{
+		$this->r=mysqli_fetch_assoc($sql);
+		return $this->r;
+	}
+	//执行fetchone(mysql_fetch_assoc())
+	function fetch1_zm($query)
+	{
+		$this->sql=$this->query($query);
+		$this->r=mysqli_fetch_assoc($this->sql);
+		return $this->r;
+	}
+	//执行mysql_fetch_row()
+	function fetch_sz($sql)//此方法的参数是$sql就是sql语句执行结果
+	{
+		$this->r=mysqli_fetch_row($sql);
+		return $this->r;
+	}
+	//执行fetchone(mysql_fetch_row())
+	function fetch1_sz($query)
+	{
+		$this->sql=$this->query($query);
+		$this->r=mysqli_fetch_row($this->sql);
 		return $this->r;
 	}
 	//执行mysql_num_rows()

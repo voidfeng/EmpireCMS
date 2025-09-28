@@ -237,6 +237,11 @@ if(empty($tbname)||InfoIsInTable($tbname))
 {
 	printerror("SearchNotRecord",$getfrom,1);
 }
+$modid=(int)$modid;
+if(!eInfoHaveTable($tbname,0))
+{
+	printerror("SearchNotRecord",$getfrom,1);
+}
 //标题分类
 $ttid=RepPostVar($_POST['ttid']);
 $truettid=0;
@@ -281,6 +286,9 @@ else
 {
 	$tempr['modid']=$modid;
 }
+$tempr['modid']=(int)$tempr['modid'];
+$trueclassid=(int)$trueclassid;
+$truettid=(int)$truettid;
 
 //关键字
 $keyboard=$_POST['keyboard'];
@@ -333,7 +341,14 @@ if(!strstr($mr['searchvar'],",price,"))//是否包含价格
 	$endprice=0;
 }
 //搜索特殊字段
-$mr['searchvar'].='id,keyboard,userid,username,';
+if($ecms_config['db']['usedb']=='pgsql')
+{
+	$mr['searchvar'].='keyboard,username,';
+}
+else
+{
+	$mr['searchvar'].='id,keyboard,userid,username,';
+}
 $where='';
 $newsearchclass='';
 $count=count($searchclass);

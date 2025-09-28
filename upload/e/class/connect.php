@@ -80,6 +80,7 @@ $get_evr=array();
 $edb_ir=array();
 $edb_fr=array();
 $edb_vr=array();
+$sql=null;
 $add='';
 $iconv='';
 $char='';
@@ -756,7 +757,7 @@ function EcmsDefMoreport($pid){
 			exit();
 		}
 	}
-	$ecms_config['sets']['deftempid']=$emoreport_r[$pid]['tempgid'];
+	$ecms_config['sets']['deftempid']=(int)$emoreport_r[$pid]['tempgid'];
 	$ecms_config['sets']['pagemustdt']=$emoreport_r[$pid]['mustdt'];
 	$ecms_config['sets']['mainportpath']=$emoreport_r[1]['ppath'];
 	if($emoreport_r[$pid]['closeadd'])
@@ -779,6 +780,7 @@ function Moreport_ResetMainTempGid(){
 	{
 		return '';
 	}
+	$public_r['deftempid']=(int)$public_r['deftempid'];
 	$ecms_config['sets']['deftempid']=$public_r['deftempid']?$public_r['deftempid']:1;
 }
 
@@ -1699,6 +1701,10 @@ function RepPostVar($val){
 	$val=str_replace("#","",$val);
 	$val=str_replace("--","",$val);
 	$val=RepPostStr($val,1);
+	if($val!=addslashes($val))
+	{
+		exit();
+	}
 	$val=addslashes($val);
 	//FireWall
 	FWClearGetText($val);
@@ -1726,6 +1732,10 @@ function RepPostVar2($val){
 	$val=str_replace("#","",$val);
 	$val=str_replace("--","",$val);
 	$val=RepPostStr($val,1);
+	if($val!=addslashes($val))
+	{
+		exit();
+	}
 	$val=addslashes($val);
 	//FireWall
 	FWClearGetText($val);
@@ -1753,6 +1763,10 @@ function RepPostVar3($val){
 	$val=str_replace("#","",$val);
 	$val=str_replace("--","",$val);
 	$val=RepPostStr($val,1);
+	if($val!=addslashes($val))
+	{
+		exit();
+	}
 	$val=addslashes($val);
 	//FireWall
 	FWClearGetText($val);
@@ -1838,13 +1852,17 @@ function eReturnEmptyArray(){
 }
 
 //处理提交字符
-function RepPostStr($val,$ecms=0,$phck=0){
+function RepPostStr($val,$ecms=0,$phck=0,$isurl=0){
 	$val=CkPostStrIsArray($val);
 	if($phck==1)
 	{
 		CkPostStrCharYh($val);
 	}
 	$val=ehtmlspecialchars($val,ENT_QUOTES);
+	if($isurl==1)
+	{
+		$val=str_replace('&amp;','&',$val);
+	}
 	if($ecms==0)
 	{
 		CkPostStrChar($val);
@@ -1999,7 +2017,7 @@ function eDoRepPostComStr($val,$isurl=0){
 }
 
 //处理提交字符
-function hRepPostStr($val,$ecms=0,$phck=0){
+function hRepPostStr($val,$ecms=0,$phck=0,$isurl=0){
 	$val=CkPostStrIsArray($val);
 	if($phck==1)
 	{
@@ -2008,6 +2026,10 @@ function hRepPostStr($val,$ecms=0,$phck=0){
 	if($ecms==1)
 	{
 		$val=ehtmlspecialchars($val,ENT_QUOTES);
+	}
+	if($isurl==1)
+	{
+		$val=str_replace('&amp;','&',$val);
 	}
 	CkPostStrChar($val);
 	$val=AddAddsData($val);
@@ -2205,7 +2227,7 @@ function eSqlToGetids($query,$idtype=0,$maxnum=0,$maxlen=0,$mustlen=1){
 }
 
 //返回ID列表(固定字符)
-function eGetidsLimitMlen($ids,$len,$line,$page){
+function eGetidsLimitMlen($ids,$len,$line,$page,$cblank=1){
 	if(empty($ids))
 	{
 		return '';
@@ -2213,7 +2235,17 @@ function eGetidsLimitMlen($ids,$len,$line,$page){
 	$start=$line*$page*($len+1);
 	$sublen=$line*($len+1)-1;
 	$str=substr($ids,$start,$sublen);
+	if($cblank==1)
+	{
+		$str=eStrCleanBlank($str);
+	}
 	return $str;
+}
+
+//去除空格
+function eStrCleanBlank($ids){
+	$ids=str_replace(' ','',$ids);
+	return $ids;
 }
 
 //补空格
@@ -2715,6 +2747,10 @@ function page1($num,$line,$page_line,$start,$page,$search){
 //返回实际动态内容页地址
 function eReturnTrueDtInfoUrl($classid,$id,$ecms=0,$page=0,$tempid=0){
 	global $public_r;
+	$classid=(int)$classid;
+	$id=(int)$id;
+	$page=(int)$page;
+	$tempid=(int)$tempid;
 	if($ecms==0)
 	{
 		$infourl=$public_r['newsurl'].'e/action/ShowInfo.php?classid='.$classid.'&id='.$id.($tempid?'&tempid='.$tempid:'').($page?'&page='.$page:'');
@@ -2729,6 +2765,8 @@ function eReturnTrueDtInfoUrl($classid,$id,$ecms=0,$page=0,$tempid=0){
 //返回内容伪静态
 function eReturnRewriteInfoUrl($classid,$id,$ecms=0,$tempid=0){
 	global $public_r;
+	$classid=(int)$classid;
+	$id=(int)$id;
 	$tempid=(int)$tempid;
 	if(empty($public_r['rewriteinfo'])||$tempid)
 	{
@@ -2753,6 +2791,7 @@ function eReturnRewriteInfoUrl($classid,$id,$ecms=0,$tempid=0){
 //返回栏目列表伪静态
 function eReturnRewriteClassUrl($classid,$ecms=0,$tempid=0){
 	global $public_r;
+	$classid=(int)$classid;
 	$tempid=(int)$tempid;
 	if(empty($public_r['rewriteclass'])||$tempid)
 	{
@@ -2777,6 +2816,7 @@ function eReturnRewriteClassUrl($classid,$ecms=0,$tempid=0){
 //返回标题分类列表伪静态
 function eReturnRewriteTitleTypeUrl($ttid,$ecms=0,$tempid=0){
 	global $public_r;
+	$ttid=(int)$ttid;
 	$tempid=(int)$tempid;
 	if(empty($public_r['rewriteinfotype'])||$tempid)
 	{
@@ -2825,6 +2865,10 @@ function eReturnRewriteTagsUrl($tagid,$tagname,$ecms=0){
 //返回评论列表伪静态
 function eReturnRewritePlUrl($classid,$id,$doaction='doinfo',$myorder=0,$tempid=0,$ecms=0){
 	global $public_r;
+	$classid=(int)$classid;
+	$id=(int)$id;
+	$myorder=(int)$myorder;
+	$tempid=(int)$tempid;
 	if(empty($public_r['rewritepl']))
 	{
 		if($doaction=='dozt')
@@ -2855,6 +2899,9 @@ function eReturnRewritePlUrl($classid,$id,$doaction='doinfo',$myorder=0,$tempid=
 //返回父子信息列表伪静态
 function eReturnRewriteFzUrl($fztid,$fzid,$cid,$ecms=0,$tempid=0){
 	global $public_r;
+	$fztid=(int)$fztid;
+	$fzid=(int)$fzid;
+	$cid=(int)$cid;
 	$tempid=(int)$tempid;
 	if(empty($public_r['rewritefz'])||$tempid)
 	{
@@ -2903,6 +2950,7 @@ function eReturnRewriteLink($type,$classid,$id,$cid=0){
 
 //伪静态替换分页号
 function eReturnRewritePageLink($r,$page){
+	$page=(int)$page;
 	//动静
 	$truepage=$page+1;
 	if($r['repagenum']&&$truepage<=$r['repagenum'])
@@ -2928,6 +2976,7 @@ function eReturnRewritePageLink($r,$page){
 
 //伪静态替换分页号(静态)
 function eReturnRewritePageLink2($r,$page){
+	$page=(int)$page;
 	if($r['rewrite']==1)
 	{
 		$url=str_replace('[!--page--]',$page-1,$r['pageurl']);
@@ -3468,6 +3517,7 @@ function DoRepFileXg($file){
 //返回栏目链接字符串
 function ReturnClassLink($classid){
 	global $class_r,$public_r,$fun_r;
+	$classid=(int)$classid;
 	if(empty($class_r[$classid]['featherclass']))
 	{$class_r[$classid]['featherclass']="|";}
 	$r=explode("|",$class_r[$classid]['featherclass'].$classid."|");
@@ -3501,6 +3551,7 @@ function ReturnClassLink($classid){
 //返回专题链接字符串
 function ReturnZtLink($ztid){
 	global $class_zr,$public_r,$fun_r;
+	$ztid=(int)$ztid;
 	$string="<a href=\"".ReturnSiteIndexUrl()."\">".$fun_r['index']."</a>";
 	//无绑定域名
 	if(empty($class_zr[$ztid]['zturl']))
@@ -3514,6 +3565,7 @@ function ReturnZtLink($ztid){
 //返回标题分类链接字符串
 function ReturnInfoTypeLink($typeid){
 	global $class_tr,$public_r,$fun_r;
+	$typeid=(int)$typeid;
 	$string="<a href=\"".ReturnSiteIndexUrl()."\">".$fun_r['index']."</a>";
 	//moreport
 	if(Moreport_ReturnMustDt())
@@ -3865,6 +3917,7 @@ function ReturnClassInfoNum($cr,$ecms=0){
 	}
 	else
 	{
+		$cr['classid']=(int)$cr['classid'];
 		$f=$ecms==0?'infos':'allinfos';
 		$num=$empire->gettotal("select sum(".$f.") as total from {$dbtbpre}enewsclass where ".ReturnClass($class_r[$cr['classid']]['sonclass']));
 	}
@@ -4054,6 +4107,7 @@ function ReturnClassAddField($classid,$f){
 	{
 		$classid=$navclassid;
 	}
+	$classid=(int)$classid;
 	$fr=$empire->fetch1("select ".$f." from {$dbtbpre}enewsclassadd where classid='$classid'".do_dblimit_one());
 	if(strstr($f,','))
 	{
@@ -4072,6 +4126,7 @@ function ReturnZtAddField($classid,$f){
 	{
 		$classid=$navclassid;
 	}
+	$classid=(int)$classid;
 	$fr=$empire->fetch1("select ".$f." from {$dbtbpre}enewsztadd where ztid='$classid'".do_dblimit_one());
 	if(strstr($f,','))
 	{
@@ -4230,14 +4285,19 @@ function ReturnSqlTextF($mid,$ecms=0){
 }
 
 //返回内容副表查询字段
-function ReturnSqlFtextF($mid){
+function ReturnSqlFtextF($mid,$ecms=0){
 	global $emod_r;
 	if(empty($mid))
 	{
 		return '*';
 	}
+	$addf='';
+	if($ecms==1)
+	{
+		$addf=',haveaddfen';
+	}
 	$mid=(int)$mid;
-	$f='keyid,dokey,newstempid,closepl,infotags,efzstb'.substr($emod_r[$mid]['tbdataf'],0,-1);
+	$f='keyid,dokey,newstempid,closepl'.$addf.',infotags,efzstb'.substr($emod_r[$mid]['tbdataf'],0,-1);
 	return $f;
 }
 
@@ -4284,7 +4344,7 @@ function eReturnRestb($restb){
 	$restb=(int)$restb;
 	if(!strstr($public_r['pldatatbs'],','.$restb.','))
 	{
-		$restb=$public_r['pldeftb'];
+		$restb=(int)$public_r['pldeftb'];
 	}
 	return $dbtbpre.'enewspl_'.$restb;
 }
@@ -4295,7 +4355,7 @@ function eReturnFstb($fstb){
 	$fstb=(int)$fstb;
 	if(!strstr($public_r['filedatatbs'],','.$fstb.','))
 	{
-		$fstb=$public_r['filedeftb'];
+		$fstb=(int)$public_r['filedeftb'];
 	}
 	return $dbtbpre.'enewsfile_'.$fstb;
 }
@@ -4450,14 +4510,19 @@ function InfoIsInTable($tbname){
 //检验字段是否存在
 function eCheckTbHaveField($tid,$tbname,$f){
 	global $empire,$dbtbpre;
+	$tid=(int)$tid;
+	$tbname=RepPostVar($tbname);
 	$where=$tid?"tid='$tid' and ":"tbname='$tbname' and ";
 	if(strstr($f,','))
 	{
 		$fr=explode(',',$f);
+		$fr[0]=RepPostVar($fr[0]);
+		$fr[1]=RepPostVar($fr[1]);
 		$where.="f='".$fr[0]."' or f='".$fr[1]."'";
 	}
 	else
 	{
+		$f=RepPostVar($f);
 		$where.="f='$f'";
 	}
 	$num=$empire->gettotal("select count(*) as total from {$dbtbpre}enewsf where ".$where."".do_dblimit_cone());
@@ -5219,7 +5284,7 @@ function eReturnFileStb($fstb){
 	$fstb=(int)$fstb;
 	if(!strstr($public_r['filedatatbs'],','.$fstb.','))
 	{
-		$fstb=$public_r['filedeftb'];
+		$fstb=(int)$public_r['filedeftb'];
 	}
 	return $fstb;
 }
@@ -5774,6 +5839,11 @@ function DoTranUrl($url,$classid){
 	//文件类型
 	$r['filetype']=GetFiletype($url);
 	if(CheckSaveTranFiletype($r['filetype']))
+	{
+		$r['tran']=0;
+		return $r;
+	}
+	if(!strstr($public_r['filetype'],"|".$r['filetype']."|"))
 	{
 		$r['tran']=0;
 		return $r;
@@ -6791,6 +6861,7 @@ function sys_CheckMemberGroup($groupid){
 
 //返回会员头像扩展名
 function eMember_UpicReturnGtype($upic){
+	$upic=(int)$upic;
 	$ut_r=array();
 	$ut_r[1]='.jpg';
 	$ut_r[2]='.gif';
@@ -8019,7 +8090,7 @@ function eapi_JsonEn($jsonr,$ecms=0){
 	}
 	else
 	{
-		$jsonstr=json_encode($jsonr);
+		$jsonstr=json_encode($jsonr,320);
 	}
 	return $jsonstr;
 }
@@ -8082,7 +8153,7 @@ function eapi_JsonDbQuery($jsonquery,$ecms=0){
 	$jsondb_r=array();
 	if($ecms==1)
 	{
-		$json_r=$empire->fetch1($jsonquery);
+		$json_r=$empire->fetch1_zm($jsonquery);
 		$jsondb_r=eapi_JsonForeach($json_r);
 		return $jsondb_r;
 	}
@@ -8093,7 +8164,7 @@ function eapi_JsonDbQuery($jsonquery,$ecms=0){
 		{
 			return $jsondb_r;
 		}
-		while($json_r=$empire->fetch($jsonsql))
+		while($json_r=$empire->fetch_zm($jsonsql))
 		{
 			$jsondb_r[]=eapi_JsonForeach($json_r);
 		}

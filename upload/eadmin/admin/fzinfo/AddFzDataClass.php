@@ -5,6 +5,7 @@ require('../../../e/class/functions.php');
 require('../../../e/data/dbcache/class.php');
 $link=db_connect();
 $empire=new mysqlquery();
+$editor=1;
 //验证用户
 $lur=is_login();
 $logininid=(int)$lur['userid'];

@@ -53,6 +53,8 @@ function eCheckLevelInfo_ViewInfoMsg($ckuser,$r,$ecms){
 //返回提示信息内容
 function eCheckLevelInfo_ReturnMsgStr($ckuser,$ecms){
 	global $check_path,$level_r,$empire,$gotourl,$toreturnurl,$public_r,$dbtbpre,$class_r,$checkinfor;
+	$ckuser['groupid']=(int)$ckuser['groupid'];
+	$ckuser['userfen']=(int)$ckuser['userfen'];
 	$msgstr='';
 	if($ecms=='NotLogin')//未登录
 	{
@@ -92,11 +94,23 @@ function eCheckLevelInfo_ReturnMsgStr($ckuser,$ecms){
 //返回需要的查看权限提示
 function eCheckLevelInfo_ReturnViewLevelSay($infor){
 	global $check_path,$level_r,$empire,$gotourl,$toreturnurl,$public_r,$dbtbpre,$class_r,$checkinfor;
+	$infor['userfen']=(int)$infor['userfen'];
+	$infor['classid']=(int)$infor['classid'];
+	$infor['groupid']=(int)$infor['groupid'];
+	$infor['eclass_cgroupid']=(int)$infor['eclass_cgroupid'];
 	if(empty($infor['userfen']))//不需要扣点
 	{
 		if($class_r[$infor['classid']]['cgtoinfo'])//栏目设置
 		{
-			$ViewLevel="需要 [".eCheckLevelInfo_ViewInfoLevels($infor['eclass_cgroupid'])."] 级别才能查看。";
+			//$ViewLevel="需要 [".eCheckLevelInfo_ViewInfoLevels($infor['eclass_cgroupid'])."] 级别才能查看。";
+			if($infor['eclass_cgroupid']>0)
+			{
+				$ViewLevel="需要 [".$level_r[$infor['eclass_cgroupid']]['groupname']."] 级别以上才能查看。";
+			}
+			else
+			{
+				$ViewLevel="需要 [特定访问组] 级别才能查看。";
+			}
 		}
 		else
 		{
@@ -114,7 +128,15 @@ function eCheckLevelInfo_ReturnViewLevelSay($infor){
 	{
 		if($class_r[$infor['classid']]['cgtoinfo'])//栏目设置
 		{
-			$ViewLevel="需要 [".eCheckLevelInfo_ViewInfoLevels($infor['eclass_cgroupid'])."] 级别与扣除 ".$infor['userfen']." 点才能查看。";
+			//$ViewLevel="需要 [".eCheckLevelInfo_ViewInfoLevels($infor['eclass_cgroupid'])."] 级别与扣除 ".$infor['userfen']." 点才能查看。";
+			if($infor['eclass_cgroupid']>0)
+			{
+				$ViewLevel="需要 [".$level_r[$infor['eclass_cgroupid']]['groupname']."] 级别以上与扣除 ".$infor['userfen']." 点才能查看。";
+			}
+			else
+			{
+				$ViewLevel="需要 [特定访问组] 级别与扣除 ".$infor['userfen']." 点才能查看。";
+			}
 		}
 		else
 		{
@@ -153,8 +175,9 @@ function eCheckLevelInfo_ViewInfoLevels($groupid){
 //返回简介字段
 function eCheckLevelInfo_ReturnIntroField($r){
 	global $public_r,$class_r,$emod_r,$check_tbname;
+	$r['classid']=(int)$r['classid'];
 	$sublen=120;//截取120个字
-	$mid=$class_r[$r['classid']]['modid'];
+	$mid=(int)$class_r[$r['classid']]['modid'];
 	$smalltextf=$emod_r[$mid]['smalltextf'];
 	$stf=$emod_r[$mid]['savetxtf'];
 	//简介

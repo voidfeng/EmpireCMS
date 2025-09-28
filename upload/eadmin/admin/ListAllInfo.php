@@ -240,7 +240,7 @@ if($sear)
 		$show=RepPostStr($_GET['show'],1);
 		if($show==0)//搜索全部
 		{
-			$where.=$and."(title like '%$keyboard%' or username like '%$keyboard%' or id='$keyboard' or keyboard like '%$keyboard%')";
+			$where.=$and."(title like '%$keyboard%' or username like '%$keyboard%' or keyboard like '%$keyboard%'".($ecms_config['db']['usedb']=='pgsql'?"":" or id='$keyboard'").")";
 		}
 		elseif($show==1)//搜索标题
 		{

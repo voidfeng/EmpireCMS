@@ -139,6 +139,7 @@ function ReturnDownpath($downname,$downpath,$delpathid,$pathid,$downuser,$fen,$t
 	}
 	//去掉最后的字符
 	$returnstr=substr($returnstr,0,strlen($returnstr)-2);
+	$returnstr=hRepPostStr($returnstr,1,0,1);
 	return $returnstr;
 }
 
@@ -258,6 +259,7 @@ function ReturnMorepicpath($smallpic,$bigpic,$picname,$delpicid,$picid,$add,$dow
 	}
 	//去掉最后的字符
 	$returnstr=substr($returnstr,0,strlen($returnstr)-2);
+	$returnstr=hRepPostStr($returnstr,1,0,1);
 	return $returnstr;
 }
 
@@ -404,6 +406,7 @@ function QReturnDownpath($downname,$downpath,$delpathid,$pathid,$downuser,$fen,$
 	}
 	//去掉最后的字符
 	$returnstr=substr($returnstr,0,strlen($returnstr)-2);
+	$returnstr=RepPostStr($returnstr,0,0,1);
 	return $returnstr;
 }
 
@@ -527,6 +530,7 @@ function QReturnMorepicpath($smallpic,$bigpic,$picname,$delpicid,$picid,$add,$do
 	}
 	//去掉最后的字符
 	$returnstr=substr($returnstr,0,strlen($returnstr)-2);
+	$returnstr=RepPostStr($returnstr,0,0,1);
 	return $returnstr;
 }
 

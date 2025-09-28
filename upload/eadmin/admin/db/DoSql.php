@@ -97,7 +97,7 @@ function AddSql($add,$userid,$username){
 //修改SQL语句
 function EditSql($add,$userid,$username){
 	global $empire,$dbtbpre;
-	$id=(int)$add[id];
+	$id=(int)$add['id'];
 	if(!$add['sqlname']||!$add['sqltext']||!$id)
 	{
 		printerror("EmptySqltext","history.go(-1)");

@@ -127,22 +127,22 @@ $infotmp=$empire->query(SetCreateTable("CREATE TABLE ".$tablename." (
 
 //字段表数据
 $sysfdata=ReadFiletext(ECMS_PATH.'e/data/html/sysfhtml.txt');
-$sys_selectf='fid,f,fname,fform,fhtml,fzs,isadd,isshow,iscj,cjhtml,myorder,ftype,flen,dotemp,tid,tbname,savetxt,fvalue,iskey,tobr,dohtml,qfhtml,isonly,linkfieldval,samedata,fformsize,tbdataf,ispage,adddofun,editdofun,qadddofun,qeditdofun,linkfieldtb,linkfieldshow,editorys,issmalltext';
+$sys_selectf='f,fname,fform,fhtml,fzs,isadd,isshow,iscj,cjhtml,myorder,ftype,flen,dotemp,tid,tbname,savetxt,fvalue,iskey,tobr,dohtml,qfhtml,isonly,linkfieldval,samedata,fformsize,tbdataf,ispage,adddofun,editdofun,qadddofun,qeditdofun,linkfieldtb,linkfieldshow,editorys,issmalltext';
 
 $sysf_titler=explode('[!--sys.title--]',$sysfdata);
 $sysf_titletr=explode('[!--sys.qf.exp--]',$sysf_titler[1]);
-$empire->query("insert into {$dbtbpre}enewsf($sys_selectf) values(NULL,'title','标题','text','".addslashes($sysf_titletr[0])."','标题','0','1','1','".addslashes($sysf_titletr[2])."','0','CHAR','100','1','$tid','$tbname','0','','0','0','0','".addslashes($sysf_titletr[1])."','0','','0','60','0','0','','','','','','','0','0');");
+$empire->query("insert into {$dbtbpre}enewsf($sys_selectf) values('title','标题','text','".addslashes($sysf_titletr[0])."','标题','0','1','1','".addslashes($sysf_titletr[2])."','0','CHAR','100','1','$tid','$tbname','0','','0','0','0','".addslashes($sysf_titletr[1])."','0','','0','60','0','0','','','','','','','0','0');");
 
 $sysf_specialr=explode('[!--sys.special.field--]',$sysfdata);
 $sysf_specialtr=explode('[!--sys.qf.exp--]',$sysf_specialr[1]);
-$empire->query("insert into {$dbtbpre}enewsf($sys_selectf) values(NULL,'special.field','特殊属性','','".addslashes($sysf_specialtr[0])."','特殊属性','0','1','0','".addslashes($sysf_specialtr[2])."','0','','0','0','$tid','$tbname','0','','0','0','0','".addslashes($sysf_specialtr[1])."','0','','0','','0','0','','','','','','','0','0');");
+$empire->query("insert into {$dbtbpre}enewsf($sys_selectf) values('special.field','特殊属性','','".addslashes($sysf_specialtr[0])."','特殊属性','0','1','0','".addslashes($sysf_specialtr[2])."','0','','0','0','$tid','$tbname','0','','0','0','0','".addslashes($sysf_specialtr[1])."','0','','0','','0','0','','','','','','','0','0');");
 
 $sysf_titlepicr=explode('[!--sys.titlepic--]',$sysfdata);
 $sysf_titlepictr=explode('[!--sys.qf.exp--]',$sysf_titlepicr[1]);
-$empire->query("insert into {$dbtbpre}enewsf($sys_selectf) values(NULL,'titlepic','标题图片','img','".addslashes($sysf_titlepictr[0])."','标题图片','0','1','1','".addslashes($sysf_titlepictr[2])."','0','CHAR','120','1','$tid','$tbname','0','','0','0','0','".addslashes($sysf_titlepictr[1])."','0','','0','60','0','0','','','','','','','0','0');");
+$empire->query("insert into {$dbtbpre}enewsf($sys_selectf) values('titlepic','标题图片','img','".addslashes($sysf_titlepictr[0])."','标题图片','0','1','1','".addslashes($sysf_titlepictr[2])."','0','CHAR','120','1','$tid','$tbname','0','','0','0','0','".addslashes($sysf_titlepictr[1])."','0','','0','60','0','0','','','','','','','0','0');");
 
 $sysf_newstimer=explode('[!--sys.newstime--]',$sysfdata);
 $sysf_newstimetr=explode('[!--sys.qf.exp--]',$sysf_newstimer[1]);
-$empire->query("insert into {$dbtbpre}enewsf($sys_selectf) values(NULL,'newstime','发布时间','text','".addslashes($sysf_newstimetr[0])."','发布时间','0','1','1','".addslashes($sysf_newstimetr[2])."','0','INT','11','1','$tid','$tbname','0','','1','0','0','".addslashes($sysf_newstimetr[1])."','0','','0','','0','0','','','','','','','0','0');");
+$empire->query("insert into {$dbtbpre}enewsf($sys_selectf) values('newstime','发布时间','text','".addslashes($sysf_newstimetr[0])."','发布时间','0','1','1','".addslashes($sysf_newstimetr[2])."','0','INT','11','1','$tid','$tbname','0','','1','0','0','".addslashes($sysf_newstimetr[1])."','0','','0','','0','0','','','','','','','0','0');");
 
 ?>

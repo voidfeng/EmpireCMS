@@ -62,6 +62,7 @@ if($enews=="login")//登陆
 }
 elseif($enews=="exit")//退出登陆
 {
+	define('InEmpireCMSNMUST',TRUE);
 	qloginout($myuserid,$myusername,$myrnd);
 }
 elseif($enews=="register")//注册

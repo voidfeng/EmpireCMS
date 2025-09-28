@@ -87,26 +87,26 @@ while($cr=$empire->fetch($csql))
     </tr>
     <tr bgcolor="#FFFFFF"> 
       <td width="26%" height="25">站点名称:(*)</td>
-      <td width="74%" height="25"> <input name="lname" type="text" id="lname" value="<?=$r['lname']?>" size="42"> 
+      <td width="74%" height="25"> <input name="lname" type="text" id="lname" value="<?=ehtmlspecialchars($r['lname'])?>" size="42"> 
         <input name="checked" type="checkbox" id="checked" value="1"<?=$checked?>>
         显示</td>
     </tr>
     <tr bgcolor="#FFFFFF"> 
       <td rowspan="2" valign="top">站点图标:</td>
-      <td height="25"> <input name="lpic" type="text" id="lpic" value="<?=$r['lpic']?>" size="42"> 
-        <a onclick="window.open('../ecmseditor/FileMain.php?modtype=5&type=1&classid=&doing=2&field=lpic<?=$ecms_hashur['ehref']?>','','width=700,height=550,scrollbars=yes');" title="选择已上传的图片"><img src="../../../e/data/images/changeimg.gif" width="22" height="22" border="0" align="absbottom"></a> 
+      <td height="25"> <input name="lpic" type="text" id="lpic" value="<?=ehtmlspecialchars($r['lpic'])?>" size="42"> 
+        <a onClick="window.open('../ecmseditor/FileMain.php?modtype=5&type=1&classid=&doing=2&field=lpic<?=$ecms_hashur['ehref']?>','','width=700,height=550,scrollbars=yes');" title="选择已上传的图片"><img src="../../../e/data/images/changeimg.gif" width="22" height="22" border="0" align="absbottom"></a> 
       </td>
     </tr>
     <tr bgcolor="#FFFFFF"> 
       <td height="25">宽 
-        <input name="width" type="text" id="width" value="<?=$r['width']?>" size="6">
+        <input name="width" type="text" id="width" value="<?=ehtmlspecialchars($r['width'])?>" size="6">
         * 高 
-        <input name="height" type="text" id="height" value="<?=$r['height']?>" size="6">
+        <input name="height" type="text" id="height" value="<?=ehtmlspecialchars($r['height'])?>" size="6">
         (不选择图片为文字链接)</td>
     </tr>
     <tr bgcolor="#FFFFFF"> 
       <td height="25">站点地址:(*)</td>
-      <td height="25"> <input name="lurl" type="text" id="lurl" value="<?=$r['lurl']?>" size="42"> 
+      <td height="25"> <input name="lurl" type="text" id="lurl" value="<?=ehtmlspecialchars($r['lurl'])?>" size="42"> 
         <select name=target>
           <option value="_blank"<?=$target0?>>在新窗口打开</option>
           <option value="_parent"<?=$target1?>>在原窗口打开</option>
@@ -118,7 +118,7 @@ while($cr=$empire->fetch($csql))
           <option value="0">不隶属于任何分类</option>
           <?=$cstr?>
         </select>
-        <input type="button" name="Submit3" value="管理分类" onclick="window.open('LinkClass.php<?=$ecms_hashur['whehref']?>');"></td>
+        <input type="button" name="Submit3" value="管理分类" onClick="window.open('LinkClass.php<?=$ecms_hashur['whehref']?>');"></td>
     </tr>
     <tr bgcolor="#FFFFFF"> 
       <td height="25">点击:</td>
@@ -131,7 +131,7 @@ while($cr=$empire->fetch($csql))
     </tr>
     <tr bgcolor="#FFFFFF"> 
       <td height="25">站长Email:</td>
-      <td height="25"><input name="email" type="text" id="email" value="<?=$r['email']?>" size="42"></td>
+      <td height="25"><input name="email" type="text" id="email" value="<?=ehtmlspecialchars($r['email'])?>" size="42"></td>
     </tr>
     <tr bgcolor="#FFFFFF"> 
       <td height="25">站点简介:</td>

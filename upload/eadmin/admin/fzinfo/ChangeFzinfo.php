@@ -53,16 +53,35 @@ eCheckStrType(5,$field,1);
 eCheckStrType(5,$form,1);
 
 //信息ID
+$mid=(int)$_GET['mid'];
+$search_tbname='';
+$search_infoid=0;
+if($mid)
+{
+	$search_tbname=$emod_r[$mid]['tbname'];
+}
 $keyboard=RepPostVar($_GET['keyboard']);
 if($keyboard)
 {
-	if(strlen($keyboard)>12)
+	if(!eCheckStrType(1,$keyboard,0))
 	{
-		$add.=" and pubid='$keyboard'";
+		if($search_tbname)
+		{
+			$search_infor=$empire->fetch1("select id from {$dbtbpre}ecms_".$search_tbname." where title='".$keyboard."'".do_dblimit_one());
+			$search_infoid=(int)$search_infor['id'];
+		}
+		$add.=" and id='$search_infoid'";
 	}
 	else
 	{
-		$add.=" and id='$keyboard'";
+		if(strlen($keyboard)>12)
+		{
+			$add.=" and pubid='$keyboard'";
+		}
+		else
+		{
+			$add.=" and id='$keyboard'";
+		}
 	}
 	$search.='&keyboard='.$keyboard;
 }
@@ -74,7 +93,6 @@ if($cid)
 	$search.="&cid=$cid";
 }
 //系统模型
-$mid=(int)$_GET['mid'];
 if($mid)
 {
 	$add.=" and mid='$mid'";
@@ -155,6 +173,11 @@ $returnpage=page2($num,$line,$page_line,$start,$page,$search);
 function iChangeFzinfo(infopubid,infoclassid,infoid,infotitle,cval){
 	opener.iUpdateFzinfo(infopubid,infoclassid,infoid,infotitle,cval);
 	window.close();
+}
+
+function iChangeFzinfoNc(infopubid,infoclassid,infoid,infotitle,cval){
+	opener.iUpdateFzinfo(infopubid,infoclassid,infoid,infotitle,cval);
+	//window.close();
 }
 </script>
 </head>
@@ -253,7 +276,7 @@ function iChangeFzinfo(infopubid,infoclassid,infoid,infotitle,cval){
 		else
 		{
 			$checked="";
-			$titleurl=sys_ReturnBqTitleLink(infor);
+			$titleurl=sys_ReturnBqTitleLink($infor);
 		}
 		$classname=$class_r[$infor['classid']]['classname'];
 		$classurl=sys_ReturnBqClassname($infor,9);
@@ -273,16 +296,18 @@ function iChangeFzinfo(infopubid,infoclassid,infoid,infotitle,cval){
 			$thisvid='chfzc'.$i;
 			$efzidval=$infor['classid'].'|'.$infor['id'].'|0|0|';
 			$jsonch=" onchange=\"document.getElementById('efzid'".$i.").value='".$infor['classid']."|".$infor['id']."|'+this.options[this.selectedIndex].value;\"";
+			$chfzinfofun='';
 		}
 		else
 		{
 			$thisvn='chfzc'.$i;
 			$thisvid='chfzc'.$i;
 			$jsonch='';
+			$chfzinfofun=" onclick=\"iChangeFzinfoNc('".$r['pubid']."','".$infor['classid']."','".$infor['id']."','".$jstitle."',document.iChangeFormFz.".$thisvn.".value);\"";
 		}
 	?>
     <tr bgcolor="#FFFFFF" onmouseout="this.style.backgroundColor='#ffffff'" onmouseover="this.style.backgroundColor='#C3EFFF'">
-      <td height="27"><div align="center"><a href="#empirecms" title='公共信息ID：".$r['pubid']."'><?=$r['id']?></a></div></td>
+      <td height="27"><div align="center"><a href="#empirecms" title="公共信息ID：<?=$r['pubid']?>"<?=$chfzinfofun?>><?=$r['id']?></a></div></td>
       <td><div align="center"><a href="<?=$classurl?>" target=_blank title="父栏目：<?=$bclassname?>"><?=$classname?></a></div></td>
       <td><a href='<?=$titleurl?>' target=_blank title="<?=$oldtitle?>"><?=$infor['title']?></a></td>
       <td><div align="center">
@@ -329,6 +354,14 @@ function iChangeFzinfo(infopubid,infoclassid,infoid,infotitle,cval){
           <input name="infoid" type="hidden" id="infoid" value="<?=$infoid?>">
 		  <input name="sinfo" type="hidden" id="sinfo" value="<?=$sinfo?>">
       </div></td>
+    </tr>
+	<?php
+	}
+	else
+	{
+	?>
+	<tr bgcolor="#FFFFFF">
+      <td height="25" colspan="6"><font color="#666666">说明：如果要选择父信息不关窗口可以点击ID进行选择。</font></td>
     </tr>
 	<?php
 	}

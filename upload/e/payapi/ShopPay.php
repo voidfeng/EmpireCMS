@@ -25,7 +25,7 @@ include('payfun.php');
 //订单信息
 $ddid=(int)getcvar('paymoneyddid');
 $ddr=PayApiShopDdMoney($ddid);
-$money=$ddr['tmoney'];
+$money=(float)$ddr['tmoney'];
 if($money<=0)
 {
 	printerror('订单金额有误','',1,0,1);
@@ -57,7 +57,7 @@ if($ckuserid)
 	$prdr['username']=$user['username'];
 }
 //支付参数
-$ddno=$ddr['ddno'];
+$ddno=RepPostVar($ddr['ddno']);
 $prdr['pname']="购物,支付订单号:".$ddno;
 $prdr['psay']="购物,订单号:".$ddno;
 $prdr['payddno']=epayapi_ReturnDdno($prdr['userid']);
@@ -94,6 +94,7 @@ $prdr['payckcode']=$re_prdr['payckcode'];
 $prdr['posttime']=$re_prdr['posttime'];
 $prdr['payip']=$re_prdr['payip'];
 
+eCheckStrType(4,$payr['paytype'],1);
 $file=$payr['paytype'].'/to_pay.php';
 @include($file);
 db_close();

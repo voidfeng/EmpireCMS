@@ -108,7 +108,7 @@ $ckcid=0;
 $cid=0;
 if(strstr($_GET['cid'],'b'))//一级
 {
-	$cid=str_replace($_GET['cid'],'b','');
+	$cid=str_replace('b','',$_GET['cid']);
 	$cid=(int)$cid;
 	if($cid)
 	{
@@ -196,7 +196,7 @@ while($cr=$empire->fetch($csql))
 {
 	$thiscid=$cr['bcid']==0?'b'.$cr['cid']:$cr['cid'];
 	$selected='';
-	if($thiscid==$ckcid)
+	if('dg'.$thiscid=='dg'.$ckcid)
 	{
 		$selected=' selected';
 	}
@@ -284,7 +284,7 @@ function DoDelThisFzinfo()
 	}
 	if(ok&&oktwo&&okthree)
 	{
-		self.location.href='ecmsfzinfo.php?enews=DelFzinfo&fzclassid=<?=$fzclassid?>&fzid=<?=$fzid?><?=$ecms_hashur['href'].$efh?>';
+		self.location.href='ecmsfzinfo.php?enews=DelFzinfo&classid=<?=$fzclassid?>&id=<?=$fzid?><?=$ecms_hashur['href'].$efh?>';
 	}
 }
 
@@ -448,11 +448,11 @@ function ChangeInfoDoAction(tbname,infoids){
 		$cname='';
 		if($zr['bcid'])
 		{
-			$cname="<a href='ListFzData.php?fzclassid=$fzclassid&fzid=$fzid&cid=b".$zr['bcid'].$addecmscheck.$ecms_hashur['ehref']."'>".$selfpagecache_cr[$zr['bcid']]['cname']."</a> &gt; <br>";
+			$cname="<a href='ListFzData.php?fzclassid=$fzclassid&fzid=$fzid&cid=b".$zr['bcid'].$addecmscheck.$ecms_hashur['ehref']."'>".$selfpagecache_cr[$zr['bcid']]['cname']."</a>";
 		}
 		if($zr['cid'])
 		{
-			$cname.="<a href='ListFzData.php?fzclassid=$fzclassid&fzid=$fzid&cid=".$zr['cid'].$addecmscheck.$ecms_hashur['ehref']."'>".$selfpagecache_cr[$zr['cid']]['cname']."</a>";
+			$cname.="<br> &gt; <a href='ListFzData.php?fzclassid=$fzclassid&fzid=$fzid&cid=".$zr['cid'].$addecmscheck.$ecms_hashur['ehref']."'>".$selfpagecache_cr[$zr['cid']]['cname']."</a>";
 		}
 		$tbname=$class_r[$zr['classid']]['tbname'];
 		if(!$tbname)
@@ -462,11 +462,13 @@ function ChangeInfoDoAction(tbname,infoids){
 		$index_r=$empire->fetch1("select checked from {$dbtbpre}ecms_".$tbname."_index where id='".$zr['id']."'");
 		$infotb=ReturnInfoMainTbname($tbname,$index_r['checked']);
 		$r=$empire->fetch1("select id,classid,isurl,isqf,havehtml,newstime,truetime,lastdotime,titlepic,title,titleurl,ismember from ".$infotb." where id='".$zr['id']."'");
+		/*
 		$addecmscheck='';
 		if($index_r['checked'])
 		{
 			$addecmscheck='&ecmscheck=1';
 		}
+		*/
 		//状态
 		$st='';
 		if($zr['firsttitle'])//头条

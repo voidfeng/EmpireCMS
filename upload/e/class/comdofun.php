@@ -246,7 +246,7 @@ function DoRepNewstext($start,$oldword,$newword,$field,$classid,$tid,$tbname,$ov
 	$tid=(int)$tid;
 	$dotype=(int)$_POST['dotype'];
 	$classid=(int)$classid;
-	if(!$field||empty($tbname)||!$tid)
+	if(!$field||empty($tbname)||!$tid||!eCheckTbname($tbname))
 	{
 		printerror("FailCX","history.go(-1)");
 	}
@@ -256,6 +256,8 @@ function DoRepNewstext($start,$oldword,$newword,$field,$classid,$tid,$tbname,$ov
 	}
 	CheckLevel($userid,$username,$classid,"repnewstext");//验证权限
 	//变量替换
+	eCheckStrType(4,$tbname,1);
+	eCheckStrType(4,$field,1);
 	$postoldword=ClearAddsData($oldword);
 	$postnewword=ClearAddsData($newword);
 	//替换条件

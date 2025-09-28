@@ -201,7 +201,7 @@ if($_GET['sear'])
 		}
 		else
 		{
-			$add.=" and (aid='$keyboard' or aname like '%$keyboard%' or avar like '%$keyboard%' or avarid like '%$keyboard%')";
+			$add.=" and (".($ecms_config['db']['usedb']=='pgsql'?"":"aid='$keyboard' or ")."aname like '%$keyboard%' or avar like '%$keyboard%' or avarid like '%$keyboard%')";
 		}
 		$search.="&keyboard=$keyboard&show=$show";
 	}
@@ -257,6 +257,7 @@ while($cr=$empire->fetch($csql))
 
   <table width="100%" border="0" cellpadding="3" cellspacing="1">
   <form name="sform" method="GET" action="ListDtUserpage.php">
+  <?=$ecms_hashur['eform']?>
     <tr>
       <td><div align="center">搜索：
           <select name="show" id="show">

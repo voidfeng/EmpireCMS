@@ -9,6 +9,7 @@ if(!defined('InEmpireCMS'))
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <link href="../../data/images/qcss.css" rel="stylesheet" type="text/css">
 <title>登录</title>
+<script src="../../data/js/ajax.js"></script>
 </head>
 
 <body>

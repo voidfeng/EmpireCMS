@@ -35,6 +35,9 @@ if(!defined('InEmpireCMSIns'))
                         <tr> 
                           <td height="23"> <li>请在下面填写您的数据库账号信息, 通常情况下不需要修改绿色选项内容。</li></td>
                         </tr>
+						<tr> 
+                          <td height="23"> <li>使用 PHP8以上环境 或者 使用PostgreSQL 必须填写已建好的数据库名。</li></td>
+                        </tr>
                         <tr> 
                           <td height="23"> <li>带*项为不能为空。</li></td>
                         </tr>

@@ -220,12 +220,14 @@ function epayapi_ReturnDdno($id){
 		$id=EcmsRandInt(10000000,99999999);
 	}
 	$ddno=time().$id;
+	$ddno=RepPostVar($ddno);
 	return $ddno;
 }
 
 //返回支付验证码
 function epayapi_ReturnPayckcode(){
 	$ckcode=make_password(9);
+	$ckcode=RepPostVar($ckcode);
 	return $ckcode;
 }
 
@@ -377,6 +379,7 @@ function epayapi_PaySuccessDo($psr,$isnt=0){
 			//esetcookie("checkpaysession","",0);
 		}
 	}
+	$phome=RepPostVar($phome);
 	if($money<=0||$prstr['money']<=0)
 	{
 		printerror('您来自的链接不存在','',1,0,1);

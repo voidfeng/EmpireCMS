@@ -72,6 +72,7 @@ if($enews=="ReNewsHtml")//刷新内容页面
 	$endid=$_GET['endid'];
 	$tbname=$_GET['tbname'];
 	$havehtml=$_GET['havehtml'];
+	$havernext=(int)$_GET['havernext'];
 	ReNewsHtml($start,$classid,$from,$retype,$startday,$endday,$startid,$endid,$tbname,$havehtml);
 }
 elseif($enews=="ReListHtml_all")//刷新所有列表

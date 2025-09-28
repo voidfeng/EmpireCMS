@@ -28,6 +28,7 @@ else
 $addimg="images/add.gif";
 }
 $ecms=RepPostVar(RepPathStr($_GET['ecms']));
+eCheckStrType(4,$ecms,1);
 $menus=',system,classdata,template,usercp,tool,extend,other,fastmenu,';
 $ecms=str_replace(',','',$ecms);
 if(!strstr($menus,','.$ecms.','))

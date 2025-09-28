@@ -1,6 +1,5 @@
 <?php
 require('e/class/connect.php');
-require('e/class/db_sql.php');
 $link=db_connect();
 $empire=new mysqlquery();
 //缓存

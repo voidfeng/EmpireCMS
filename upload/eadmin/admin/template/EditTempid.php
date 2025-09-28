@@ -64,6 +64,8 @@ function EditTempid($add,$userid,$username){
 	{
 		$empire->query("update ".$temptbname." set ".$tempidf."='$tempid' where ".$tempidf."='$lastid'");
 	}
+	//pgsql
+	do_dbTableSetAutoField($temptbname,$tempidf);
 	//sametg
 	sametg_EditTempid($temptb,$gid,$tempid,$newtempid,$redo);
 	if($sql)

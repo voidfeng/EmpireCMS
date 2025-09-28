@@ -91,6 +91,13 @@ else
 
 //修改
 $tempid=(int)$_GET['tempid'];
+
+if($tempid==7)
+{
+	echo"从8.0版开始，该动态页面模板修改已转移至“系统>管理数据表>管理系统模型列表”";
+	exit();
+}
+
 $r=GetDtTempFiletext($tempid);
 $url="修改动态页面模板: ".$r['tempname'];
 

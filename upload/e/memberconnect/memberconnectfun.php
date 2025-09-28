@@ -35,6 +35,7 @@ function MemberConnect_DoLogin($apptype,$openid){
 	$mcr=MemberConnect_CheckOpenid($apptype,$openid);
 	if($mcr['id'])
 	{
+		$mcr['userid']=(int)$mcr['userid'];
 		$lifetime=0;
 		$r=$empire->fetch1("select ".eReturnSelectMemberF('*')." from ".eReturnMemberTable()." where ".egetmf('userid')."='".$mcr['userid']."'".do_dblimit_one());
 		DoEcmsMemberLogin($r,$lifetime,1);

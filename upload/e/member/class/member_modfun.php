@@ -19,6 +19,8 @@ function DelYMemberTranFile($file,$tf,$username=''){
 	$filename=$r[$count-1];
 	$filename=addslashes(dgdbe_rpstr($filename));
 	$filename=RepPostVar($filename);
+	$tf=RepPostVar($tf);
+	$username=RepPostVar($username);
 	$fr=$empire->fetch1("select filename,path,fileid,fpath,classid from {$dbtbpre}enewsfile_member where no='Member[".$tf."]' and filename='$filename' and adduser='[EditInfo]".$username."'".do_dblimit_one());
 	if($fr['fileid'])
 	{
@@ -257,6 +259,7 @@ function ReturnDoMemberF($fid,$add,$mr,$ecms=0,$username='',$admin=0){
 			{
 				$repfval=$mr[$tf];
 			}
+			$repfval=addslashes($repfval);
 			if($ecms==0)//添加
 			{
 				$ret_r[1]=str_replace("[!#@-".$tf."-@!]",$repfval,$ret_r[1]);

@@ -30,6 +30,8 @@ if(file_exists($fcfile))
 {
 	$fclistenews=str_replace(AddCheckViewTempCode(),'',ReadFiletext($fcfile));
 }
+
+/*
 //数据表
 $changetbs='';
 $dh='';
@@ -50,6 +52,7 @@ while($tbr=$empire->fetch($tbsql))
 $efh=heformhash_get('ReListHtml',1);
 $efh1=heformhash_get('ReSingleJs',1);
 $efh2=heformhash_get('ReIndex',1);
+*/
 
 ?>
 <html>
@@ -58,8 +61,6 @@ $efh2=heformhash_get('ReIndex',1);
 <title>管理信息</title>
 <link href="../../e/data/menu/menu.css" rel="stylesheet" type="text/css">
 <script src="../../e/data/menu/menu.js" type="text/javascript"></script>
-<script language="javascript" src="../../e/data/rightmenu/context_menu.js"></script>
-<script language="javascript" src="../../e/data/rightmenu/ieemu.js"></script>
 <SCRIPT lanuage="JScript">
 if(self==top)
 {self.location.href='admin.php<?=$ecms_hashur['whehref']?>';}
@@ -84,70 +85,13 @@ function tourl(bclassid,classid){
 	parent.main.location.href="ListNews.php?<?=$ecms_hashur['ehref']?>&bclassid="+bclassid+"&classid="+classid;
 }
 
-if(moz) {
-	extendEventObject();
-	extendElementModel();
-	emulateAttachEvent();
-}
-//右键菜单
-function ShRM(obj,bclassid,classid,classurl,showmenu)
-{
-  var eobj,popupoptions;
-  classurl='<?=$public_r['newsurl']?>e/public/ClassUrl/?classid='+classid;
-if(showmenu==1)
-{
-  popupoptions = [
-    new ContextItem("增加信息",function(){ parent.document.main.location="AddNews.php?<?=$ecms_hashur['ehref']?>&enews=AddNews&bclassid="+bclassid+"&classid="+classid; }),
-	new ContextSeperator(),
-    new ContextItem("刷新栏目",function(){ parent.document.main.location="enews.php?<?=$ecms_hashur['href'].$efh?>&enews=ReListHtml&classid="+classid; }),
-	new ContextItem("刷新栏目JS",function(){ parent.document.main.location="ecmschtml.php?<?=$ecms_hashur['href'].$efh1?>&enews=ReSingleJs&doing=0&classid="+classid; }),
-    new ContextItem("刷新首页",function(){ parent.document.main.location="ecmschtml.php?enews=ReIndex<?=$ecms_hashur['href'].$efh2?>"; }),
-	new ContextSeperator(),
-	new ContextItem("预览首页",function(){ window.open("../../"); }),
-    new ContextItem("预览栏目",function(){ window.open(classurl); }),
-	new ContextSeperator(),
-	new ContextItem("修改栏目",function(){ parent.document.main.location="AddClass.php?<?=$ecms_hashur['ehref']?>&classid="+classid+"&enews=EditClass"; }),
-    new ContextItem("增加新栏目",function(){ parent.document.main.location="AddClass.php?enews=AddClass<?=$ecms_hashur['ehref']?>"; }),
-    new ContextItem("复制栏目",function(){ parent.document.main.location="AddClass.php?<?=$ecms_hashur['ehref']?>&classid="+classid+"&enews=AddClass&docopy=1"; }),
-    new ContextSeperator(),
-	new ContextItem("数据更新",function(){ parent.document.main.location="ReHtml/ChangeData.php<?=$ecms_hashur['whehref']?>"; }),
-	new ContextItem("增加采集节点",function(){ parent.document.main.location="AddInfoClass.php?<?=$ecms_hashur['ehref']?>&enews=AddInfoClass&newsclassid="+classid; }),
-	new ContextItem("管理附件",function(){ parent.document.main.location="file/ListFile.php?<?=$ecms_hashur['ehref']?>&type=9&classid="+classid; }),
-	new ContextSeperator()
-  ]
-}
-else if(showmenu==2)
-{
-	popupoptions = [
-    <?=$changetbs?>
-  ]
-}
-else
-{
-	popupoptions = [
-    new ContextItem("刷新栏目",function(){ parent.document.main.location="enews.php?<?=$ecms_hashur['href'].$efh?>&enews=ReListHtml&classid="+classid; }),
-	new ContextItem("刷新栏目JS",function(){ parent.document.main.location="ecmschtml.php?<?=$ecms_hashur['href'].$efh1?>&enews=ReSingleJs&doing=0&classid="+classid; }),
-    new ContextItem("刷新首页",function(){ parent.document.main.location="ecmschtml.php?enews=ReIndex<?=$ecms_hashur['href'].$efh2?>"; }),
-	new ContextItem("数据更新",function(){ parent.document.main.location="ReHtml/ChangeData.php<?=$ecms_hashur['whehref']?>"; }),
-	new ContextSeperator(),
-	new ContextItem("预览首页",function(){ window.open("../../"); }),
-	new ContextItem("预览栏目",function(){ window.open(classurl); }),
-	new ContextSeperator(),
-	new ContextItem("修改栏目",function(){ parent.document.main.location="AddClass.php?<?=$ecms_hashur['ehref']?>&classid="+classid+"&enews=EditClass"; }),
-    new ContextItem("增加新栏目",function(){ parent.document.main.location="AddClass.php?enews=AddClass<?=$ecms_hashur['ehref']?>"; }),
-    new ContextItem("复制栏目",function(){ parent.document.main.location="AddClass.php?<?=$ecms_hashur['ehref']?>&classid="+classid+"&enews=AddClass&docopy=1"; }),
-	new ContextSeperator()
-  ]
-}
-  ContextMenu.display(popupoptions)
-}
 </SCRIPT>
 </head>
-<body onLoad="initialize();ContextMenu.intializeContextMenu();" bgcolor="#FFCFAD">
+<body onLoad="initialize();" bgcolor="#FFCFAD">
 	<table border='0' cellspacing='0' cellpadding='0'>
 	<tr height=20>
 			<td id="home"><img src="../../e/data/images/homepage.gif" border=0></td>
-			<td><a href="#ecms" onclick="parent.main.location.href='ListAllInfo.php<?=$ecms_hashur['whehref']?>';" onmouseout="this.style.fontWeight=''" onmouseover="this.style.fontWeight='bold'" oncontextmenu="ShRM(this,0,0,'',2)"><b>管理信息</b></a></td>
+			<td><a href="#ecms" onclick="parent.main.location.href='ListAllInfo.php<?=$ecms_hashur['whehref']?>';" onmouseout="this.style.fontWeight=''" onmouseover="this.style.fontWeight='bold'"><b>管理信息</b></a></td>
 	</tr>
 	</table>
 <?php

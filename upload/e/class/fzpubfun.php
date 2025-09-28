@@ -16,6 +16,7 @@ function PubFzinfoSetOpen(){
 //返回子信息分类
 function PubReturnFzClass($pubid,$ckcid=0,$ecms=0,$addb='b'){
 	global $empire,$dbtbpre;
+	$pubid=RepPostVar($pubid);
 	//子类
 	$csql=$empire->query("select cid,bcid,cname from {$dbtbpre}enewsfz_class where pubid='$pubid' order by bcid desc,myorder");
 	$bcr=array();
@@ -75,6 +76,7 @@ function PubReturnFzClass($pubid,$ckcid=0,$ecms=0,$addb='b'){
 //取消加入子信息
 function PubDelFzData($where,$stb,$checked=1){
 	global $empire,$dbtbpre;
+	$stb=(int)$stb;
 	if(!$where)
 	{
 		return '';
@@ -90,6 +92,7 @@ function PubFzDataUpEfz($fzstb){
 	{
 		return '';
 	}
+	$fzstb=RepPostVar($fzstb);
 	$oldstr=','.$fzstb.',';
 	$newstr=',';
 	$tbsql=$empire->query("select tid,tbname,datatbs from {$dbtbpre}enewstable");
@@ -177,11 +180,65 @@ function PubFzInfoUpFclast($where){
 	$sql=$empire->query("update {$dbtbpre}enewsfz_info set fclast='".$fclast."' where ".$where);
 }
 
+//验证子信息是否存在
+function PubCheckHaveFzData($fzclassid,$fzid,$fzpubid,$fzstb,$classid,$id,$tid,$ecms=0){
+	global $empire,$dbtbpre,$class_r;
+	$fzclassid=(int)$fzclassid;
+	$fzid=(int)$fzid;
+	$fzstb=(int)$fzstb;
+	$classid=(int)$classid;
+	$id=(int)$id;
+	$tid=(int)$tid;
+	if(!$fzpubid)
+	{
+		$fzpubid=ReturnInfoPubid($fzclassid,$fzid);
+	}
+	$fzpubid=RepPostVar($fzpubid);
+	if(!$tid)
+	{
+		$tid=(int)$class_r[$classid]['tid'];
+	}
+	if(!$fzstb)
+	{
+		return '';
+	}
+	//表
+	$fzdatatb_ck=$dbtbpre.'enewsfz_data_check';
+	$fzdatatb=$dbtbpre.'enewsfz_data_'.$fzstb;
+	//查询
+	if($ecms==1)//已审核表
+	{
+		$ckinfor=$empire->fetch1("select id,classid,mid,bcid,cid from ".$fzdatatb." where bpubid='".$fzpubid."' and id='".$id."' and tid='".$tid."'".do_dblimit_one());
+		$addhavefztb=1;
+	}
+	elseif($ecms==2)//未审核表
+	{
+		$ckinfor=$empire->fetch1("select id,classid,mid,bcid,cid from ".$fzdatatb_ck." where bpubid='".$fzpubid."' and id='".$id."' and tid='".$tid."'".do_dblimit_one());
+		$addhavefztb=2;
+	}
+	else//所有表
+	{
+		$ckinfor=$empire->fetch1("select id,classid,mid,bcid,cid from ".$fzdatatb." where bpubid='".$fzpubid."' and id='".$id."' and tid='".$tid."'".do_dblimit_one());
+		$addhavefztb=1;
+		if(!$ckinfor['id'])
+		{
+			$ckinfor=$empire->fetch1("select id,classid,mid,bcid,cid from ".$fzdatatb_ck." where bpubid='".$fzpubid."' and id='".$id."' and tid='".$tid."'".do_dblimit_one());
+			$addhavefztb=2;
+		}
+	}
+	$ckinfor['addhavefz']=$ckinfor['id']?1:0;
+	$ckinfor['addhavefztb']=$addhavefztb;
+	return $ckinfor;
+}
 
 //多信息加入子信息
 function PubAddMoreInfoToFzData($fzclassid,$fzid,$fzbcid,$fzcid,$tbname,$where,$upfc=1,$upefz=1){
 	global $empire,$dbtbpre,$class_r;
 	if(empty($where))
+	{
+		return '';
+	}
+	if(!eInfoHaveTable($tbname,0))
 	{
 		return '';
 	}
@@ -233,6 +290,10 @@ function PubAddOneInfoToFzData($fzclassid,$fzid,$fzbcid,$fzcid,$tbname,$classid,
 	{
 		return '';
 	}
+	if(!eInfoHaveTable($tbname,0))
+	{
+		return '';
+	}
 	$fzclassid=(int)$fzclassid;
 	$fzid=(int)$fzid;
 	$fzbcid=(int)$fzbcid;
@@ -253,12 +314,26 @@ function PubAddOneInfoToFzData($fzclassid,$fzid,$fzbcid,$fzcid,$tbname,$classid,
 		$newstime=$r['newstime'];
 		$checked=$r['checked'];
 	}
-	$fzdatatb=$checked?$dbtbpre.'enewsfz_data_'.$fzinfor['fzstb']:$dbtbpre.'enewsfz_data_check';
+	$fzdatatb_do=$dbtbpre.'enewsfz_data_'.$fzinfor['fzstb'];
+	$fzdatatb_ck=$dbtbpre.'enewsfz_data_check';
+	$fzdatatb=$checked?$fzdatatb_do:$fzdatatb_ck;
+	$fzdatatb_edit=$fzdatatb;
+	$zinfotbecms=0;
 	$mid=(int)$class_r[$classid]['modid'];
 	$tid=(int)$class_r[$classid]['tid'];
 	if($ecms==1)//修改
 	{
-		$zinfor=$empire->fetch1("select id,classid,mid,bcid,cid from ".$fzdatatb." where bpubid='".$fzpubid."' and id='".$id."' and tid='".$tid."'".do_dblimit_one());
+		$zinfor=$empire->fetch1("select id,classid,mid,bcid,cid from ".$fzdatatb_do." where bpubid='".$fzpubid."' and id='".$id."' and tid='".$tid."'".do_dblimit_one());
+		$zinfotbecms=1;
+		if(!$zinfor['id'])
+		{
+			$zinfor=$empire->fetch1("select id,classid,mid,bcid,cid from ".$fzdatatb_ck." where bpubid='".$fzpubid."' and id='".$id."' and tid='".$tid."'".do_dblimit_one());
+			$zinfotbecms=2;
+		}
+		if($zinfor['id'])
+		{
+			$fzdatatb_edit=$zinfotbecms==1?$fzdatatb_do:$fzdatatb_ck;
+		}
 	}
 	else
 	{
@@ -268,7 +343,7 @@ function PubAddOneInfoToFzData($fzclassid,$fzid,$fzbcid,$fzcid,$tbname,$classid,
 	{
 		if($zinfor['cid']!=$fzcid||$zinfor['bcid']!=$fzbcid||$zinfor['mid']!=$mid||$zinfor['classid']!=$classid)
 		{
-			$empire->query("update ".$fzdatatb." set bcid='$fzbcid',cid='$fzcid',mid='$mid',classid='$classid' where bpubid='".$fzpubid."' and id='".$id."' and tid='".$tid."'".do_dblimit_upone());
+			$empire->query("update ".$fzdatatb_edit." set bcid='$fzbcid',cid='$fzcid',mid='$mid',classid='$classid' where bpubid='".$fzpubid."' and id='".$id."' and tid='".$tid."'".do_dblimit_upone());
 		}
 	}
 	else
@@ -300,6 +375,10 @@ function PubAddFzDataUpEfz($fzclassid,$fzid,$classid,$id,$tbname,$checked,$fzstb
 	{
 		return '';
 	}
+	if(!eInfoHaveTable($tbname,0))
+	{
+		return '';
+	}
 	//主表
 	$finfotb=ReturnInfoMainTbname($tbname,$checked);
 	$infor=$empire->fetch1("select stb from ".$finfotb." where id='".$id."'".do_dblimit_one());
@@ -325,6 +404,40 @@ function PubAddFzDataUpEfz($fzclassid,$fzid,$classid,$id,$tbname,$checked,$fzstb
 	$empire->query("update ".$infotbr['datatbname']." set efzstb='$newefzstb' where id='".$id."'".do_dblimit_upone());
 }
 
+//移除子信息
+function PubDelOneFzData($fzclassid,$fzid,$fzpubid,$fzstb,$classid,$id,$tid){
+	global $empire,$dbtbpre,$class_r;
+	$fzclassid=(int)$fzclassid;
+	$fzid=(int)$fzid;
+	$fzstb=(int)$fzstb;
+	$classid=(int)$classid;
+	$id=(int)$id;
+	$tid=(int)$tid;
+	if(!$fzpubid)
+	{
+		$fzpubid=ReturnInfoPubid($fzclassid,$fzid);
+	}
+	$fzpubid=RepPostVar($fzpubid);
+	if(!$tid)
+	{
+		$tid=(int)$class_r[$classid]['tid'];
+	}
+	if(!$fzstb)
+	{
+		$fzinfor=$empire->fetch1("select fzstb from {$dbtbpre}enewsfz_info where pubid='$fzpubid'".do_dblimit_one());
+		$fzstb=(int)$fzinfor['fzstb'];
+	}
+	if(!$fzstb)
+	{
+		return '';
+	}
+	$fzdatatb=$dbtbpre.'enewsfz_data_'.$fzstb;
+	$fzdatatb_ck=$dbtbpre.'enewsfz_data_check';
+	$empire->query("delete from ".$fzdatatb." where id='$id' and tid='$tid' and bpubid='$fzpubid'");
+	$empire->query("delete from ".$fzdatatb_ck." where id='$id' and tid='$tid' and bpubid='$fzpubid'");
+	return $fzstb;
+}
+
 //增加信息时加入父信息
 function PubAEInfoToFzData($tbname,$classid,$id,$newstime,$checked,$efz,$efzid,$delefzid,$ecms=0,$doupefz=0){
 	global $empire,$dbtbpre,$class_r,$public_r;
@@ -332,7 +445,15 @@ function PubAEInfoToFzData($tbname,$classid,$id,$newstime,$checked,$efz,$efzid,$
 	{
 		return '';
 	}
+	$classid=(int)$classid;
+	$id=(int)$id;
+	$newstime=(int)$newstime;
+	$checked=(int)$checked;
 	if(!$tbname||!$id)
+	{
+		return '';
+	}
+	if(!eInfoHaveTable($tbname,0))
 	{
 		return '';
 	}
@@ -383,6 +504,8 @@ function PubAEInfoToFzData($tbname,$classid,$id,$newstime,$checked,$efz,$efzid,$
 			}
 			$delpids.=$deldh.$dfzclassid.'.'.$dfzid;
 			$deldh=',';
+			//del
+			PubDelOneFzData($dfzclassid,$dfzid,0,0,$classid,$id,0);
 		}
 		if($delpids)
 		{
@@ -447,6 +570,10 @@ function MoveCheckInfoForFzData($tbname,$classid,$id,$checked,$stb,$efz,$efzstb)
 	{
 		return '';
 	}
+	if(!eInfoHaveTable($tbname,0))
+	{
+		return '';
+	}
 	$classid=(int)$classid;
 	$id=(int)$id;
 	$checked=(int)$checked;
@@ -458,7 +585,7 @@ function MoveCheckInfoForFzData($tbname,$classid,$id,$checked,$stb,$efz,$efzstb)
 		$up_r=$empire->fetch1("select efzstb from ".$infotbr['datatbname']." where id='".$id."'".do_dblimit_one());
 		$efzstb=$up_r['efzstb'];
 	}
-	if(!$efzstb||$efzstb==','||$efzstb=',,')
+	if(!$efzstb||$efzstb==','||$efzstb==',,')
 	{
 		return '';
 	}
@@ -505,6 +632,10 @@ function MoveCheckInfoForFzData($tbname,$classid,$id,$checked,$stb,$efz,$efzstb)
 function DelInfoForFzData($tbname,$classid,$id,$checked,$stb,$efz,$efzstb){
 	global $empire,$dbtbpre,$class_r,$public_r;
 	if(!$public_r['openfz'])
+	{
+		return '';
+	}
+	if(!eInfoHaveTable($tbname,0))
 	{
 		return '';
 	}
@@ -560,6 +691,9 @@ function PubFzinfoUpChangeMore($classid,$ids,$to_classid,$efz){
 	{
 		return '';
 	}
+	$classid=(int)$classid;
+	$ids=eReturnInids($ids);
+	$to_classid=(int)$to_classid;
 	if(!$classid||!$ids||!$to_classid)
 	{
 		return '';
@@ -584,6 +718,8 @@ function PubFzinfoUpChangeAll($classid,$to_classid){
 	{
 		return '';
 	}
+	$classid=(int)$classid;
+	$to_classid=(int)$to_classid;
 	if(!$classid||!$to_classid)
 	{
 		return '';
@@ -623,6 +759,12 @@ function PubFzDataUpChangeAll($upstr,$where){
 //子信息自动更正
 function PubAutoTrueFzData($tbname,$tid,$id,$classid,$mid,$newclassid,$newmid){
 	global $empire,$dbtbpre;
+	$tid=(int)$tid;
+	$id=(int)$id;
+	$classid=(int)$classid;
+	$mid=(int)$mid;
+	$newclassid=(int)$newclassid;
+	$newmid=(int)$newmid;
 	$upstr='';
 	$dh='';
 	if($newclassid)
@@ -651,6 +793,11 @@ function PubAutoTrueFzData($tbname,$tid,$id,$classid,$mid,$newclassid,$newmid){
 //父信息自动更正
 function PubAutoTrueFzInfo($pubid,$classid,$mid,$newclassid,$newmid){
 	global $empire,$dbtbpre;
+	$pubid=RepPostVar($pubid);
+	$classid=(int)$classid;
+	$mid=(int)$mid;
+	$newclassid=(int)$newclassid;
+	$newmid=(int)$newmid;
 	$upstr='';
 	$dh='';
 	if($newclassid)

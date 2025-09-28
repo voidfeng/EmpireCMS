@@ -91,7 +91,7 @@ $eusedbtypename=$echdbtype>2?'PostgreSQL':'MySQL';
 //数据库操作
 if($ok)
 {
-	if($enews=='setdb'||$enews=='systb'||$enews=='systbdata'||$enews=='modtb'||$enews=='modtbdata'||$enews=='templatetb'||$enews=='templatetbdata'||$enews=='defaultdata'||$enews=='firstadmin')
+	if($enews=='setdb'||$enews=='systb'||$enews=='systbdata'||$enews=='modtb'||$enews=='modtbdata'||$enews=='templatetb'||$enews=='templatetbdata'||$enews=='defaultdata'||$enews=='firstadmin'||$enews=='changetbpgsql')
 	{
 		if($enews!='setdb')
 		{
@@ -169,6 +169,10 @@ elseif($enews=="defaultdata"&&$ok)
 elseif($enews=="firstadmin"&&$ok)
 {
 	eins_FirstAdmin($_POST);
+}
+elseif($enews=="changetbpgsql"&&$ok)
+{
+	eins_InstallChangeTbPgsql($_GET);
 }
 else
 {}

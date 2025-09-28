@@ -44,14 +44,14 @@ eCheckStrType(4,$enews,1);
 if($enews=="AddMSearchtemp"&&$_GET['docopy'])
 {
 	$tempid=(int)$_GET['tempid'];
-	$r=$empire->fetch1("select tempname,temptext,subnews,listvar,rownum,modid,showdate,subtitle,classid,docode from ".GetDoTemptb("enewssearchtemp",$gid)." where tempid='$tempid'");
+	$r=$empire->fetch1("select tempname,temptext,subnews,listvar,".do_dbkeyfield_spe('rownum').",modid,showdate,subtitle,classid,docode from ".GetDoTemptb("enewssearchtemp",$gid)." where tempid='$tempid'");
 	$url=$urlgname."<a href=ListSearchtemp.php?gid=$gid".$ecms_hashur['ehref'].">管理搜索模板</a>&nbsp;>&nbsp;复制搜索模板：".$r['tempname'];
 }
 //修改
 if($enews=="EditMSearchtemp")
 {
 	$tempid=(int)$_GET['tempid'];
-	$r=$empire->fetch1("select tempname,temptext,subnews,listvar,rownum,modid,showdate,subtitle,classid,docode from ".GetDoTemptb("enewssearchtemp",$gid)." where tempid='$tempid'");
+	$r=$empire->fetch1("select tempname,temptext,subnews,listvar,".do_dbkeyfield_spe('rownum').",modid,showdate,subtitle,classid,docode from ".GetDoTemptb("enewssearchtemp",$gid)." where tempid='$tempid'");
 	$url=$urlgname."<a href=ListSearchtemp.php?gid=$gid".$ecms_hashur['ehref'].">管理搜索模板</a>&nbsp;>&nbsp;修改搜索模板：".$r['tempname'];
 }
 //系统模型

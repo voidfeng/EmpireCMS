@@ -248,7 +248,7 @@ function eReturnDoUpRndf($dotype,$rnd,$rndt){
 	{
 		return '';
 	}
-	$upstr=egetmf('rnd')."='".$rnd."',".egetmf('rndt')."='".$rndt."',";
+	$upstr=egetmf('rnd')."='".addslashes($rnd)."',".egetmf('rndt')."='".addslashes($rndt)."',";
 	return $upstr;
 }
 
@@ -313,7 +313,7 @@ function GetMemberFormId($groupid){
 	global $empire,$dbtbpre;
 	$groupid=(int)$groupid;
 	$r=$empire->fetch1("select formid from {$dbtbpre}enewsmembergroup where groupid='$groupid'");
-	return $r['formid'];
+	return intval($r['formid']);
 }
 
 //取得邮件地址
@@ -571,14 +571,14 @@ function islogin($uid=0,$uname='',$urnd=''){
 			}
 		}
 	}
-	$re['userid']=$cr['userid'];
+	$re['userid']=(int)$cr['userid'];
 	$re['rnd']=$rnd;
 	$re['rndt']=$cr['rndt'];
 	$re['username']=$cr['username'];
 	$re['email']=$cr['email'];
 	$re['userfen']=$cr['userfen'];
 	$re['money']=$cr['money'];
-	$re['groupid']=$cr['groupid'];
+	$re['groupid']=(int)$cr['groupid'];
 	$re['userdate']=$cr['userdate'];
 	$re['zgroupid']=$cr['zgroupid'];
 	$re['havemsg']=$cr['havemsg'];
@@ -1187,6 +1187,7 @@ function eAddFenToUser($fen,$date,$groupid,$zgroupid,$user,$money=0){
 	$user['groupid']=(int)$user['groupid'];
 	$user['userdate']=(int)$user['userdate'];
 	$update='';
+	$dh='';
 	//积分
 	if($fen)
 	{
@@ -1195,13 +1196,16 @@ function eAddFenToUser($fen,$date,$groupid,$zgroupid,$user,$money=0){
 	//预付款
 	if($money)
 	{
-		$update.=egetmf('money')."=".egetmf('money')."+$money";
+		if($update)
+		{
+			$dh=',';
+		}
+		$update.=$dh.egetmf('money')."=".egetmf('money')."+$money";
 	}
 	//有效期
 	if($date)
 	{
 		$user['userdate']=eCardCheckUserdate($user['userdate'],$user['groupid'],$groupid);//有效期验证
-		$dh='';
 		if($update)
 		{
 			$dh=',';
@@ -1214,6 +1218,7 @@ function eAddFenToUser($fen,$date,$groupid,$zgroupid,$user,$money=0){
 		{
 			$userdate=$user['userdate']+$date*24*3600;
 		}
+		$userdate=(int)$userdate;
 		$update.=$dh.egetmf('userdate')."='$userdate'";
 		//转向会员组
 		if($groupid)

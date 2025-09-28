@@ -60,7 +60,7 @@ if($_GET['sear'])
 		}
 		else
 		{
-			$add=" and (classname like '%$keyboard%' or intro like '%$keyboard%' or bname like '%$keyboard%' or classpath like '%$keyboard%' or classid='$keyboard')";
+			$add=" and (classname like '%$keyboard%' or intro like '%$keyboard%' or bname like '%$keyboard%' or classpath like '%$keyboard%'".($ecms_config['db']['usedb']=='pgsql'?"":" or classid='$keyboard'").")";
 		}
 		$search.="&keyboard=$keyboard&show=$show";
 	}

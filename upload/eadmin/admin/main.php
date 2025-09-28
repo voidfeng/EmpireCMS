@@ -210,7 +210,7 @@ if($public_r['addnews_ok'])
               <tr> 
                 <td height="23">程序版本:</td>
                 <td> <a href="http://www.phome.net" target="_blank"><strong>EmpireCMS 
-                  v<?=EmpireCMS_VERSION?>beta Free</strong></a> <font color="#666666">(<?=EmpireCMS_LASTTIME?>)</font></td>
+                  v<?=EmpireCMS_VERSION?> Free</strong></a> <font color="#666666">(<?=EmpireCMS_LASTTIME?>)</font></td>
               </tr>
               <tr>
                 <td height="23">程序编码:</td>

@@ -39,11 +39,17 @@ if(empty($search_r['searchid'])||InfoIsInTable($search_r['tbname']))
 {
 	printerror("SearchNotRecord",$getfrom,1);
 }
+if(!eInfoHaveTable($search_r['tbname'],0))
+{
+	printerror("SearchNotRecord",$getfrom,1);
+}
+$search_r['tempid']=(int)$search_r['tempid'];
+
 $page=(int)$_GET['page'];
 $page=RepPIntvar($page);
 $start=0;
-$page_line=$public_r['search_pagenum'];//每页显示链接数
-$line=$public_r['search_num'];//每页显示记录数
+$page_line=(int)$public_r['search_pagenum'];//每页显示链接数
+$line=(int)$public_r['search_num'];//每页显示记录数
 $offset=$page*$line;//总偏移量
 if($offset>$public_r['searchupnum'])
 {
@@ -62,27 +68,28 @@ if(strstr($add,"\\")||strstr($search_r['andsql'],"\\"))
 	exit();
 }
 //ids
-$pageids=eGetidsLimitMlen($search_r['andsql'],10,$line,$page);
+$pageids=eGetidsLimitMlen($search_r['andsql'],10,$line,$page,1);
 if(!$pageids)
 {
 	printerror("SearchNotRecord",$getfrom,1);
 }
 $query="select * from {$dbtbpre}ecms_".$search_r['tbname']." where id in (".$pageids.")";
-$query.=" order by ".$myorder."".do_dblimit($line,$offset);
+//$query.=" order by ".$myorder."".do_dblimit($line,$offset);
+$query.=" order by ".$myorder."";
 $sql=$empire->query($query);
 $listpage=page1($num,$line,$page_line,$start,$page,$search);
 //取得模板
 if($search_r['tempid'])
 {
-	$tempr=$empire->fetch1("select temptext,subnews,listvar,rownum,showdate,modid,subtitle,docode from ".GetTemptb("enewssearchtemp")." where tempid='".$search_r['tempid']."'".do_dblimit_one());
+	$tempr=$empire->fetch1("select temptext,subnews,listvar,".do_dbkeyfield_spe('rownum').",showdate,modid,subtitle,docode from ".GetTemptb("enewssearchtemp")." where tempid='".$search_r['tempid']."'".do_dblimit_one());
 }
 elseif(empty($class_r[$search_r['trueclassid']]['searchtempid']))
 {
-	$tempr=$empire->fetch1("select temptext,subnews,listvar,rownum,showdate,modid,subtitle,docode from ".GetTemptb("enewssearchtemp")." where isdefault=1".do_dblimit_one());
+	$tempr=$empire->fetch1("select temptext,subnews,listvar,".do_dbkeyfield_spe('rownum').",showdate,modid,subtitle,docode from ".GetTemptb("enewssearchtemp")." where isdefault=1".do_dblimit_one());
 }
 else
 {
-	$tempr=$empire->fetch1("select temptext,subnews,listvar,rownum,showdate,modid,subtitle,docode from ".GetTemptb("enewssearchtemp")." where tempid='".$class_r[$search_r['trueclassid']]['searchtempid']."'".do_dblimit_one());
+	$tempr=$empire->fetch1("select temptext,subnews,listvar,".do_dbkeyfield_spe('rownum').",showdate,modid,subtitle,docode from ".GetTemptb("enewssearchtemp")." where tempid='".$class_r[$search_r['trueclassid']]['searchtempid']."'".do_dblimit_one());
 }
 $have_class=1;
 //替换公共模板变量

@@ -1,7 +1,7 @@
 <?php
 //生成所有内容页面
 function ReNewsHtml($start,$classid,$from,$retype,$startday,$endday,$startid,$endid,$tbname,$havehtml){
-	global $empire,$public_r,$class_r,$fun_r,$dbtbpre,$etable_r,$moreportpid;
+	global $empire,$public_r,$class_r,$fun_r,$dbtbpre,$etable_r,$moreportpid,$havernext;
 	$moreportpid=(int)$moreportpid;
 	$mphref='';
 	if($moreportpid)
@@ -13,7 +13,24 @@ function ReNewsHtml($start,$classid,$from,$retype,$startday,$endday,$startid,$en
 	{
 		printerror("ErrorUrl","history.go(-1)");
     }
+	$rhaddhref='';
+	if($havernext)
+	{
+		$rhaddhref.='&havernext='.$havernext;
+	}
 	$start=(int)$start;
+	//lastrhid
+	$eckvar_rhlastid='e'.$tbname.'_rhid_'.intval($moreportpid);
+	if(!$start)
+	{
+		if(!$havernext)
+		{
+			if(getcvar('ehaverhlid'))
+			{
+				$start=intval(getcvar($eckvar_rhlastid));
+			}
+		}
+	}
 	//按ID
 	if($retype)
 	{
@@ -65,6 +82,7 @@ function ReNewsHtml($start,$classid,$from,$retype,$startday,$endday,$startid,$en
 	}
 	if(empty($b))
 	{
+		esetcookie($eckvar_rhlastid,"",0);
 		//更新状态
 		if($yhadd.$add1=='')
 		{
@@ -100,7 +118,9 @@ function ReNewsHtml($start,$classid,$from,$retype,$startday,$endday,$startid,$en
 		$empire=null;
 		exit();
 	}
-	echo"<link rel=\"stylesheet\" href=\"../data/images/css.css\" type=\"text/css\"><meta http-equiv=\"refresh\" content=\"".$public_r['realltime'].";url=ecmschtml.php?enews=ReNewsHtml&tbname=$tbname&classid=$classid&start=$new_start&from=".urlencode($from)."&retype=$retype&startday=$startday&endday=$endday&startid=$startid&endid=$endid&havehtml=$havehtml&reallinfotime=".ehtmlspecialchars($_GET['reallinfotime']).hReturnEcmsHashStrHref(0).heformhash_get('ReNewsHtml',1).$mphref."\">".$fun_r['OneReNewsHtmlSuccess']."(ID:<font color=red><b>".$new_start."</b></font>)";
+	esetcookie("ehaverhlid",time(),0);
+	esetcookie($eckvar_rhlastid,$new_start,0);
+	echo"<link rel=\"stylesheet\" href=\"../data/images/css.css\" type=\"text/css\"><meta http-equiv=\"refresh\" content=\"".$public_r['realltime'].";url=ecmschtml.php?enews=ReNewsHtml&tbname=$tbname&classid=$classid&start=$new_start&from=".urlencode($from)."&retype=$retype&startday=$startday&endday=$endday&startid=$startid&endid=$endid&havehtml=$havehtml&reallinfotime=".ehtmlspecialchars($_GET['reallinfotime']).hReturnEcmsHashStrHref(0).heformhash_get('ReNewsHtml',1).$mphref.$rhaddhref."\">".$fun_r['OneReNewsHtmlSuccess']."(ID:<font color=red><b>".$new_start."</b></font>)";
 	exit();
 }
 

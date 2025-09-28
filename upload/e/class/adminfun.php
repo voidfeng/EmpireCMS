@@ -21,6 +21,7 @@ function InsertErrorLoginNum($username,$password,$loginauth,$ip,$time,$userid=0)
 	esetcookie("lastlogintime",$logintime,$logintime+3600*24);
 	//数据库
 	$chtime=$time-$public_r['logintime']*60;
+	$chtime=(int)$chtime;
 	//ip
 	if($public_r['loginckt']==2||$public_r['loginckt']==0)
 	{
@@ -74,6 +75,7 @@ function CheckLoginNum($username,$ip,$time){
 	$ip=RepPostVar($ip);
 	//数据库验证
 	$chtime=$time-$public_r['logintime']*60;
+	$chtime=(int)$chtime;
 	//ip
 	if($public_r['loginckt']==2||$public_r['loginckt']==0)
 	{
@@ -377,6 +379,37 @@ function loginout($userid,$username,$rnd){
 	//操作日志
 	insert_dolog("");
 	printerror("ExitSuccess","index.php");
+}
+
+//退出登录(手动)
+function MustDoLoginout($userid,$loginuserid,$loginusername){
+	global $empire,$dbtbpre,$ecms_config;
+	//操作权限
+	CheckLevel($loginuserid,$loginusername,$classid,"user");
+	$userid=(int)$userid;
+	if(!$userid)
+	{
+		printerror("NotThisUserid","history.go(-1)");
+	}
+	$ur=$empire->fetch1("select userid,username,adminclass,groupid,checked,styleid,filelevel from {$dbtbpre}enewsuser where userid='$userid'");
+	if(!$ur['userid'])
+	{
+		printerror("NotThisUserid","history.go(-1)");
+	}
+	if($userid==$loginuserid)
+	{
+		printerror("MustDoLoginOutSelf","history.go(-1)");
+	}
+	//取得随机密码
+	$rnd=make_password(30);
+	$sql=$empire->query("update {$dbtbpre}enewsuser set rnd='$rnd',isot=0,lgac=0,goac=0 where userid='$userid'");
+	DoEDelFileRnd($userid);
+	DoEDelAndAuthRnd($userid);
+	//formhash
+	heformhash_del($userid,0);
+	//操作日志
+	insert_dolog("userid=".$userid);
+	printerror("MustDoLoginOutSuccess","user/ListUser.php".hReturnEcmsHashStrHref2(1));
 }
 
 //验证登录IP

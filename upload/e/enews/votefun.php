@@ -109,18 +109,21 @@ function DoVote($r,$vote){
 		}
 		for($j=0;$j<$vote_count;$j++)
 		{
-			$new_vote_total++;
+			$vote[$j]=(int)$vote[$j];
 			$v_r=explode($VoteField,$vote_r[$vote[$j]-1]);
 			if(empty($v_r[0]))
 			{
 				continue;
 			}
 			$vote_num=$v_r[1]+1;
+			$vote_num=(int)$vote_num;
 			$vote_r[$vote[$j]-1]=$v_r[0].$VoteField.$vote_num;
+			$new_vote_total++;
 		}
 	}
 	else//单选
 	{
+		$vote=(int)$vote;
 		if(empty($vote))
 		{
 			printerror("NotChangeVote","history.go(-1)",1);
@@ -131,6 +134,7 @@ function DoVote($r,$vote){
 			printerror("NotChangeVote","history.go(-1)",1);
 		}
 		$vote_num=$v_r[1]+1;
+		$vote_num=(int)$vote_num;
 		$vote_r[$vote-1]=$v_r[0].$VoteField.$vote_num;
 		$new_vote_total=1;
 	}

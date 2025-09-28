@@ -432,6 +432,7 @@ $returnpage=page2($num,$line,$page_line,$start,$page,$search);
   <?php
   //formhash
   $efh=heformhash_get('DelUser',1);
+  $efh1=heformhash_get('MustDoLoginout',1);
   
   while($r=$empire->fetch($sql))
   {
@@ -446,6 +447,10 @@ $returnpage=page2($num,$line,$page_line,$start,$page,$search);
   	{$zt="禁用";}
   	else
   	{$zt="开启";}
+	if($r['isot'])
+  	{$ztisot="未退出";}
+  	else
+  	{$ztisot="退出";}
   	$lasttime='---';
   	if($r['lasttime'])
   	{
@@ -476,6 +481,8 @@ $returnpage=page2($num,$line,$page_line,$start,$page,$search);
       </div></td>
     <td><div align="center"> 
         <?=$zt?>
+        <br>
+        [<a href="../enews.php?enews=MustDoLoginout&userid=<?=$r['userid']?><?=$ecms_hashur['href'].$efh1?>" onClick="return confirm('确认要强制退出该用户？');"><?=$ztisot?></a>]
       </div></td>
     <td><div align="left">证书：
         <?=$usercertkey?>

@@ -91,7 +91,7 @@ function eTranMorePic($file,$file_name,$file_type,$file_size,$add,$userid,$usern
 			{continue;}
 			//开始上传
 			$r=DoTranUrl($url_r[$i],$add['classid']);
-			if(empty($r[tran]))
+			if(empty($r['tran']))
 		    {
 				continue;
 			}

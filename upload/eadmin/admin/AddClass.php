@@ -648,7 +648,7 @@ tb1 = new WebFXTabPane( document.getElementById( "TabPane1" ) );
           <td height="30" colspan="2">增加栏目</td>
         </tr>
         <tr bgcolor="#FFFFFF"> 
-          <td width="23%" height="25">栏目名称</td>
+          <td width="23%" height="25">栏目名称(*)</td>
           <td> <input name="classname" type="text" id="classname" value="<?=$r['classname']?>" size="38"> 
             <?php
 	  if($enews=="AddClass")
@@ -734,7 +734,7 @@ tb1 = new WebFXTabPane( document.getElementById( "TabPane1" ) );
               <font color="#FF0000">(终级栏目下才能增加信息)</font></td>
           </tr>
           <tr bgcolor="#FFFFFF"> 
-            <td height="25" valign="top">栏目存放文件夹 
+            <td height="25" valign="top">栏目存放文件夹(*) 
               <input name="oldclasspath" type="hidden" id="oldclasspath" value="<?=$r['classpath']?>"> 
               <br> <input name="oldcpath" type="hidden" id="oldcpath" value="<?=$classpath?>"></td>
             <td><table border="0" cellspacing="1" cellpadding="3">
@@ -755,7 +755,7 @@ tb1 = new WebFXTabPane( document.getElementById( "TabPane1" ) );
               </table></td>
           </tr>
           <tr bgcolor="#FFFFFF"> 
-            <td width="23%" height="25">绑定的系统模型</td>
+            <td width="23%" height="25">绑定的系统模型(*)</td>
             <td width="77%"><select name="modid" id="modid">
                 <?=$mod_options?>
               </select> <input type="button" name="Submit6" value="管理系统模型" onClick="window.open('db/ListTable.php<?=$ecms_hashur['whehref']?>');">
@@ -1389,10 +1389,14 @@ tb1 = new WebFXTabPane( document.getElementById( "TabPane1" ) );
 </div>
   <table width="100%" border="0" align="center" cellpadding="3" cellspacing="1">
     <tr> 
-      <td width="100%" height="30"><div align="center"><strong> 
-          <input type="submit" name="Submit" value="提交">
-          &nbsp;&nbsp;<input type="reset" name="Submit2" value="重置">
-          <input type=hidden name=from value="<?=ehtmlspecialchars($_GET['from'])?>"></strong></div></td>
+      <td width="100%" height="32"><div align="center"><strong> 
+          <input type="submit" name="Submit" value=" 提 交 ">
+          &nbsp; &nbsp;<input type="reset" name="Submit2" value="重置">
+      <input type=hidden name=from value="<?=ehtmlspecialchars($_GET['from'])?>"></strong></div></td>
+    </tr>
+	<tr>
+      <td height="30"><font color="#666666">非终级栏目必填项：栏目名称、栏目存放文件夹、绑定的系统模型。
+      <br>终级栏目必填项：栏目名称、栏目存放文件夹、绑定的系统模型、所属列表模板(模板选项)、所属内容模板(模板选项)。 (终级栏目下才能增加信息)</font></td>
     </tr>
   </table>
   </form>

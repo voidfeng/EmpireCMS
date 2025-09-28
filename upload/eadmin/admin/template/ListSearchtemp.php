@@ -40,7 +40,7 @@ function AddMSearchtemp($add,$userid,$username){
 	$add['subtitle']=(int)$add['subtitle'];
 	$docode=(int)$add['docode'];
 	$gid=(int)$add['gid'];
-	$sql=$empire->updatesql("insert into ".GetDoTemptb("enewssearchtemp",$gid)."(tempname,temptext,subnews,isdefault,listvar,rownum,modid,showdate,subtitle,classid,docode) values('".$add['tempname']."','".eaddslashes2($add['temptext'])."','".$add['subnews']."',0,'".eaddslashes2($add['listvar'])."','".$add['rownum']."','".$add['modid']."','".eaddslashes($add['showdate'])."','".$add['subtitle']."','$classid','$docode');","ins");
+	$sql=$empire->updatesql("insert into ".GetDoTemptb("enewssearchtemp",$gid)."(tempname,temptext,subnews,isdefault,listvar,".do_dbkeyfield_spe('rownum').",modid,showdate,subtitle,classid,docode) values('".$add['tempname']."','".eaddslashes2($add['temptext'])."','".$add['subnews']."',0,'".eaddslashes2($add['listvar'])."','".$add['rownum']."','".$add['modid']."','".eaddslashes($add['showdate'])."','".$add['subtitle']."','$classid','$docode');","ins");
 	$tempid=$empire->lastid(GetDoTemptb("enewssearchtemp",$gid),'tempid');
 	//备份模板
 	AddEBakTemp('searchtemp',$gid,$tempid,$add['tempname'],$add['temptext'],$add['subnews'],0,$add['listvar'],$add['rownum'],$add['modid'],$add['showdate'],$add['subtitle'],$classid,$docode,$userid,$username);
@@ -81,7 +81,7 @@ function EditMSearchtemp($add,$userid,$username){
 	$add['subtitle']=(int)$add['subtitle'];
 	$docode=(int)$add['docode'];
 	$gid=(int)$add['gid'];
-	$sql=$empire->query("update ".GetDoTemptb("enewssearchtemp",$gid)." set subnews='".$add['subnews']."',tempname='".$add['tempname']."',temptext='".eaddslashes2($add['temptext'])."',listvar='".eaddslashes2($add['listvar'])."',rownum='".$add['rownum']."',modid='".$add['modid']."',showdate='".eaddslashes($add['showdate'])."',subtitle='".$add['subtitle']."',classid='$classid',docode='$docode' where tempid='".$add['tempid']."'");
+	$sql=$empire->query("update ".GetDoTemptb("enewssearchtemp",$gid)." set subnews='".$add['subnews']."',tempname='".$add['tempname']."',temptext='".eaddslashes2($add['temptext'])."',listvar='".eaddslashes2($add['listvar'])."',".do_dbkeyfield_spe('rownum')."='".$add['rownum']."',modid='".$add['modid']."',showdate='".eaddslashes($add['showdate'])."',subtitle='".$add['subtitle']."',classid='$classid',docode='$docode' where tempid='".$add['tempid']."'");
 	//备份模板
 	AddEBakTemp('searchtemp',$gid,$add['tempid'],$add['tempname'],$add['temptext'],$add['subnews'],0,$add['listvar'],$add['rownum'],$add['modid'],$add['showdate'],$add['subtitle'],$classid,$docode,$userid,$username);
 	if($sql)

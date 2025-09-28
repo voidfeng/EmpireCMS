@@ -30,7 +30,7 @@ $fieldexp="<!--field--->";
 $recordexp="<!--record-->";
 //返回搜索字段列表
 function ReturnSearchOptions($enter,$field,$record){
-	global $modid,$emod_r;
+	global $modid,$emod_r,$ecms_config;
 	$r=explode($record,$enter);
 	$count=count($r)-1;
 	for($i=0;$i<$count;$i++)
@@ -47,6 +47,18 @@ function ReturnSearchOptions($enter,$field,$record){
 		if($r1[1]=="special.field"||strstr($emod_r[$modid]['tbdataf'],','.$r1[1].','))
 		{
 			continue;
+		}
+		//pgsql
+		if($ecms_config['db']['usedb']=='pgsql')
+		{
+			if($r1[1]=="id"||$r1[1]=="classid"||$r1[1]=="newstime"||$r1[1]=="diggtop"||$r1[1]=="diggdown"||$r1[1]=="star"||$r1[1]=="num"||$r1[1]=="elpltime"||$r1[1]=="moviefen"||$r1[1]=="playerid"||$r1[1]=="tprice"||$r1[1]=="price"||$r1[1]=="buyfen"||$r1[1]=="pmaxnum"||$r1[1]=="psalenum"||$r1[1]=="infoipport"||stristr($r1[1],'ediyintfd'))
+			{
+				continue;
+			}
+			if(stristr($emod_r[$modid]['typeintf'],','.$r1[1].','))
+			{
+				continue;
+			}
 		}
 		if($r1[1]=="id")
 		{

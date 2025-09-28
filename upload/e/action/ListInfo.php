@@ -230,6 +230,7 @@ if($line<10||$line>80)
 		$line=intval($public_r['qlistinfonum']);
 	}
 }
+$line=(int)$line;
 if(empty($line))
 {
 	printerror('ErrorUrl','',1);
@@ -247,11 +248,12 @@ else
 {
 	DtTempIsClose($tempid,'listtemp');
 }
+$tempid=(int)$tempid;
 if(empty($tempid))
 {
 	printerror('ErrorUrl','',1);
 }
-$tempr=$empire->fetch1("select tempid,temptext,subnews,listvar,rownum,showdate,modid,subtitle,docode from ".GetTemptb("enewslisttemp")." where tempid='$tempid'");
+$tempr=$empire->fetch1("select tempid,temptext,subnews,listvar,".do_dbkeyfield_spe('rownum').",showdate,modid,subtitle,docode from ".GetTemptb("enewslisttemp")." where tempid='$tempid'");
 if(empty($tempr['tempid']))
 {
 	printerror('ErrorUrl','',1);

@@ -77,6 +77,8 @@ function ReturnInfoUrl($r){
 //增加节点
 function AddInfoClass($bclassid,$newsclassid,$add,$ztid,$userid,$username){
 	global $empire,$class_r,$dbtbpre;
+	$bclassid=(int)$bclassid;
+	$newsclassid=(int)$newsclassid;
 	if(!$add['classname'])
 	{printerror("EmptyInfoTitleSuccess","history.go(-1)");}
 	//操作权限
@@ -106,8 +108,6 @@ function AddInfoClass($bclassid,$newsclassid,$add,$ztid,$userid,$username){
 	if(empty($add['insertnum']))
 	{$add['insertnum']=10;}
 	//处理变量
-	$bclassid=(int)$bclassid;
-	$newsclassid=(int)$newsclassid;
 	$add['num']=(int)$add['num'];
 	$add['copyimg']=(int)$add['copyimg'];
 	$add['renum']=(int)$add['renum'];
@@ -180,6 +180,9 @@ function AddInfoClass($bclassid,$newsclassid,$add,$ztid,$userid,$username){
 //修改节点
 function EditInfoClass($bclassid,$newsclassid,$add,$ztid,$userid,$username){
 	global $empire,$class_r,$dbtbpre;
+	$add['classid']=(int)$add['classid'];
+	$bclassid=(int)$bclassid;
+	$newsclassid=(int)$newsclassid;
 	if(!$add['classid']||!$add['classname'])
 	{printerror("EmptyInfoTitleSuccess","history.go(-1)");}
 	//操作权限
@@ -210,9 +213,6 @@ function EditInfoClass($bclassid,$newsclassid,$add,$ztid,$userid,$username){
 	if(empty($add['insertnum']))
 	{$add['insertnum']=10;}
 	//处理变量
-	$add['classid']=(int)$add['classid'];
-	$bclassid=(int)$bclassid;
-	$newsclassid=(int)$newsclassid;
 	$add['num']=(int)$add['num'];
 	$add['copyimg']=(int)$add['copyimg'];
 	$add['renum']=(int)$add['renum'];

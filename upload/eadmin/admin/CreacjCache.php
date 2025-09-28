@@ -115,7 +115,7 @@ function CreateClassCache($bclassid,$exp,$expjs,$expmodjs,$adminclass,$doall,$mi
 			{$menutype="file1";}
 			else
 			{$menutype="file";}
-			$infoclassname="<a onclick=tourl(".$r['bclassid'].",".$r['classid'].") onmouseout=chft(this,0,".$r['classid'].") onmouseover=chft(this,1,".$r['classid'].") oncontextmenu=ShRM(this,".$r['bclassid'].",".$r['classid'].",'".$infoclassurl."',1)>".$r['classname']."</a>";
+			$infoclassname="<a onclick=tourl(".$r['bclassid'].",".$r['classid'].") onmouseout=chft(this,0,".$r['classid'].") onmouseover=chft(this,1,".$r['classid'].")>".$r['classname']."</a>";
 			$onmouseup="";
 		}
 		else
@@ -133,7 +133,7 @@ function CreateClassCache($bclassid,$exp,$expjs,$expmodjs,$adminclass,$doall,$mi
 				$listtype="list";
 				$onmouseup="chengstate('".$r['classid']."')";
 			}
-			$infoclassname="<a onmouseout=chft(this,0,".$r['classid'].") onmouseover=chft(this,1,".$r['classid'].") oncontextmenu=ShRM(this,".$r['bclassid'].",".$r['classid'].",'".$infoclassurl."',0)>".$r['classname']."</a>";
+			$infoclassname="<a onmouseout=chft(this,0,".$r['classid'].") onmouseover=chft(this,1,".$r['classid'].")>".$r['classname']."</a>";
 		}
 		$returnr['listenews'].='<tr><td id="pr'.$r['classid'].'" class="'.$menutype.'" onclick="'.$onmouseup.'">'.$infoclassname.'</td></tr>';
 		//JS颜色

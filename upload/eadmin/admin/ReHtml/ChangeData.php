@@ -179,6 +179,20 @@ function CheckAll(form)
                               <input name="havehtml" type="checkbox" id="havehtml" value="1" title="把已经生成的内容页一起更新">
                             </div></td>
                         </tr>
+						<?php
+						if(getcvar('ehaverhlid'))
+						{
+						?>
+						<tr> 
+                          <td height="25" valign="top"> <div align="center"><select name="havernext" id="havernext">
+                          <option value="0">继续上次刷新</option>
+                          <option value="1">重新刷新</option>
+                          </select>
+                            </div></td>
+                        </tr>
+						<?php
+						}
+						?>
                       </form>
                     </table>
                   </div></td>
@@ -429,6 +443,22 @@ function CheckAll(form)
               <td height="25"><input name="havehtml" type="checkbox" id="havehtml" value="1">
                 是<font color="#666666"> (不选择将不刷新已生成过的信息)</font></td>
             </tr>
+			<?php
+			if(getcvar('ehaverhlid'))
+			{
+			?>
+			<tr>
+              <td height="25">断点刷新：</td>
+              <td height="25">
+  				<select name="havernext" id="havernext">
+    			<option value="0">继续上次刷新</option>
+    			<option value="1">重新刷新</option>
+  				</select>
+                </td>
+            </tr>
+			<?php
+			}
+			?>
             <tr> 
               <td height="25">&nbsp;</td>
               <td height="25"><input type="submit" name="Submit6" value="开始刷新"> 

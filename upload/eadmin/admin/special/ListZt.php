@@ -93,7 +93,7 @@ if($_GET['sear'])
 		}
 		else
 		{
-			$add.=$where."(ztname like '%$keyboard%' or intro like '%$keyboard%' or ztpath like '%$keyboard%' or ztid='$keyboard')";
+			$add.=$where."(ztname like '%$keyboard%' or intro like '%$keyboard%' or ztpath like '%$keyboard%'".($ecms_config['db']['usedb']=='pgsql'?"":" or ztid='$keyboard'").")";
 		}
 		$search.="&keyboard=$keyboard&show=$show";
 		$where=' and ';

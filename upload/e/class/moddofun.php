@@ -18,20 +18,20 @@ function AddTableDefault($tbname,$tid){
 	//未审核表
 	$otb=$dbtbpre."ecms_".$tbname;
 	$tb=$otb."_check";
-	CopyEcmsTb($otb,$tb);
+	CopyEcmsTb($otb,$tb,'id');
 	$odtb=$dbtbpre."ecms_".$tbname."_data_1";
 	$dtb=$tb."_data";
-	CopyEcmsTb($odtb,$dtb);
+	CopyEcmsTb($odtb,$dtb,'');
 	//复制存档表
 	$otb=$dbtbpre."ecms_".$tbname;
 	$tb=$otb."_doc";
-	CopyEcmsTb($otb,$tb);
+	CopyEcmsTb($otb,$tb,'id');
 	$odtb=$dbtbpre."ecms_".$tbname."_data_1";
 	$dtb=$tb."_data";
-	CopyEcmsTb($odtb,$dtb);
+	CopyEcmsTb($odtb,$dtb,'');
 	$optb=$dbtbpre."ecms_".$tbname."_index";
 	$ptb=$tb."_index";
-	CopyEcmsTb($optb,$ptb);
+	CopyEcmsTb($optb,$ptb,'id');
 }
 
 //复制数据表
@@ -60,16 +60,16 @@ function CopyNewTable($add,$userid,$username){
 	$sql=$empire->updatesql("insert into {$dbtbpre}enewstable(tbname,tname,tsay,isdefault,datatbs,deftb,yhid,mid,intb) values('".$newtbname."','".$add['tname']."','".$add['tsay']."',0,',1,','1','".$add['yhid']."',0,'".$tr['intb']."');","ins");
 	$newtid=$empire->lastid($dbtbpre.'enewstable','tid');
 	//复制表
-	CopyEcmsTb($dbtbpre."ecms_".$tr['tbname'],$dbtbpre."ecms_".$newtbname);	//内容表
-	CopyEcmsTb($dbtbpre."ecms_".$tr['tbname']."_data_1",$dbtbpre."ecms_".$newtbname."_data_1");	//内容副表
-	CopyEcmsTb($dbtbpre."ecms_".$tr['tbname']."_index",$dbtbpre."ecms_".$newtbname."_index");	//内容索引表
-	CopyEcmsTb($dbtbpre."ecms_".$tr['tbname']."_doc",$dbtbpre."ecms_".$newtbname."_doc");	//归档表
-	CopyEcmsTb($dbtbpre."ecms_".$tr['tbname']."_doc_data",$dbtbpre."ecms_".$newtbname."_doc_data");	//归档副表
-	CopyEcmsTb($dbtbpre."ecms_".$tr['tbname']."_doc_index",$dbtbpre."ecms_".$newtbname."_doc_index");	//归档索引表
-	CopyEcmsTb($dbtbpre."ecms_".$tr['tbname']."_check",$dbtbpre."ecms_".$newtbname."_check");	//审核表
-	CopyEcmsTb($dbtbpre."ecms_".$tr['tbname']."_check_data",$dbtbpre."ecms_".$newtbname."_check_data");	//审核副表
-	CopyEcmsTb($dbtbpre."ecms_infoclass_".$tr['tbname'],$dbtbpre."ecms_infoclass_".$newtbname);	//采集节点附加表
-	CopyEcmsTb($dbtbpre."ecms_infotmp_".$tr['tbname'],$dbtbpre."ecms_infotmp_".$newtbname);	//采集数据临时表
+	CopyEcmsTb($dbtbpre."ecms_".$tr['tbname'],$dbtbpre."ecms_".$newtbname,'id');	//内容表
+	CopyEcmsTb($dbtbpre."ecms_".$tr['tbname']."_data_1",$dbtbpre."ecms_".$newtbname."_data_1",'');	//内容副表
+	CopyEcmsTb($dbtbpre."ecms_".$tr['tbname']."_index",$dbtbpre."ecms_".$newtbname."_index",'id');	//内容索引表
+	CopyEcmsTb($dbtbpre."ecms_".$tr['tbname']."_doc",$dbtbpre."ecms_".$newtbname."_doc",'id');	//归档表
+	CopyEcmsTb($dbtbpre."ecms_".$tr['tbname']."_doc_data",$dbtbpre."ecms_".$newtbname."_doc_data",'');	//归档副表
+	CopyEcmsTb($dbtbpre."ecms_".$tr['tbname']."_doc_index",$dbtbpre."ecms_".$newtbname."_doc_index",'id');	//归档索引表
+	CopyEcmsTb($dbtbpre."ecms_".$tr['tbname']."_check",$dbtbpre."ecms_".$newtbname."_check",'id');	//审核表
+	CopyEcmsTb($dbtbpre."ecms_".$tr['tbname']."_check_data",$dbtbpre."ecms_".$newtbname."_check_data",'');	//审核副表
+	CopyEcmsTb($dbtbpre."ecms_infoclass_".$tr['tbname'],$dbtbpre."ecms_infoclass_".$newtbname,'');	//采集节点附加表
+	CopyEcmsTb($dbtbpre."ecms_infotmp_".$tr['tbname'],$dbtbpre."ecms_infotmp_".$newtbname,'id');	//采集数据临时表
 	//字段数据
 	$fsql=$empire->query("select * from {$dbtbpre}enewsf where tid='$tid' order by fid");
 	while($fr=$empire->fetch($fsql))
@@ -334,7 +334,7 @@ function AddDataTable($add,$userid,$username){
 	//建表
 	$odtb=$dbtbpre."ecms_".$tbname."_data_1";
 	$dtb=$dbtbpre."ecms_".$tbname."_data_".$datatb;
-	CopyEcmsTb($odtb,$dtb);
+	CopyEcmsTb($odtb,$dtb,'');
 	$sql=$empire->query("update {$dbtbpre}enewstable set datatbs='$newdatatbs' where tid='$tid'");
 	GetConfig(1);//更新缓存
 	if($sql)
@@ -1172,6 +1172,11 @@ function EditF($add,$userid,$username){
 						{
 							do_dbTableAddFIndex($dbtbpre.'ecms_'.$tbname.'_data_'.$dtbr[$i],$add['f'],'');//pgsql
 						}
+						if($cr['iskey']==1&&$cr['f']<>$add['f'])
+						{
+							do_dbTableDelFIndex($dbtbpre.'ecms_'.$tbname.'_data_'.$dtbr[$i],$add['oldf'],'');//pgsql
+							do_dbTableAddFIndex($dbtbpre.'ecms_'.$tbname.'_data_'.$dtbr[$i],$add['f'],'');//pgsql
+						}
 					}
 					elseif($cr['iskey']==1&&$add['iskey']==0)//删除索引
 					{
@@ -1187,6 +1192,11 @@ function EditF($add,$userid,$username){
 				{
 					$keysql=do_dbTableAddFIndex($dbtbpre.'ecms_'.$tbname.'_doc_data',$add['f'],'');//pgsql
 				}
+				if($cr['iskey']==1&&$cr['f']<>$add['f'])//pgsql
+				{
+					$keysql=do_dbTableDelFIndex($dbtbpre.'ecms_'.$tbname.'_doc_data',$add['oldf'],'');//pgsql
+					$keysql=do_dbTableAddFIndex($dbtbpre.'ecms_'.$tbname.'_doc_data',$add['f'],'');//pgsql
+				}
 			}
 			elseif($cr['iskey']==1&&$add['iskey']==0)//删除索引
 			{
@@ -1198,6 +1208,11 @@ function EditF($add,$userid,$username){
 			{
 				if($cr['iskey']==0)
 				{
+					$keysql=do_dbTableAddFIndex($dbtbpre.'ecms_'.$tbname.'_check_data',$add['f'],'');//pgsql
+				}
+				if($cr['iskey']==1&&$cr['f']<>$add['f'])
+				{
+					$keysql=do_dbTableDelFIndex($dbtbpre.'ecms_'.$tbname.'_check_data',$add['oldf'],'');//pgsql
 					$keysql=do_dbTableAddFIndex($dbtbpre.'ecms_'.$tbname.'_check_data',$add['f'],'');//pgsql
 				}
 			}
@@ -1215,6 +1230,11 @@ function EditF($add,$userid,$username){
 				{
 					$keysql=do_dbTableAddFIndex($dbtbpre.'ecms_'.$tbname,$add['f'],'');//pgsql
 				}
+				if($cr['iskey']==1&&$cr['f']<>$add['f'])
+				{
+					$keysql=do_dbTableDelFIndex($dbtbpre.'ecms_'.$tbname,$add['oldf'],'');//pgsql
+					$keysql=do_dbTableAddFIndex($dbtbpre.'ecms_'.$tbname,$add['f'],'');//pgsql
+				}
 			}
 			elseif($cr['iskey']==1&&$add['iskey']==0)//删除索引
 			{
@@ -1228,6 +1248,11 @@ function EditF($add,$userid,$username){
 				{
 					$keysql=do_dbTableAddFIndex($dbtbpre.'ecms_'.$tbname.'_doc',$add['f'],'');//pgsql
 				}
+				if($cr['iskey']==1&&$cr['f']<>$add['f'])
+				{
+					$keysql=do_dbTableDelFIndex($dbtbpre.'ecms_'.$tbname.'_doc',$add['oldf'],'');//pgsql
+					$keysql=do_dbTableAddFIndex($dbtbpre.'ecms_'.$tbname.'_doc',$add['f'],'');//pgsql
+				}
 			}
 			elseif($cr['iskey']==1&&$add['iskey']==0)//删除索引
 			{
@@ -1239,6 +1264,11 @@ function EditF($add,$userid,$username){
 			{
 				if($cr['iskey']==0)
 				{
+					$keysql=do_dbTableAddFIndex($dbtbpre.'ecms_'.$tbname.'_check',$add['f'],'');//pgsql
+				}
+				if($cr['iskey']==1&&$cr['f']<>$add['f'])
+				{
+					$keysql=do_dbTableDelFIndex($dbtbpre.'ecms_'.$tbname.'_check',$add['oldf'],'');//pgsql
 					$keysql=do_dbTableAddFIndex($dbtbpre.'ecms_'.$tbname.'_check',$add['f'],'');//pgsql
 				}
 			}

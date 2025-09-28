@@ -633,6 +633,7 @@ if(!$pr['wapchstyle'])
 $wapstyle=intval($_GET['style']);
 //返回使用模板
 $usewapstyle=ReturnWapStyle($_GET,$wapstyle);
+eCheckStrType(5,$usewapstyle,1);
 if(!file_exists('template/'.$usewapstyle))
 {
 	$usewapstyle=1;

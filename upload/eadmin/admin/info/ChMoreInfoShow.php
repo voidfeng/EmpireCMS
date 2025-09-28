@@ -59,7 +59,7 @@ if(!$tbr['tbname'])
 	printerror('ErrorUrl','');
 }
 //参数
-$urladdcs="tbname=$tbname&modid=$modid&classid=$classid&id=$id&enews=$enews&form=$form&field=$field&fdivid=$fdivid&fchids=$fchids".$ecms_hashur['ehref'];
+$urladdcs="tbname=$tbname&modid=$modid&classid=$classid&id=$id&enews=$enews&form=$form&field=$field&fdivid=$fdivid".$ecms_hashur['ehref'];
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -125,7 +125,7 @@ if($fchids)
 			 <a href="<?=$titleurl?>" target="_blank" title="<?=$oldtitle?>">
               <?=$infor['title']?>
               </a></td>
-            <td width="14%"><div align="center"><a href="ChMoreInfoShow.php?<?=$urladdcs?>&delid=<?=$infor['id']?>" onclick="return confirm('确认要从列表中移除?');">移除</a></div></td>
+            <td width="14%"><div align="center"><a href="ChMoreInfoShow.php?<?=$urladdcs?>&fchids=<?=$ids?>&delid=<?=$infor['id']?>" onclick="return confirm('确认要从列表中移除?');">移除</a></div></td>
           </tr>
 	<?php
 	}

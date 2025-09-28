@@ -42,7 +42,7 @@ if($enews=='ChangeEnewsData')
 	$moreportpid=Moreport_hDoSetSelfPath(0);
 }
 //用户
-if($enews=="exit")
+if($enews=="exit"||$enews=='MustDoLoginout')
 {
 	include('../../e/class/adminfun.php');
 }
@@ -70,6 +70,11 @@ elseif($enews=="ChangeEnewsData")//更新缓存
 elseif($enews=="exit")//退出系统
 {
 	loginout($logininid,$loginin,$loginrnd);
+}
+elseif($enews=="MustDoLoginout")//强制退出用户
+{
+	$userid=(int)$_GET['userid'];
+	MustDoLoginout($userid,$logininid,$loginin);
 }
 elseif($enews=="ChangeMoreportAdmin")//切换访问端
 {

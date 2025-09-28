@@ -106,6 +106,8 @@ function qCheckInfoCloseWord($mid,$add,$closewordsf,$closewords){
 //提交字段值的处理
 function DoqValue($mid,$f,$val){
 	global $public_r,$emod_r;
+	$mid=(int)$mid;
+	$val=eModDoTbFieldTypeVal($mid,$f,$val);
 	$val=RepPhpAspJspcodeText($val);
 	if(strstr($emod_r[$mid]['editorf'],','.$f.','))//编辑器
 	{
@@ -131,6 +133,7 @@ function DoqValue($mid,$f,$val){
 //返回字段值的处理
 function DoReqValue($mid,$f,$val){
 	global $public_r,$emod_r;
+	$mid=(int)$mid;
 	if($emod_r[$mid]['savetxtf']&&$emod_r[$mid]['savetxtf']==$f)//存文本
 	{
 		eCheckStrPathGet($val);
@@ -407,6 +410,7 @@ function DoReqDownPath($downpath){
 //特殊字段处理
 function DoqSpecialValue($mid,$f,$value,$add,$infor,$ecms=0){
 	global $public_r,$loginin,$emod_r;
+	$mid=(int)$mid;
 	if($f=="morepic")//图片集
 	{
 		$add['msavepic']=0;
@@ -753,7 +757,7 @@ function ReturnQAddinfoF($mid,$add,$infor,$classid,$filepass,$userid,$username,$
 		}
 		else
 		{
-			$infoid=$infor['id'];
+			$infoid=(int)$infor['id'];
 			$filepass=0;
 		}
 		$tranr=explode(",",$tranf);
@@ -851,7 +855,7 @@ function ReturnQAddinfoF($mid,$add,$infor,$classid,$filepass,$userid,$username,$
 			}
 		}
 	}
-	$ret_r[4]=$emod_r[$mid]['deftb'];
+	$ret_r[4]=(int)$emod_r[$mid]['deftb'];
 	return $ret_r;
 }
 
@@ -949,6 +953,7 @@ function DodoInfo($add,$ecms=0){
 	if($keyboard&&strstr($qenter,',special.field,'))
 	{
 		$keyboard=str_replace('[!--f--!]','ecms',$keyboard);
+		$keyboard=RepPostVar($keyboard);
 		$keyid=GetKeyid($keyboard,$classid,$id,$class_r[$classid]['link_num']);
 		$keyid=RepPostVar($keyid);
 		$keyid=dgdbe_rpstr($keyid);
@@ -1013,17 +1018,17 @@ function DodoInfo($add,$ecms=0){
 			}
 			if($fzdatacr['bcid'])
 			{
-				$edbfunc_fzr['fzbcid']=$fzdatacr['bcid'];
-				$edbfunc_fzr['fzcid']=$fzdatacr['cid'];
+				$edbfunc_fzr['fzbcid']=(int)$fzdatacr['bcid'];
+				$edbfunc_fzr['fzcid']=(int)$fzdatacr['cid'];
 			}
 			else
 			{
-				$edbfunc_fzr['fzbcid']=$fzdatacr['cid'];
+				$edbfunc_fzr['fzbcid']=(int)$fzdatacr['cid'];
 				$edbfunc_fzr['fzcid']=0;
 			}
 		}
-		$edbfunc_fzr['fzclassid']=$binfor['classid'];
-		$edbfunc_fzr['fzid']=$binfor['id'];
+		$edbfunc_fzr['fzclassid']=(int)$binfor['classid'];
+		$edbfunc_fzr['fzid']=(int)$binfor['id'];
 		$fzdoadd=1;
 		$addurlcsfz='&fztid='.$fztid.'&fzid='.$fzid.'&fzcid='.$fzcid;
 	}
@@ -1114,7 +1119,7 @@ function DodoInfo($add,$ecms=0){
 		//返回表信息
 		$infotbr=ReturnInfoTbname($tbname,$checked,$ret_r[4]);
 		//主表
-		$sql=$empire->updatesql("insert into ".$infotbr['tbname']."(id,classid,ttid,onclick,plnum,totaldown,newspath,filename,userid,username,firsttitle,isgood,istop,isqf,ismember,isurl,truetime,lastdotime,havehtml,groupid,userfen,titlefont,titleurl,stb,fstb,restb,keyboard".$ret_r[0].") values('$id','$classid','$ttid',0,0,0,'".addslashes($newspath)."','','".$muserid."','".addslashes($musername)."',0,0,0,'$isqf',1,0,'$truetime','$truetime','$havehtml',0,0,'$titlefont','','".$ret_r[4]."','".$public_r['filedeftb']."','".$public_r['pldeftb']."','".addslashes($keyboard)."'".$ret_r[1].");","ins");
+		$sql=$empire->updatesql("insert into ".$infotbr['tbname']."(id,classid,ttid,onclick,plnum,totaldown,newspath,filename,userid,username,firsttitle,isgood,istop,isqf,ismember,isurl,truetime,lastdotime,havehtml,groupid,userfen,titlefont,titleurl,stb,fstb,restb,keyboard".$ret_r[0].") values('$id','$classid','$ttid',0,0,0,'".addslashes($newspath)."','','".$muserid."','".addslashes($musername)."',0,0,0,'$isqf',1,0,'$truetime','$truetime','$havehtml',0,0,'$titlefont','','".intval($ret_r[4])."','".intval($public_r['filedeftb'])."','".intval($public_r['pldeftb'])."','".addslashes($keyboard)."'".$ret_r[1].");","ins");
 		//副表
 		$fsql=$empire->updatesql("insert into ".$infotbr['datatbname']."(id,classid,keyid,dokey,newstempid,closepl,haveaddfen,infotags".$ret_r[2].") values('$id','$classid','".addslashes($keyid)."',1,'$newstempid',0,'$haveaddfen',''".$ret_r[3].");","ins");
 		//扣点记录
@@ -1134,13 +1139,13 @@ function DodoInfo($add,$ecms=0){
 		$filename=ReturnInfoFilename($classid,$id,'');
 		//信息地址
 		$infourl=GotoGetTitleUrl($classid,$id,$newspath,$filename,0,0,'');
-		$usql=$empire->query("update ".$infotbr['tbname']." set filename='$filename',titleurl='$infourl' where id='$id'");
+		$usql=$empire->query("update ".$infotbr['tbname']." set filename='".addslashes($filename)."',titleurl='".addslashes($infourl)."' where id='$id'");
 		//修改ispic
 		UpdateTheIspic($classid,$id,$checked);
 		//修改附件
 		if($filepass)
 		{
-			UpdateTheFile($id,$filepass,$classid,$public_r['filedeftb']);
+			UpdateTheFile($id,$filepass,$classid,intval($public_r['filedeftb']));
 		}
 		//更新栏目信息数
 		AddClassInfos($classid,'+1','+1',$checked);
@@ -1217,6 +1222,7 @@ function DodoInfo($add,$ecms=0){
 	//---------------修改
 	elseif($ecms==1)
 	{
+		$id=(int)$id;
 		if(!$id)
 		{
 			printerror("ErrorUrl","history.go(-1)",1);
@@ -1293,13 +1299,14 @@ function DodoInfo($add,$ecms=0){
 		//修改ispic
 		UpdateTheIspic($classid,$id,$ychecked);
 		//更新附件
-		UpdateTheFileEdit($classid,$id,$infor['fstb']);
+		UpdateTheFileEdit($classid,$id,intval($infor['fstb']));
 		//未审核信息互转
 		if($ychecked!=$infor['checked'])
 		{
-			MoveCheckInfoData($tbname,$ychecked,$infor['stb'],"id='$id'");
 			//efz
 			MoveCheckInfoForFzData($tbname,$infor['classid'],$id,$ychecked,$infor['stb'],$infor['efz'],$infor['efzstb']);
+			//efz
+			MoveCheckInfoData($tbname,$ychecked,$infor['stb'],"id='$id'");
 			//更新栏目信息数
 			if($infor['checked'])
 			{
@@ -1363,6 +1370,7 @@ function DodoInfo($add,$ecms=0){
 	//---------------删除
 	elseif($ecms==2)
 	{
+		$id=(int)$id;
 		if(!$id)
 		{
 			printerror("ErrorUrl","history.go(-1)",1);
@@ -1574,11 +1582,11 @@ function DoQTranFile($add,$file,$file_name,$file_type,$file_size,$userid,$userna
 		{
 			$ecms!=1?printerror("EmptyQTranFile","",9):ECMS_QEditorPrintError(1,'','','EmptyQTranFile','','');
 		}
-		$fstb=$infor['fstb'];
+		$fstb=(int)$infor['fstb'];
 	}
 	else
 	{
-		$fstb=$public_r['filedeftb'];
+		$fstb=(int)$public_r['filedeftb'];
 	}
 	//验证权限
 	$userid=(int)$userid;
@@ -1688,7 +1696,7 @@ function DoQTranFile($add,$file,$file_name,$file_type,$file_size,$userid,$userna
 
 //是否采用文本框
 function eCkQEdToText($mpid,$mid,$tbname,$f){
-	global $public_r;
+	global $public_r,$emod_r;
 	if($public_r['qedtext'])
 	{
 		return 1;

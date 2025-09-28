@@ -32,10 +32,27 @@ select					{ font: 9pt Tahoma, Verdana; font-weight: normal; }
 
 <body>
 
-<br><br><br><br><div align="center">您的账号需要激活才能进后台，请联系管理员帮您激活。<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<table width="800" border="0" align="center" cellpadding="3" cellspacing="1" class="tableborder">
+  <tr class="header"> 
+    <td height="25"><div align="center">账号需要激活</div></td>
+  </tr>
+  <tr bgcolor="#FFFFFF"> 
+    <td height="80"> 
+      <div align="center">
+
+    <br><br><div align="center">您的账号需要激活才能进后台，请联系管理员帮您激活。<br>
     <br><br>
   用户ID：<strong><?=$lgacuserid?></strong> ，这是您第 <strong><?=$lgacloginnum?></strong> 次登录，本次登录时间：<strong><?=$lgaclasttime?></strong><br><br>
-    <br>如果已经激活，请 <strong><a href="#empirecms" onClick="window.location.reload();"><font color="#FF0000">点击这里</font></a></strong> 或<font color="#FF0000"><strong> 刷新本网页</strong></font> 重新加载页面。</div>
+    <br>如果已经激活，请 <strong><a href="#empirecms" onClick="window.location.reload();"><font color="#FF0000">点击这里</font></a></strong> 或<font color="#FF0000"><strong> 刷新本网页</strong></font> 重新加载页面。</div><br><br>
 
+	  </div></td>
+  </tr>
+</table>
 </body>
 </html>

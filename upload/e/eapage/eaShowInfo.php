@@ -22,7 +22,7 @@ $classid=(int)$_GET['classid'];
 $id=(int)$_GET['id'];
 $page=(int)$_GET['page'];
 $page=RepPIntvar($page);
-$mid=$class_r[$classid]['modid'];
+$mid=(int)$class_r[$classid]['modid'];
 $tbname=$class_r[$classid]['tbname'];
 
 $urlcs='';
@@ -90,6 +90,7 @@ $GLOBALS['navclassid']=$r['classid'];
 $GLOBALS['navinfor']=$r;
 //取得内容模板
 $r['newstempid']=$r['newstempid']?$r['newstempid']:$class_r[$r['classid']]['newstempid'];
+$r['newstempid']=(int)$r['newstempid'];
 $newstemp_r=$empire->fetch1("select tempid,temptext,showdate from ".GetTemptb("enewsnewstemp")." where tempid='".$r['newstempid']."'");
 
 //替换模板变量

@@ -111,6 +111,7 @@ $prdr['payckcode']=$re_prdr['payckcode'];
 $prdr['posttime']=$re_prdr['posttime'];
 $prdr['payip']=$re_prdr['payip'];
 
+eCheckStrType(4,$payr['paytype'],1);
 $file=$payr['paytype'].'/to_pay.php';
 @include($file);
 db_close();

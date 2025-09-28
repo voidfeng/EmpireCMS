@@ -247,7 +247,7 @@ function EditBuycar($add){
 		}
 		if($shoppr['haveatt'])
 		{
-			$addatt[$i]=ShopSys_BuycarRepvar2(RepPostStr($addatt[$i]));
+			$addatt[$i]=ShopSys_BuycarRepvar2(RepPostStr($addatt[$i],0,1));
 		}
 		else
 		{
@@ -302,7 +302,7 @@ function ShopSys_BuycarInfoAdd($addatt){
 	$attstr='';
 	for($i=0;$i<$count;$i++)
 	{
-		$att=ShopSys_BuycarRepvar(RepPostStr($addatt[$i]));
+		$att=ShopSys_BuycarRepvar(RepPostStr($addatt[$i],0,1));
 		if(!trim($att))
 		{
 			continue;
@@ -319,7 +319,8 @@ function ShopCheckAddDdGroup($shoppr){
 	//限制下单会员
 	if($shoppr['shopddgroupid'])
 	{
-		if(!getcvar('mluserid'))
+		$ckuserid=(int)getcvar('mluserid');
+		if(!$ckuserid)
 		{
 			$phpmyself=urlencode(eReturnSelfPage(1));
 			$gotourl=$public_r['newsurl']."e/member/login/login.php?prt=1&from=".$phpmyself;
@@ -703,7 +704,7 @@ function ReturnBuycardd($shoppr){
 		//附加属性
 		if($shoppr['haveatt'])
 		{
-			$addattstr=dgdbe_rpstr(ShopSys_BuycarRepvar2(RepPostStr($pr[2])));
+			$addattstr=dgdbe_rpstr(ShopSys_BuycarRepvar2(RepPostStr($pr[2],0,1)));
 		}
 		else
 		{
@@ -748,7 +749,9 @@ function ReturnBuycardd($shoppr){
 		$productr['buyfen']=dgdbe_rpstr($productr['buyfen']);
 		$newbuycar.="|".$classid.",".$id."|".$addattstr."|".$num."|".$productr['price']."|".$productr['buyfen']."|".$title."!";
     }
-	$return[2]=$alltotal;
+	$return[0]=(float)$return[0];
+	$return[1]=(float)$return[1];
+	$return[2]=(float)$alltotal;
 	$return[3]=$newbuycar;
 	return $return;
 }

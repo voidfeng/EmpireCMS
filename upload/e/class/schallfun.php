@@ -170,7 +170,7 @@ function LoadSearchAll($lid,$start,$userid,$username){
 		$infotime=$r['newstime'];
 		$title=SearchReturnSaveStr(ClearSearchAllHtml(stripSlashes($title)));
 		$infotext=SearchReturnSaveStr(ClearSearchAllHtml(stripSlashes($infotext)));
-		$empire->query("insert into {$dbtbpre}enewssearchall(sid,id,classid,title,infotime,infotext) values(NULL,'".$r['id']."','".$r['classid']."','".addslashes($title)."','".$infotime."','".addslashes($infotext)."');");
+		$empire->query("insert into {$dbtbpre}enewssearchall(id,classid,title,infotime,infotext) values('".$r['id']."','".$r['classid']."','".addslashes($title)."','".$infotime."','".addslashes($infotext)."');");
 	}
 	if(empty($b))
 	{

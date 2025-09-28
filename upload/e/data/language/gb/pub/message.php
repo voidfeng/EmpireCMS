@@ -87,6 +87,9 @@ $message_r=array
 	'DelUserOnePassSuccess'=>'删除一次性密码成功',
 	'NotLgacUserid'=>'请选择用户',
 	'CheckLgacUserSuccess'=>'登录激活成功',
+	'NotThisUserid'=>'此用户不存在',
+	'MustDoLoginOutSelf'=>'不能强制退出自己',
+	'MustDoLoginOutSuccess'=>'已强制退出该用户',
 
 	'DbError'=>'数据库出错',
 	'ErrorUrl'=>'您来自的链接不存在',

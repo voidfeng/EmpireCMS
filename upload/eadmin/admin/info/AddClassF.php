@@ -39,7 +39,7 @@ if($enews=="EditClassF")
 	$url="<a href='../ListClass.php".$ecms_hashur['whehref']."'>管理栏目</a>&nbsp;>&nbsp;<a href='ListClassF.php".$ecms_hashur['whehref']."'>管理栏目字段</a>&nbsp;>&nbsp;修改栏目字段";
 	$postword='修改字段';
 	$r=$empire->fetch1("select * from {$dbtbpre}enewsclassf where fid='$fid'");
-	if(!$r[fid])
+	if(!$r['fid'])
 	{
 		printerror("ErrorUrl","history.go(-1)");
 	}

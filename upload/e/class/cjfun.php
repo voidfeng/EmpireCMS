@@ -38,6 +38,7 @@ function EditCjNews($add,$newstext,$userid,$username){
 		//发布时间
 		if($dofield=="newstime")
 		{continue;}
+		$add[$dofield]=eModDoTbFieldTypeVal($class_r[$cr['newsclassid']]['modid'],$dofield,$add[$dofield]);
 		$update.=",".$dofield."='".eaddslashes2($add[$dofield])."'";
 	}
 	$sql=$empire->query("update {$dbtbpre}ecms_infotmp_".$cr['tbname']." set keyboard='".eaddslashes2($add['keyboard'])."',newstime='".eaddslashes2($add['newstime'])."'".$update." where id='".$add['id']."'");
@@ -115,7 +116,7 @@ function DoClearSmalltextVal($value){
 
 //采集入库
 function CjNewsIn($classid,$id,$checked,$uptime,$userid,$username){
-	global $class_r,$empire,$public_r,$dbtbpre,$emod_r,$lur;
+	global $class_r,$empire,$public_r,$ecms_config,$dbtbpre,$emod_r,$lur;
 	$checked=(int)$checked;
 	$classid=(int)$classid;
 	if(empty($classid))
@@ -150,15 +151,16 @@ function CjNewsIn($classid,$id,$checked,$uptime,$userid,$username){
 	$cjr=explode($record,$mr['cj']);
 	$ccount=count($cjr);
 	//取得优化字段
+	$ecjemptyfdef=$ecms_config['db']['usedb']=='pgsql'?'0':'';
 	for($ci=0;$ci<$ccount-1;$ci++)
 	{
 		$cir=explode($field,$cjr[$ci]);
 		$cifield=$cir[1];
-		if($cifield=="title")
+		if($cifield=="title"||$cifield=="newstime")
 		{
 			continue;
 		}
-		$updatefield.=",".$cifield."=''";
+		$updatefield.=",".$cifield."='$ecjemptyfdef'";
 	}
 	$a='';
 	for($i=0;$i<count($id);$i++)
@@ -264,6 +266,7 @@ function CjNewsIn($classid,$id,$checked,$uptime,$userid,$username){
 				EditTxtFieldText($truevalue,$value);
 				$value=$truevalue;
 			}
+			$value=eModDoTbFieldTypeVal($mid,$dofield,$value);
 			$value=addslashes($value);
 			if(strstr($emod_r[$mid]['tbdataf'],','.$dofield.','))//副表
 			{
@@ -378,7 +381,7 @@ function CjNewsIn($classid,$id,$checked,$uptime,$userid,$username){
 
 //全部采集入库
 function CjNewsIn_all($classid,$checked,$uptime,$start,$userid,$username){
-	global $class_r,$empire,$public_r,$dbtbpre,$fun_r,$emod_r,$lur;
+	global $class_r,$empire,$public_r,$dbtbpre,$ecms_config,$fun_r,$emod_r,$lur;
 	$checked=(int)$checked;
 	$classid=(int)$classid;
 	$start=(int)$start;
@@ -509,6 +512,7 @@ function CjNewsIn_all($classid,$checked,$uptime,$start,$userid,$username){
 				EditTxtFieldText($truevalue,$value);
 				$value=$truevalue;
 			}
+			$value=eModDoTbFieldTypeVal($mid,$dofield,$value);
 			$value=addslashes($value);
 			if(strstr($emod_r[$mid]['tbdataf'],','.$dofield.','))//副表
 			{
@@ -612,15 +616,16 @@ function CjNewsIn_all($classid,$checked,$uptime,$start,$userid,$username){
 	if(empty($b))
 	{
 		//取得忧化字段
+		$ecjemptyfdef=$ecms_config['db']['usedb']=='pgsql'?'0':'';
 		for($ci=0;$ci<$ccount-1;$ci++)
 	    {
 			$cir=explode($field,$cjr[$ci]);
 			$cifield=$cir[1];
-			if($cifield=="title")
+			if($cifield=="title"||$cifield=="newstime")
 			{
 				continue;
 			}
-			$updatefield.=",".$cifield."=''";
+			$updatefield.=",".$cifield."='$ecjemptyfdef'";
 		}
 		//状态原记录
 		if($cr['delloadinfo'])//删除
@@ -1844,6 +1849,7 @@ function GetNewsInfo($classid,$checkrnd,$start,$userid,$username){
 					break;
 				}
 			}
+			$zzvalue=eModDoTbFieldTypeVal($class_r[$r['newsclassid']]['modid'],$dofield,$zzvalue);
 
 			$ifield.=",".$dofield;
 			$ivalue.=",'".addslashes($zzvalue)."'";

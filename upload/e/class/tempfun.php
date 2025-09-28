@@ -826,7 +826,19 @@ function CreateTempTb($gid,$en){
 	{
 		$otb=$dbtbpre.$r[$i];
 		$tb=$dbtbpre.$r[$i].$en;
-		CopyEcmsTb($otb,$tb);
+		if($r[$i]=='enewspubtemp')
+		{
+			$tbidf='id';
+		}
+		elseif($r[$i]=='enewstempvar')
+		{
+			$tbidf='varid';
+		}
+		else
+		{
+			$tbidf='tempid';
+		}
+		CopyEcmsTb($otb,$tb,$tbidf);
 	}
 }
 
@@ -1234,8 +1246,10 @@ function LoadInTGBqtemp($gid,$en,$record,$field,$text){
 	for($i=0;$i<$count-1;$i++)
 	{
 		$r=explode($field,$rr[$i]);
-		$sql=$empire->query("insert into ".$tb."(tempid,tempname,modid,temptext,showdate,listvar,subnews,rownum,classid,docode) values('".$r[0]."','".addslashes($r[1])."','".$r[2]."','".addslashes(addslashes($r[3]))."','".addslashes($r[4])."','".addslashes(addslashes($r[5]))."','".$r[6]."','".$r[7]."','".$r[8]."','".$r[9]."');");
+		$sql=$empire->query("insert into ".$tb."(tempid,tempname,modid,temptext,showdate,listvar,subnews,".do_dbkeyfield_spe('rownum').",classid,docode) values('".$r[0]."','".addslashes($r[1])."','".$r[2]."','".addslashes(addslashes($r[3]))."','".addslashes($r[4])."','".addslashes(addslashes($r[5]))."','".$r[6]."','".$r[7]."','".$r[8]."','".$r[9]."');");
 	}
+	//pgsql
+	do_dbTableSetAutoField($tb,'tempid');
 }
 
 //JS模板
@@ -1270,6 +1284,8 @@ function LoadInTGJstemp($gid,$en,$record,$field,$text){
 		}
 		$sql=$empire->query("insert into ".$tb."(tempid,tempname,temptext,classid,isdefault,showdate,modid,subnews,subtitle) values('".$r[0]."','".addslashes($r[1])."','".addslashes(addslashes($r[2]))."','".$r[3]."','".$r[4]."','".addslashes($r[5])."','".$r[6]."','".$r[7]."','".$r[8]."');");
 	}
+	//pgsql
+	do_dbTableSetAutoField($tb,'tempid');
 }
 
 //列表模板
@@ -1299,8 +1315,10 @@ function LoadInTGListtemp($gid,$en,$record,$field,$text){
 	for($i=0;$i<$count-1;$i++)
 	{
 		$r=explode($field,$rr[$i]);
-		$sql=$empire->query("insert into ".$tb."(tempid,tempname,temptext,subnews,isdefault,listvar,rownum,modid,showdate,subtitle,classid,docode) values('".$r[0]."','".addslashes($r[1])."','".addslashes(addslashes($r[2]))."','".$r[3]."','".$r[4]."','".addslashes(addslashes($r[5]))."','".$r[6]."','".$r[7]."','".addslashes($r[8])."','".$r[9]."','".$r[10]."','".$r[11]."');");
+		$sql=$empire->query("insert into ".$tb."(tempid,tempname,temptext,subnews,isdefault,listvar,".do_dbkeyfield_spe('rownum').",modid,showdate,subtitle,classid,docode) values('".$r[0]."','".addslashes($r[1])."','".addslashes(addslashes($r[2]))."','".$r[3]."','".$r[4]."','".addslashes(addslashes($r[5]))."','".$r[6]."','".$r[7]."','".addslashes($r[8])."','".$r[9]."','".$r[10]."','".$r[11]."');");
 	}
+	//pgsql
+	do_dbTableSetAutoField($tb,'tempid');
 }
 
 //内容模板
@@ -1332,6 +1350,8 @@ function LoadInTGNewstemp($gid,$en,$record,$field,$text){
 		$r=explode($field,$rr[$i]);
 		$sql=$empire->query("insert into ".$tb."(tempid,tempname,isdefault,temptext,showdate,modid,classid) values('".$r[0]."','".addslashes($r[1])."','".$r[2]."','".addslashes(addslashes($r[3]))."','".addslashes($r[4])."','".$r[5]."','".$r[6]."');");
 	}
+	//pgsql
+	do_dbTableSetAutoField($tb,'tempid');
 }
 
 //公共模板
@@ -1400,15 +1420,17 @@ function LoadInTGPubtemp($gid,$en,$record,$field,$text,$isold=0){
 		{
 			$r[2]=LoadInTGReptext_othervar($r[2],'pl');
 		}
-		$empire->query("insert into ".$pltb."(tempid,tempname,temptext,isdefault) values(NULL,'".addslashes($pltempname)."','".addslashes(addslashes($r[2]))."',1);");
+		$empire->query("insert into ".$pltb."(tempname,temptext,isdefault) values('".addslashes($pltempname)."','".addslashes(addslashes($r[2]))."',1);");
 	}
 	//6.0以下版本
 	if(($isold==1||$isold==2)&&$r[8])
 	{
 		$printtb=$dbtbpre."enewsprinttemp".$en;
 		$printtempname=$fun_r['PrintTempname'];
-		$empire->query("insert into ".$printtb."(tempid,tempname,temptext,isdefault,showdate,modid) values(NULL,'".addslashes($printtempname)."','".addslashes(addslashes($r[8]))."',1,'Y-m-d H:i:s',1);");
+		$empire->query("insert into ".$printtb."(tempname,temptext,isdefault,showdate,modid) values('".addslashes($printtempname)."','".addslashes(addslashes($r[8]))."',1,'Y-m-d H:i:s',1);");
 	}
+	//pgsql
+	do_dbTableSetAutoField($tb,'id');
 }
 
 //搜索模板
@@ -1438,8 +1460,10 @@ function LoadInTGSearchtemp($gid,$en,$record,$field,$text){
 	for($i=0;$i<$count-1;$i++)
 	{
 		$r=explode($field,$rr[$i]);
-		$sql=$empire->query("insert into ".$tb."(tempid,tempname,temptext,subnews,isdefault,listvar,rownum,modid,showdate,subtitle,classid,docode) values('".$r[0]."','".addslashes($r[1])."','".addslashes(addslashes($r[2]))."','".$r[3]."','".$r[4]."','".addslashes(addslashes($r[5]))."','".$r[6]."','".$r[7]."','".addslashes($r[8])."','".$r[9]."','".$r[10]."','".$r[11]."');");
+		$sql=$empire->query("insert into ".$tb."(tempid,tempname,temptext,subnews,isdefault,listvar,".do_dbkeyfield_spe('rownum').",modid,showdate,subtitle,classid,docode) values('".$r[0]."','".addslashes($r[1])."','".addslashes(addslashes($r[2]))."','".$r[3]."','".$r[4]."','".addslashes(addslashes($r[5]))."','".$r[6]."','".$r[7]."','".addslashes($r[8])."','".$r[9]."','".$r[10]."','".$r[11]."');");
 	}
+	//pgsql
+	do_dbTableSetAutoField($tb,'tempid');
 }
 
 //模板变量
@@ -1475,6 +1499,8 @@ function LoadInTGTempvar($gid,$en,$record,$field,$text){
 		}
 		$sql=$empire->query("insert into ".$tb."(varid,myvar,varname,varvalue,classid,isclose,myorder) values('".$r[0]."','".addslashes($r[1])."','".addslashes($r[2])."','".addslashes(addslashes($r[3]))."','".$r[4]."','".$r[5]."','".$r[6]."');");
 	}
+	//pgsql
+	do_dbTableSetAutoField($tb,'varid');
 }
 
 //投票模板
@@ -1505,6 +1531,8 @@ function LoadInTGVotetemp($gid,$en,$record,$field,$text){
 		$r=explode($field,$rr[$i]);
 		$sql=$empire->query("insert into ".$tb."(tempid,tempname,temptext) values('".$r[0]."','".addslashes($r[1])."','".addslashes(addslashes($r[2]))."');");
 	}
+	//pgsql
+	do_dbTableSetAutoField($tb,'tempid');
 }
 
 //栏目封面模板
@@ -1535,6 +1563,8 @@ function LoadInTGClasstemp($gid,$en,$record,$field,$text){
 		$r=explode($field,$rr[$i]);
 		$sql=$empire->query("insert into ".$tb."(tempid,tempname,temptext,classid) values('".$r[0]."','".addslashes($r[1])."','".addslashes(addslashes($r[2]))."','".$r[3]."');");
 	}
+	//pgsql
+	do_dbTableSetAutoField($tb,'tempid');
 }
 
 //评论列表模板
@@ -1569,6 +1599,8 @@ function LoadInTGPltemp($gid,$en,$record,$field,$text){
 		}
 		$sql=$empire->query("insert into ".$tb."(tempid,tempname,temptext,isdefault) values('".$r[0]."','".addslashes($r[1])."','".addslashes(addslashes($r[2]))."','".$r[3]."');");
 	}
+	//pgsql
+	do_dbTableSetAutoField($tb,'tempid');
 }
 
 //打印模板
@@ -1598,6 +1630,8 @@ function LoadInTGPrinttemp($gid,$en,$record,$field,$text){
 		$r=explode($field,$rr[$i]);
 		$sql=$empire->query("insert into ".$tb."(tempid,tempname,temptext,isdefault,showdate,modid) values('".$r[0]."','".addslashes($r[1])."','".addslashes(addslashes($r[2]))."','".$r[3]."','".addslashes($r[4])."','".$r[5]."');");
 	}
+	//pgsql
+	do_dbTableSetAutoField($tb,'tempid');
 }
 
 //自定义页面模板
@@ -1628,6 +1662,8 @@ function LoadInTGPagetemp($gid,$en,$record,$field,$text){
 		$r=explode($field,$rr[$i]);
 		$sql=$empire->query("insert into ".$tb."(tempid,tempname,temptext) values('".$r[0]."','".addslashes($r[1])."','".addslashes(addslashes($r[2]))."');");
 	}
+	//pgsql
+	do_dbTableSetAutoField($tb,'tempid');
 }
 
 //----------------------备份模板-------------------
@@ -1699,7 +1735,7 @@ function AddEBakTemp($temptype,$gid,$tempid,$tempname,$temptext,$subnews,$isdefa
 	$classid=(int)$classid;
 	$docode=(int)$docode;
 	$baktime=time();
-	$empire->query("insert into {$dbtbpre}enewstempbak(tempid,tempname,temptext,subnews,isdefault,listvar,rownum,modid,showdate,subtitle,classid,docode,baktime,temptype,gid,lastuser) values('$tempid','".eaddslashes($tempname)."','".eaddslashes2($temptext)."','$subnews','$isdefault','".eaddslashes2($listvar)."','$rownum','$modid','".eaddslashes($showdate)."','$subtitle','$classid','$docode','$baktime','$temptype','$gid','$username');");
+	$empire->query("insert into {$dbtbpre}enewstempbak(tempid,tempname,temptext,subnews,isdefault,listvar,".do_dbkeyfield_spe('rownum').",modid,showdate,subtitle,classid,docode,baktime,temptype,gid,lastuser) values('$tempid','".eaddslashes($tempname)."','".eaddslashes2($temptext)."','$subnews','$isdefault','".eaddslashes2($listvar)."','$rownum','$modid','".eaddslashes($showdate)."','$subtitle','$classid','$docode','$baktime','$temptype','$gid','$username');");
 }
 
 //还原模板备份
@@ -1735,7 +1771,7 @@ function ReEBakTemp($add,$userid,$username){
 	}
 	if($r['temptype']=='bqtemp')//标签模板
 	{
-		$sql=$empire->query("update ".GetDoTemptb("enewsbqtemp",$gid)." set tempname='".StripAddsData($r['tempname'])."',temptext='".addslashes($r['temptext'])."',modid='".$r['modid']."',showdate='".StripAddsData($r['showdate'])."',listvar='".addslashes($r['listvar'])."',subnews='".$r['subnews']."',rownum='".$r['rownum']."',classid='".$r['classid']."',docode='".$r['docode']."' where tempid='".$r['tempid']."'");
+		$sql=$empire->query("update ".GetDoTemptb("enewsbqtemp",$gid)." set tempname='".StripAddsData($r['tempname'])."',temptext='".addslashes($r['temptext'])."',modid='".$r['modid']."',showdate='".StripAddsData($r['showdate'])."',listvar='".addslashes($r['listvar'])."',subnews='".$r['subnews']."',".do_dbkeyfield_spe('rownum')."='".$r['rownum']."',classid='".$r['classid']."',docode='".$r['docode']."' where tempid='".$r['tempid']."'");
 	}
 	elseif($r['temptype']=='classtemp')//封面模板
 	{
@@ -1747,7 +1783,7 @@ function ReEBakTemp($add,$userid,$username){
 	}
 	elseif($r['temptype']=='listtemp')//列表模板
 	{
-		$sql=$empire->query("update ".GetDoTemptb("enewslisttemp",$gid)." set subnews='".$r['subnews']."',tempname='".StripAddsData($r['tempname'])."',temptext='".addslashes($r['temptext'])."',listvar='".addslashes($r['listvar'])."',rownum='".$r['rownum']."',modid='".$r['modid']."',showdate='".StripAddsData($r['showdate'])."',subtitle='".$r['subtitle']."',classid='".$r['classid']."',docode='".$r['docode']."' where tempid='".$r['tempid']."'");
+		$sql=$empire->query("update ".GetDoTemptb("enewslisttemp",$gid)." set subnews='".$r['subnews']."',tempname='".StripAddsData($r['tempname'])."',temptext='".addslashes($r['temptext'])."',listvar='".addslashes($r['listvar'])."',".do_dbkeyfield_spe('rownum')."='".$r['rownum']."',modid='".$r['modid']."',showdate='".StripAddsData($r['showdate'])."',subtitle='".$r['subtitle']."',classid='".$r['classid']."',docode='".$r['docode']."' where tempid='".$r['tempid']."'");
 	}
 	elseif($r['temptype']=='newstemp')//内容模板
 	{
@@ -1763,7 +1799,7 @@ function ReEBakTemp($add,$userid,$username){
 	}
 	elseif($r['temptype']=='searchtemp')//搜索模板
 	{
-		$sql=$empire->query("update ".GetDoTemptb("enewssearchtemp",$gid)." set subnews='".$r['subnews']."',tempname='".StripAddsData($r['tempname'])."',temptext='".addslashes($r['temptext'])."',listvar='".addslashes($r['listvar'])."',rownum='".$r['rownum']."',modid='".$r['modid']."',showdate='".StripAddsData($r['showdate'])."',subtitle='".$r['subtitle']."',classid='".$r['classid']."',docode='".$r['docode']."' where tempid='".$r['tempid']."'");
+		$sql=$empire->query("update ".GetDoTemptb("enewssearchtemp",$gid)." set subnews='".$r['subnews']."',tempname='".StripAddsData($r['tempname'])."',temptext='".addslashes($r['temptext'])."',listvar='".addslashes($r['listvar'])."',".do_dbkeyfield_spe('rownum')."='".$r['rownum']."',modid='".$r['modid']."',showdate='".StripAddsData($r['showdate'])."',subtitle='".$r['subtitle']."',classid='".$r['classid']."',docode='".$r['docode']."' where tempid='".$r['tempid']."'");
 	}
 	elseif($r['temptype']=='tempvar')//公共模板变量
 	{
@@ -1910,6 +1946,8 @@ function sametg_AddTemp($tbname,$gid,$tempid,$tempname,$myvar=''){
 			continue;
 		}
 		$empire->query("insert into ".$temptb."(".$f.") values(".$v.");");
+		//pgsql
+		do_dbTableSetAutoField($temptb,$idf);
 	}
 }
 
@@ -1955,6 +1993,8 @@ function sametg_DelTemp($tbname,$gid,$tempid){
 		}
 		$temptb=GetDoTemptb($tbname,$thisgid);
 		$empire->query("delete from ".$temptb." where ".$idf."='$tempid'");
+		//pgsql
+		do_dbTableSetAutoField($temptb,$idf);
 	}
 }
 
@@ -2023,6 +2063,8 @@ function sametg_EditTempid($tbname,$gid,$tempid,$newtempid,$redo){
 		{
 			$empire->query("update ".$temptb." set ".$idf."='$tempid' where ".$idf."='$lastid'");
 		}
+		//pgsql
+		do_dbTableSetAutoField($temptb,$idf);
 	}
 }
 ?>

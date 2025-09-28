@@ -35,6 +35,8 @@ if($public_r['opennotcj'])
 	@include("../../e/data/dbcache/notcj.php");
 }
 
+include('../../e/class/fzpubfun.php');
+
 //定时刷新任务
 function DoTimeRepage($time){
 	global $empire,$dbtbpre;
@@ -180,9 +182,10 @@ function DoAutoUpAndDownInfo(){
 			$pubid=ReturnInfoPubid($r['classid'],$r['id']);
 			$empire->query("update {$dbtbpre}enewsinfovote set infouptime=0 where pubid='$pubid'".do_dblimit_upone());
 			//互转
-			MoveCheckInfoData($class_r[$r['classid']]['tbname'],0,$infor['stb'],"id='".$r['id']."'");
 			//efz
 			MoveCheckInfoForFzData($class_r[$r['classid']]['tbname'],$r['classid'],$r['id'],0,$infor['stb'],$infor['efz'],'');
+			//efz
+			MoveCheckInfoData($class_r[$r['classid']]['tbname'],0,$infor['stb'],"id='".$r['id']."'");
 			AddClassInfos($r['classid'],'','+1');
 			//刷新信息
 			GetHtml($infor['classid'],$infor['id'],$infor,1);
@@ -229,9 +232,10 @@ function DoAutoUpAndDownInfo(){
 			$pubid=ReturnInfoPubid($r['classid'],$r['id']);
 			$empire->query("update {$dbtbpre}enewsinfovote set infodowntime=0 where pubid='$pubid'".do_dblimit_upone());
 			//互转
-			MoveCheckInfoData($class_r[$r['classid']]['tbname'],1,$infor['stb'],"id='".$r['id']."'");
 			//efz
 			MoveCheckInfoForFzData($class_r[$r['classid']]['tbname'],$r['classid'],$r['id'],1,$infor['stb'],$infor['efz'],'');
+			//efz
+			MoveCheckInfoData($class_r[$r['classid']]['tbname'],1,$infor['stb'],"id='".$r['id']."'");
 			AddClassInfos($r['classid'],'','-1');
 			//刷新列表
 			ReListHtml($r['classid'],1);

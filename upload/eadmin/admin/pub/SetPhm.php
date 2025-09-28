@@ -113,13 +113,13 @@ $r=$empire->fetch1("select * from {$dbtbpre}enewspublicadd".do_dblimit_one());
 	<tr bgcolor="#FFFFFF">
 	  <td height="25">关闭的模块：</td>
 	  <td>
-	  <input name="phmdock[]" type="checkbox" id="phmdock[]" value="login"<?=strstr($r['phmdock'],',login,')?' checked':''?>>
+	  <input name="phmdock[]" type="checkbox" id="phmdock[]" value="login"<?=strstr($r['phmdo'],',login,')?' checked':''?>>
 	  登录
-      <input name="phmdock[]" type="checkbox" id="phmdock[]" value="reg"<?=strstr($r['phmdock'],',reg,')?' checked':''?>>
+      <input name="phmdock[]" type="checkbox" id="phmdock[]" value="reg"<?=strstr($r['phmdo'],',reg,')?' checked':''?>>
 	  注册
-      <input name="phmdock[]" type="checkbox" id="phmdock[]" value="bind"<?=strstr($r['phmdock'],',bind,')?' checked':''?>>
+      <input name="phmdock[]" type="checkbox" id="phmdock[]" value="bind"<?=strstr($r['phmdo'],',bind,')?' checked':''?>>
 	  绑定手机
-	  <input name="phmdock[]" type="checkbox" id="phmdock[]" value="delb"<?=strstr($r['phmdock'],',delb,')?' checked':''?>>
+	  <input name="phmdock[]" type="checkbox" id="phmdock[]" value="delb"<?=strstr($r['phmdo'],',delb,')?' checked':''?>>
 	  取消绑定手机</td>
     </tr>
 	<tr bgcolor="#FFFFFF">

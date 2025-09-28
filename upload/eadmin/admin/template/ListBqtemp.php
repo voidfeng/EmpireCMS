@@ -39,7 +39,7 @@ function AddBqtemp($tempname,$modid,$subnews,$rownum,$showdate,$temptext,$listva
 	$rownum=(int)$rownum;
 	$docode=(int)$add['docode'];
 	$gid=(int)$add['gid'];
-	$sql=$empire->updatesql("insert into ".GetDoTemptb("enewsbqtemp",$gid)."(tempname,temptext,modid,showdate,listvar,subnews,rownum,classid,docode) values('$tempname','".eaddslashes2($temptext)."',$modid,'".eaddslashes($showdate)."','".eaddslashes2($listvar)."',$subnews,$rownum,$classid,'$docode')","ins");
+	$sql=$empire->updatesql("insert into ".GetDoTemptb("enewsbqtemp",$gid)."(tempname,temptext,modid,showdate,listvar,subnews,".do_dbkeyfield_spe('rownum').",classid,docode) values('$tempname','".eaddslashes2($temptext)."',$modid,'".eaddslashes($showdate)."','".eaddslashes2($listvar)."',$subnews,$rownum,$classid,'$docode')","ins");
 	$lastid=$empire->lastid(GetDoTemptb("enewsbqtemp",$gid),'tempid');
 	//备份模板
 	AddEBakTemp('bqtemp',$gid,$lastid,$tempname,$temptext,$subnews,0,$listvar,$rownum,$modid,$showdate,0,$classid,$docode,$userid,$username);
@@ -77,7 +77,7 @@ function EditBqtemp($tempid,$tempname,$modid,$subnews,$rownum,$showdate,$temptex
 	$rownum=(int)$rownum;
 	$docode=(int)$add['docode'];
 	$gid=(int)$add['gid'];
-	$sql=$empire->query("update ".GetDoTemptb("enewsbqtemp",$gid)." set tempname='$tempname',temptext='".eaddslashes2($temptext)."',modid=$modid,showdate='".eaddslashes($showdate)."',listvar='".eaddslashes2($listvar)."',subnews=$subnews,rownum=$rownum,classid=$classid,docode='$docode' where tempid='$tempid'");
+	$sql=$empire->query("update ".GetDoTemptb("enewsbqtemp",$gid)." set tempname='$tempname',temptext='".eaddslashes2($temptext)."',modid=$modid,showdate='".eaddslashes($showdate)."',listvar='".eaddslashes2($listvar)."',subnews=$subnews,".do_dbkeyfield_spe('rownum')."=$rownum,classid=$classid,docode='$docode' where tempid='$tempid'");
 	//备份模板
 	AddEBakTemp('bqtemp',$gid,$tempid,$tempname,$temptext,$subnews,0,$listvar,$rownum,$modid,$showdate,0,$classid,$docode,$userid,$username);
 	if($sql)

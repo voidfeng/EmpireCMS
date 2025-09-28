@@ -318,6 +318,7 @@ if($sear)
 }
 //排序
 $myorder=(int)$_GET['myorder'];
+$search.="&myorder=$myorder";
 if($myorder==2)//商品金额
 {
 	$orderby='alltotal desc';

@@ -192,3 +192,6 @@ INSERT INTO phome_enewswapstyle VALUES (1, '新闻模板', 1);
 INSERT INTO phome_enewswapstyle VALUES (2, '分类信息模板', 2);
 
 
+
+UPDATE phome_enewspublic SET smalltextlen=100;
+

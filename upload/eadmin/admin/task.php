@@ -35,6 +35,8 @@ if($public_r['opennotcj'])
 	@include("../../e/data/dbcache/notcj.php");
 }
 
+include('../../e/class/fzpubfun.php');
+
 //验证是否执行
 function CheckDoTask($r){
 	global $logininid;

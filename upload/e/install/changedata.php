@@ -94,7 +94,7 @@ if(!defined('InEmpireCMS'))
 	}
 	//--- 评论表情文件 ---
 	eins_InstallGetPlfaceJs();
-	echo"更新文件完毕.<script>self.location.href='index.php?enews=success&f=7&echdbtype=$echdbtype&defaultdata=$defaultdata';</script>";
+	echo"更新文件完毕.<script>self.location.href='index.php?enews=changetbpgsql&f=5&ok=1&echdbtype=$echdbtype&defaultdata=$defaultdata';</script>";
 	exit();
 }
 else//更新数据库缓存

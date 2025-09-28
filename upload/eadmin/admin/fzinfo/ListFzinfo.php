@@ -32,17 +32,36 @@ $search.=$ecms_hashur['ehref'];
 $url="<a href=ListFzinfo.php".$ecms_hashur['whehref'].">管理父信息</a>";
 
 //信息ID
+$mid=(int)$_GET['mid'];
+$search_tbname='';
+$search_infoid=0;
+if($mid)
+{
+	$search_tbname=$emod_r[$mid]['tbname'];
+}
 $keyboard=RepPostVar($_GET['keyboard']);
 if($keyboard)
 {
 	$and=$add?' and ':' where ';
-	if(strlen($keyboard)>12)
+	if(!eCheckStrType(1,$keyboard,0))
 	{
-		$add.=$and."pubid='$keyboard'";
+		if($search_tbname)
+		{
+			$search_infor=$empire->fetch1("select id from {$dbtbpre}ecms_".$search_tbname." where title='".$keyboard."'".do_dblimit_one());
+			$search_infoid=$search_infor['id'];
+		}
+		$add.=$and."id='$search_infoid'";
 	}
 	else
 	{
-		$add.=$and."id='$keyboard'";
+		if(strlen($keyboard)>12)
+		{
+			$add.=$and."pubid='$keyboard'";
+		}
+		else
+		{
+			$add.=$and."id='$keyboard'";
+		}
 	}
 	$search.='&keyboard='.$keyboard;
 }
@@ -55,7 +74,6 @@ if($cid)
 	$search.="&cid=$cid";
 }
 //系统模型
-$mid=(int)$_GET['mid'];
 if($mid)
 {
 	$and=$add?' and ':' where ';
@@ -154,7 +172,7 @@ $efhr=heformhash_getr('EditFzinfoOrder');
   <?=$ecms_hashur['eform']?>
     <tr> 
       <td height="30">
-	  <a href="#ecms" title="可以是信息ID，也可以是公共信息ID">信息ID</a>： 
+	  <a href="#ecms" title="可以是信息ID，也可以是公共信息ID，也可以是信息标题(须选择系统模型)">信息ID</a>： 
         <input name="keyboard" type="text" id="keyboard" value="<?=$keyboard?>">
         <select name="mid" id="mid">
           <option value="0">所有系统模型</option>

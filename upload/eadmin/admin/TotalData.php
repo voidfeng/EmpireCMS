@@ -69,6 +69,10 @@ elseif($totaltype==1)
 	{
 		printerror("ErrorUrl","history.go(-1)");
 	}
+	if(!eInfoHaveTable($tbname,0))
+	{
+		printerror("ErrorUrl","history.go(-1)");
+	}
 	//未审核
 	$query="select count(*) as total from {$dbtbpre}ecms_".$tbname."_check";
 	//已审核

@@ -138,7 +138,8 @@ function DoGetPassword($add){
 	//密码
 	$salt=eReturnMemberSalt();
 	$password=eDoMemberPw($password,$salt);
-	$sql=$empire->query("update ".eReturnMemberTable()." set ".egetmf('password')."='$password',".egetmf('salt')."='$salt' where ".egetmf('userid')."='".$r['id']."'");
+	$r['id']=(int)$r['id'];
+	$sql=$empire->query("update ".eReturnMemberTable()." set ".egetmf('password')."='".addslashes($password)."',".egetmf('salt')."='".addslashes($salt)."' where ".egetmf('userid')."='".$r['id']."'");
 	$usql=$empire->query("update {$dbtbpre}enewsmemberpub set authstr='' where userid='".$r['id']."'");
 	printerror('GetPasswordSuccess',$public_r['newsurl'],1);
 }
@@ -149,6 +150,9 @@ function DoGetPassword($add){
 //发送激活帐号邮件
 function SendActUserEmail($userid,$username,$email){
 	global $empire,$dbtbpre,$public_r;
+	$userid=(int)$userid;
+	$username=RepPostVar($username);
+	$email=RepPostVar($email);
 	$email=addslashes($email);
 	$passr=QMReturnCheckPass($userid,$username,$email,2);
 	$authstr=$passr['dotime'].'||'.$passr['ecms'].'||'.$passr['rnd'];
@@ -166,6 +170,9 @@ function SendActUserEmail($userid,$username,$email){
 function DoActUser($add){
 	global $empire,$dbtbpre,$public_r;
 	$r=CheckGetPassword($add,2);
+	$r['id']=(int)$r['id'];
+	$r['groupid']=(int)$r['groupid'];
+	$r['checked']=(int)$r['checked'];
 	if(!$r['checked'])
 	{
 		$checked=ReturnGroupChecked($r['groupid']);

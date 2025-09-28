@@ -554,7 +554,7 @@ function sys_ReturnBqQuery($classid,$line,$enews=0,$do=0,$ewhere='',$eorder=''){
 	}
 	//排序
 	$addorder=empty($eorder)?$order.' desc':$eorder;
-	$query='select '.ReturnSqlListF($mid).' from '.$dbtbpre.'ecms_'.$tbname.$query.' order by '.ReturnSetTopSql('bq').$addorder.''.do_dblimit($line);
+	$query='select '.ReturnSqlListF($mid).' from '.$dbtbpre.'ecms_'.$tbname.$query.' order by '.ReturnSetTopSql('bq').$addorder.''.do_dblimit_str($line);
 	$sql=$empire->query1($query);
 	if(!$sql)
 	{
@@ -566,7 +566,8 @@ function sys_ReturnBqQuery($classid,$line,$enews=0,$do=0,$ewhere='',$eorder=''){
 //返回标签模板
 function sys_ReturnBqTemp($tempid){
 	global $empire,$dbtbpre,$fun_r;
-	$r=$empire->fetch1("select tempid,modid,temptext,showdate,listvar,subnews,rownum,docode from ".GetTemptb("enewsbqtemp")." where tempid='$tempid'");
+	$tempid=(int)$tempid;
+	$r=$empire->fetch1("select tempid,modid,temptext,showdate,listvar,subnews,".do_dbkeyfield_spe('rownum').",docode from ".GetTemptb("enewsbqtemp")." where tempid='$tempid'");
 	if(empty($r['tempid']))
 	{
 		echo $fun_r['BqErrorNbqtemp']."(ID=".$tempid.")";
@@ -739,20 +740,21 @@ function sys_OtherLinkQuery($classid,$line,$enews,$doing){
 			{
 				$or=' or ';
 			}
-			$repadd.=$or."[!--f--!] like '%".$keyr[$i]."%'";
+			$keyr[$i]=RepPostVar($keyr[$i]);
+			$repadd.=$or."<[!--f--!]> like '%".$keyr[$i]."%'";
 		}
 		//搜索范围
 		if($public_r['newslink']==1)
 		{
-			$keys='('.str_replace('[!--f--!]','keyboard',$repadd).')';
+			$keys='('.str_replace('<[!--f--!]>','keyboard',$repadd).')';
 		}
 		elseif($public_r['newslink']==2)
 		{
-			$keys='('.str_replace('[!--f--!]','keyboard',$repadd).' or '.str_replace('[!--f--!]','title',$repadd).')';
+			$keys='('.str_replace('<[!--f--!]>','keyboard',$repadd).' or '.str_replace('<[!--f--!]>','title',$repadd).')';
 		}
 		else
 		{
-			$keys='('.str_replace('[!--f--!]','title',$repadd).')';
+			$keys='('.str_replace('<[!--f--!]>','title',$repadd).')';
 		}
 	}
 	else
@@ -785,7 +787,7 @@ function sys_OtherLinkQuery($classid,$line,$enews,$doing){
 	{
 		$yhadd=ReturnYhSql($yhid,$yhvar,1);
 	}
-	$query="select * from {$dbtbpre}ecms_".$tbname." where ".$yhadd.$and.$keys." order by newstime desc".do_dblimit($line);
+	$query="select * from {$dbtbpre}ecms_".$tbname." where ".$yhadd.$and.$keys." order by newstime desc".do_dblimit_str($line);
 	$sql=$empire->query1($query);
 	if(!$sql)
 	{
@@ -1155,7 +1157,7 @@ function sys_GetSitelink($line,$num,$enews=0,$classid=0,$stats=0){
 	{
 		$whereclass=" and classid='$classid'";
 	}
-	$sql=$empire->query("select * from {$dbtbpre}enewslink where checked=1".$a.$whereclass." order by myorder,lid".do_dblimit($num));
+	$sql=$empire->query("select * from {$dbtbpre}enewslink where checked=1".$a.$whereclass." order by myorder,lid".do_dblimit_str($num));
 	//输出
 	$i=0;
 	while($r=$empire->fetch($sql))
@@ -1375,7 +1377,7 @@ function sys_ShowSearchKey($line,$num,$classid=0,$enews=0){
 	{
 		$add=" and classid='$classid'";
 	}
-	$sql=$empire->query("select searchid,keyboard from {$dbtbpre}enewssearch where iskey=0".$add." order by ".$order." desc".do_dblimit($num));
+	$sql=$empire->query("select searchid,keyboard from {$dbtbpre}enewssearch where iskey=0".$add." order by ".$order." desc".do_dblimit_str($num));
 	$i=0;
 	$returnkey="";
 	while($r=$empire->fetch($sql))
@@ -1585,7 +1587,7 @@ function sys_ForSonclassData($classid,$line,$strlen,$have_class=0,$enews=0,$temp
 	//限制条数
 	if($cline)
 	{
-		$limit=do_dblimit($cline);
+		$limit=do_dblimit_str($cline);
 	}
 	//字段
 	$ret_r=ReturnReplaceListF($tr['modid']);
@@ -1635,7 +1637,7 @@ function sys_ShowClassByTemp($classid,$tempid,$show=0,$cline=0){
 	//限制条数
 	if($cline)
 	{
-		$limit=do_dblimit($cline);
+		$limit=do_dblimit_str($cline);
 	}
 	//替换变量
 	$bclassname=$class_r[$classid]['classname'];
@@ -1705,7 +1707,7 @@ function sys_ForShowSonClass($classid,$tempid,$show=0,$cline=0){
 	//限制条数
 	if($cline)
 	{
-		$limit=do_dblimit($cline);
+		$limit=do_dblimit_str($cline);
 	}
 	$no=1;
 	$sql=$empire->query("select classid,classname,islast,sonclass,tbname,intro,classimg,infos from {$dbtbpre}enewsclass where ".$where." and showclass=0 order by myorder,classid".$limit);
@@ -1842,7 +1844,7 @@ function sys_ShowLyInfo($line,$tempid,$bid=0){
 	$listtext=$list_r[1];
 	$no=1;
 	$changerow=1;
-	$sql=$empire->query("select lyid,name,email,lytime,lytext,retext from {$dbtbpre}enewsgbook where checked=0".$a." order by lyid desc".do_dblimit($line));
+	$sql=$empire->query("select lyid,name,email,lytime,lytext,retext from {$dbtbpre}enewsgbook where checked=0".$a." order by lyid desc".do_dblimit_str($line));
 	while($r=$empire->fetch($sql))
 	{
 		//替换列表变量
@@ -1912,7 +1914,7 @@ function sys_ShowZtData($tempid,$zcid=0,$cline=0,$classid=0){
 	//限制条数
 	if($cline)
 	{
-		$limit=do_dblimit($cline);
+		$limit=do_dblimit_str($cline);
 	}
 	//列表
 	$list_exp="[!--empirenews.listtemp--]";
@@ -2091,7 +2093,7 @@ function sys_ShowPlInfo($line,$tempid,$classid=0,$id=0,$isgood=0,$enews=0){
 	$listtext=$list_r[1];
 	$no=1;
 	$changerow=1;
-	$sql=$empire->query("select plid,userid,username,saytime,id,classid,zcnum,fdnum,saytext from {$dbtbpre}enewspl_".$public_r['pldeftb']." where checked=0".$a." order by ".$order."".do_dblimit($line));
+	$sql=$empire->query("select plid,userid,username,saytime,id,classid,zcnum,fdnum,saytext from {$dbtbpre}enewspl_".$public_r['pldeftb']." where checked=0".$a." order by ".$order."".do_dblimit_str($line));
 	while($r=$empire->fetch($sql))
 	{
 		//替换列表变量
@@ -2212,7 +2214,7 @@ function sys_ListMemberInfo($line=10,$ecms=0,$groupid=0,$userids=0,$fields=''){
 	{
 		$fields='u.*,ui.*';
 	}
-	$sql=$empire->query("select ".$fields." from ".eReturnMemberTable()." u LEFT JOIN {$dbtbpre}enewsmemberadd ui ON u.".egetmf('userid')."=ui.userid where u.".egetmf('checked')."=1".$where." order by ".$order."".do_dblimit($line));
+	$sql=$empire->query("select ".$fields." from ".eReturnMemberTable()." u LEFT JOIN {$dbtbpre}enewsmemberadd ui ON u.".egetmf('userid')."=ui.userid where u.".egetmf('checked')."=1".$where." order by ".$order."".do_dblimit_str($line));
 	return $sql;
 }
 
@@ -2297,7 +2299,7 @@ function sys_eShowTags($cid,$num=0,$line=0,$order='',$isgood='',$isgoodshow='',$
 		$limit='';
 		if($num)
 		{
-			$limit=do_dblimit($num);
+			$limit=do_dblimit_str($num);
 		}
 		//推荐标红
 		$gfont1='';
@@ -2570,7 +2572,7 @@ function sys_ReturnTogQuery($type,$id,$line,$classid='',$mid='',$ewhere='',$eord
 	{
 		$orderf=$eorder;
 	}
-	$query='select classid,id'.$selectf.' from '.$table.' where '.$where.' order by '.$orderf.''.do_dblimit($line);
+	$query='select classid,id'.$selectf.' from '.$table.' where '.$where.' order by '.$orderf.''.do_dblimit_str($line);
 	$sql=$empire->query1($query);
 	if(!$sql)
 	{
@@ -2697,7 +2699,7 @@ function sys_eShowSp1($spid,$spr,$line,$strlen){
 	$listtext=$list_r[1];
 	$no=1;
 	$changerow=1;
-	$sql=$empire->query("select sid,title,titlepic,bigpic,titleurl,smalltext,titlefont,newstime,titlepre,titlenext from {$dbtbpre}enewssp_1 where spid='$spid' order by newstime desc".do_dblimit($line));
+	$sql=$empire->query("select sid,title,titlepic,bigpic,titleurl,smalltext,titlefont,newstime,titlepre,titlenext from {$dbtbpre}enewssp_1 where spid='$spid' order by newstime desc".do_dblimit_str($line));
 	while($r=$empire->fetch($sql))
 	{
 		$r['oldtitle']=$r['title'];

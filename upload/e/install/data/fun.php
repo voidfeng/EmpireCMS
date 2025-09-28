@@ -845,6 +845,22 @@ function eins_InstallTemplateTbData($add){
 	exit();
 }
 
+//导入pgsql数据更新
+function eins_InstallChangeTbPgsql($add){
+	global $echdbtype,$ecms_config,$dbtbpre;
+	$eispgsql=$echdbtype>2?1:0;
+	if($eispgsql==1)
+	{
+		//链接数据库
+		$dbver=eins_InstallConnectDb($ecms_config['db']['dbver'],$ecms_config['db']['dbserver'],$ecms_config['db']['dbport'],$ecms_config['db']['dbusername'],$ecms_config['db']['dbpassword'],$ecms_config['db']['dbname'],$ecms_config['db']['setchar'],$ecms_config['db']['dbchar']);
+		//执行SQL语句
+		eins_DoRunQuery(eins_ReturnInstallSql(8),$ecms_config['db']['dbchar'],$dbtbpre,$ecms_config['db']['dbver']);
+		do_dbclose($GLOBALS['link']);
+	}
+	//echo"更新表状态完毕!<script>self.location.href='index.php?enews=success&f=7&echdbtype=".$GLOBALS['echdbtype']."&defaultdata=".intval($add['defaultdata'])."';</script>";
+	eins_InstallShowMsgTime("更新表状态完毕!","index.php?enews=success&f=7&echdbtype=".$GLOBALS['echdbtype']."&defaultdata=".intval($add['defaultdata']),0);
+	exit();
+}
 
 //导入测试数据
 function eins_InstallDefaultData($add){
@@ -1137,6 +1153,10 @@ function eins_ReturnInstallSql($defaultdata=1){
 	elseif($defaultdata==6)
 	{
 		$sqlfile="data/empirecms.tempdata.sql";
+	}
+	elseif($defaultdata==8)
+	{
+		$sqlfile="data/empirecms.pgsqladd.sql";
 	}
 	else
 	{

@@ -108,6 +108,7 @@ $enews_r=array
 	'EditUserOnePass'=>'修改一次性密码',
 	'DelUserOnePass'=>'删除一次性密码',
 	'CheckLgacUser'=>'后台登录激活',
+	'MustDoLoginout'=>'强制退出用户',
 
 	'AddBqtemp'=>'增加标签模板',
 	'EditBqtemp'=>'修改标签模板',
